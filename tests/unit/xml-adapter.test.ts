@@ -29,3 +29,26 @@ test('XML / RSS Adapter - extracts valid torrent items from RSS feed text', () =
   assert.equal(items[1]?.title, 'Void Linux Base glibc');
   assert.equal(items[1]?.infoHash, '99887766554433221100ffeeddccbbaa99887766');
 });
+
+test('XML / RSS Adapter - parses Chinese DMHY Anime feed with Base32 Magnet', () => {
+  const dmhyRss = `
+    <?xml version="1.0" encoding="utf-8"?>
+    <rss version="2.0">
+    <channel>
+      <title>動漫花園</title>
+      <item>
+        <title><![CDATA[[沸班亚马制作组] 剧场版 鬼灭之刃 无限城篇 第一章 猗窝座再袭 V2 [1080p HEVC]]]></title>
+        <link>http://share.dmhy.org/topics/view/724294.html</link>
+        <pubDate>Thu, 06 Aug 2026 03:29:02 +0800</pubDate>
+        <enclosure url="magnet:?xt=urn:btih:4F7NZYMA4GN3YDT4NQU3N3I6RHIXP3LZ&amp;dn=Kimetsu" length="1500000000" type="application/x-bittorrent" />
+      </item>
+    </channel>
+    </rss>
+  `;
+
+  const items = parseRssXmlFeed(dmhyRss, 'dmhy', 'Anime');
+  assert.equal(items.length, 1);
+  assert.ok(items[0]?.title.includes('鬼灭之刃'));
+  assert.equal(items[0]?.infoHash, '4f7nzyma4gn3ydt4nqu3n3i6rhixp3lz');
+  assert.ok(items[0]?.magnetUri?.startsWith('magnet:?'));
+});

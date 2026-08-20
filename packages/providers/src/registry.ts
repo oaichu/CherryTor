@@ -5,12 +5,12 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
     'apibay',
     {
       id: 'apibay',
-      name: 'ThePirateBay / Apibay Index',
+      name: 'ThePirateBay (Global)',
       origin: 'https://apibay.org',
       pathTemplate: '/q.php?q={query}',
       allowedRedirectHosts: ['apibay.org', 'thepiratebay.org'],
       timeoutMs: 5000,
-      maxPayloadBytes: 5242880, // 5MB
+      maxPayloadBytes: 5242880,
       requiresAuth: false,
       format: 'json',
       adapter: 'apibay',
@@ -18,26 +18,10 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
     }
   ],
   [
-    'nyaa',
-    {
-      id: 'nyaa',
-      name: 'Nyaa Asian & Global Media',
-      origin: 'https://nyaa.si',
-      pathTemplate: '/?page=rss&q={query}',
-      allowedRedirectHosts: ['nyaa.si', 'sukebei.nyaa.si'],
-      timeoutMs: 5000,
-      maxPayloadBytes: 5242880,
-      requiresAuth: false,
-      format: 'xml',
-      adapter: 'rss-xml',
-      enabled: true
-    }
-  ],
-  [
     'dmhy',
     {
       id: 'dmhy',
-      name: '动漫花园 DMHY (Chinese ACG)',
+      name: '动漫花园 DMHY (中文)',
       origin: 'https://share.dmhy.org',
       pathTemplate: '/topics/rss/rss.xml?keyword={query}',
       allowedRedirectHosts: ['share.dmhy.org', 'dmhy.org'],
@@ -50,10 +34,26 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
     }
   ],
   [
+    'nyaa',
+    {
+      id: 'nyaa',
+      name: 'Nyaa (Global / Asian)',
+      origin: 'https://nyaa.si',
+      pathTemplate: '/?page=rss&q={query}',
+      allowedRedirectHosts: ['nyaa.si', 'sukebei.nyaa.si'],
+      timeoutMs: 5000,
+      maxPayloadBytes: 5242880,
+      requiresAuth: false,
+      format: 'xml',
+      adapter: 'rss-xml',
+      enabled: true
+    }
+  ],
+  [
     'acg-rip',
     {
       id: 'acg-rip',
-      name: 'ACG.RIP (Chinese Community)',
+      name: 'ACG.RIP (中文)',
       origin: 'https://acg.rip',
       pathTemplate: '/1.xml?term={query}',
       allowedRedirectHosts: ['acg.rip'],
@@ -66,10 +66,74 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
     }
   ],
   [
+    'yts',
+    {
+      id: 'yts',
+      name: 'YTS / YIFY (Movies)',
+      origin: 'https://yts.mx',
+      pathTemplate: '/api/v2/list_movies.json?query_term={query}&limit=25',
+      allowedRedirectHosts: ['yts.mx', 'yts.lt', 'yts.am'],
+      timeoutMs: 5000,
+      maxPayloadBytes: 5242880,
+      requiresAuth: false,
+      format: 'json',
+      adapter: 'yts',
+      enabled: true
+    }
+  ],
+  [
+    'eztv',
+    {
+      id: 'eztv',
+      name: 'EZTV (TV Shows)',
+      origin: 'https://eztv.re',
+      pathTemplate: '/api/get-torrents?keywords={query}&limit=30',
+      allowedRedirectHosts: ['eztv.re', 'eztv.it', 'eztv.ch'],
+      timeoutMs: 5000,
+      maxPayloadBytes: 5242880,
+      requiresAuth: false,
+      format: 'json',
+      adapter: 'eztv',
+      enabled: true
+    }
+  ],
+  [
+    'solidtorrents',
+    {
+      id: 'solidtorrents',
+      name: 'SolidTorrents (DHT)',
+      origin: 'https://solidtorrents.to',
+      pathTemplate: '/api/v1/search?q={query}&limit=30',
+      allowedRedirectHosts: ['solidtorrents.to', 'solidtorrents.net'],
+      timeoutMs: 5000,
+      maxPayloadBytes: 5242880,
+      requiresAuth: false,
+      format: 'json',
+      adapter: 'solidtorrents',
+      enabled: true
+    }
+  ],
+  [
+    'bangumi',
+    {
+      id: 'bangumi',
+      name: '萌番组 Bangumi (中文)',
+      origin: 'https://bangumi.moe',
+      pathTemplate: '/rss/latest?search={query}',
+      allowedRedirectHosts: ['bangumi.moe'],
+      timeoutMs: 5000,
+      maxPayloadBytes: 5242880,
+      requiresAuth: false,
+      format: 'xml',
+      adapter: 'rss-xml',
+      enabled: true
+    }
+  ],
+  [
     'archive-org',
     {
       id: 'archive-org',
-      name: 'Internet Archive Public Media',
+      name: 'Internet Archive Media',
       origin: 'https://archive.org',
       pathTemplate: '/advancedsearch.php?q={query}+AND+format:Torrent&output=json',
       allowedRedirectHosts: ['archive.org', 'ia800000.us.archive.org'],
@@ -85,7 +149,7 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
     'linuxtracker',
     {
       id: 'linuxtracker',
-      name: 'LinuxTracker Distro Feeds',
+      name: 'LinuxTracker',
       origin: 'https://linuxtracker.org',
       pathTemplate: '/rss.php?search={query}',
       allowedRedirectHosts: ['linuxtracker.org'],

@@ -2,19 +2,7 @@ import type { ProviderEndpointConfig } from './types.ts';
 import type { SearchItem, Category } from '../../schemas/src/item.ts';
 import { validateSearchItem } from '../../schemas/src/validate.ts';
 import { ProviderBadResponseError } from '../../core/src/errors.ts';
-import { parseRssXmlFeed } from './xml-adapter.ts';
-
-const PUBLIC_TRACKERS = [
-  'udp://tracker.opentrackr.org:1337/announce',
-  'udp://open.stealth.si:80/announce',
-  'udp://tracker.torrent.eu.org:451/announce',
-  'udp://tracker.moeking.me:6969/announce'
-];
-
-function buildMagnetUri(infoHash: string, title: string): string {
-  const trParams = PUBLIC_TRACKERS.map(t => `tr=${encodeURIComponent(t)}`).join('&');
-  return `magnet:?xt=urn:btih:${infoHash.toLowerCase()}&dn=${encodeURIComponent(title)}&${trParams}`;
-}
+import { parseRssXmlFeed, buildMagnet } from './xml-adapter.ts';
 
 export async function parseProviderResponse(
   config: ProviderEndpointConfig,
@@ -55,6 +43,121 @@ export async function parseProviderResponse(
 
   const validatedItems: SearchItem[] = [];
 
+  // Special Adapter: YTS (Movies with exact size_bytes)
+  if (config.adapter === 'yts' && typeof rawJson === 'object' && rawJson !== null) {
+    const obj = rawJson as Record<string, unknown>;
+    const data = obj['data'] as Record<string, unknown> | undefined;
+    const movies = (data && Array.isArray(data['movies'])) ? data['movies'] : [];
+
+    for (const movie of movies) {
+      if (!movie || typeof movie !== 'object') continue;
+      const movieObj = movie as Record<string, unknown>;
+      const movieTitle = String(movieObj['title_long'] || movieObj['title'] || 'Movie');
+      const torrents = Array.isArray(movieObj['torrents']) ? movieObj['torrents'] : [];
+
+      for (const tor of torrents) {
+        if (!tor || typeof tor !== 'object') continue;
+        const t = tor as Record<string, unknown>;
+        const hash = String(t['hash'] || '').trim();
+        if (!hash || hash.length < 32) continue;
+
+        const quality = String(t['quality'] || 'HD');
+        const sizeBytes = typeof t['size_bytes'] === 'number' ? t['size_bytes'] : null;
+        const seeders = typeof t['seeds'] === 'number' ? Math.max(0, t['seeds']) : 10;
+        const leechers = typeof t['peers'] === 'number' ? Math.max(0, t['peers']) : 1;
+        const title = `${movieTitle} [${quality}]`;
+
+        const candidate = {
+          id: `${config.id}-${hash}`,
+          title,
+          category: 'Movies' as Category,
+          sizeBytes,
+          seeders,
+          leechers,
+          infoHash: hash.toLowerCase(),
+          magnetUri: buildMagnet(hash, title),
+          sourceId: config.id,
+          publishedAt: new Date().toISOString()
+        };
+
+        const res = validateSearchItem(candidate);
+        if (res.ok) validatedItems.push(res.value);
+      }
+    }
+    return validatedItems;
+  }
+
+  // Special Adapter: EZTV (TV Shows with exact size_bytes)
+  if (config.adapter === 'eztv' && typeof rawJson === 'object' && rawJson !== null) {
+    const obj = rawJson as Record<string, unknown>;
+    const torrents = Array.isArray(obj['torrents']) ? obj['torrents'] : [];
+
+    for (const tor of torrents) {
+      if (!tor || typeof tor !== 'object') continue;
+      const t = tor as Record<string, unknown>;
+      const hash = String(t['hash'] || '').trim();
+      const title = String(t['title'] || 'Episode').trim();
+      if (!hash || hash.length < 32) continue;
+
+      const sizeBytes = typeof t['size_bytes'] === 'number' && t['size_bytes'] > 0 ? t['size_bytes'] : null;
+      const seeders = typeof t['seeds'] === 'number' ? Math.max(0, t['seeds']) : 5;
+      const leechers = typeof t['peers'] === 'number' ? Math.max(0, t['peers']) : 1;
+
+      const candidate = {
+        id: `${config.id}-${hash}`,
+        title,
+        category: 'TV' as Category,
+        sizeBytes,
+        seeders,
+        leechers,
+        infoHash: hash.toLowerCase(),
+        magnetUri: String(t['magnet_url'] || buildMagnet(hash, title)),
+        sourceId: config.id,
+        publishedAt: new Date().toISOString()
+      };
+
+      const res = validateSearchItem(candidate);
+      if (res.ok) validatedItems.push(res.value);
+    }
+    return validatedItems;
+  }
+
+  // Special Adapter: SolidTorrents (DHT with exact size)
+  if (config.adapter === 'solidtorrents' && typeof rawJson === 'object' && rawJson !== null) {
+    const obj = rawJson as Record<string, unknown>;
+    const results = Array.isArray(obj['results']) ? obj['results'] : [];
+
+    for (const item of results) {
+      if (!item || typeof item !== 'object') continue;
+      const t = item as Record<string, unknown>;
+      const hash = String(t['infoHash'] || t['hash'] || '').trim();
+      const title = String(t['title'] || '').trim();
+      if (!hash || !title || hash.length < 32) continue;
+
+      const swarm = (t['swarm'] && typeof t['swarm'] === 'object') ? (t['swarm'] as Record<string, unknown>) : {};
+      const seeders = typeof swarm['seeders'] === 'number' ? Math.max(0, swarm['seeders']) : 5;
+      const leechers = typeof swarm['leechers'] === 'number' ? Math.max(0, swarm['leechers']) : 1;
+      const sizeBytes = typeof t['size'] === 'number' && t['size'] > 0 ? t['size'] : null;
+
+      const candidate = {
+        id: `${config.id}-${hash}`,
+        title,
+        category: 'Other' as Category,
+        sizeBytes,
+        seeders,
+        leechers,
+        infoHash: hash.toLowerCase(),
+        magnetUri: String(t['magnet'] || buildMagnet(hash, title)),
+        sourceId: config.id,
+        publishedAt: String(t['imported'] || new Date().toISOString())
+      };
+
+      const res = validateSearchItem(candidate);
+      if (res.ok) validatedItems.push(res.value);
+    }
+    return validatedItems;
+  }
+
   // Special Adapter: Apibay / ThePirateBay
   if (config.adapter === 'apibay' && Array.isArray(rawJson)) {
     for (const rawItem of rawJson) {
@@ -81,7 +184,7 @@ export async function parseProviderResponse(
         seeders,
         leechers,
         infoHash: infoHash.toLowerCase(),
-        magnetUri: buildMagnetUri(infoHash, name),
+        magnetUri: buildMagnet(infoHash, name),
         sourceId: config.id,
         publishedAt
       };
@@ -109,7 +212,6 @@ export async function parseProviderResponse(
 
       if (!identifier) continue;
 
-      // Deterministic 40-character pseudo hash from identifier for canonical schema
       const paddedHash = (identifier + '0000000000000000000000000000000000000000').substring(0, 40).replace(/[^a-fA-F0-9]/g, 'a');
 
       const candidate = {
@@ -120,7 +222,7 @@ export async function parseProviderResponse(
         seeders: 12,
         leechers: 1,
         infoHash: paddedHash.toLowerCase(),
-        magnetUri: buildMagnetUri(paddedHash, title),
+        magnetUri: buildMagnet(paddedHash, title),
         sourceId: config.id,
         publishedAt: new Date(pubDate).toISOString()
       };
@@ -133,7 +235,7 @@ export async function parseProviderResponse(
     return validatedItems;
   }
 
-  // Generic JSON Array Mapping
+  // Generic JSON Array
   let itemsArray: unknown[] = [];
   if (Array.isArray(rawJson)) {
     itemsArray = rawJson;

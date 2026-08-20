@@ -249,7 +249,7 @@ export function renderFullHtmlPage(): string {
       <div class="frame-toolbar" id="providers">
         <div class="feeds-pills" id="provider-toggles"></div>
         <div>
-          <span id="active-provider-count" class="badge badge-accent">6 Active</span>
+          <span id="active-provider-count" class="badge badge-accent">10 Active</span>
         </div>
       </div>
 
@@ -317,9 +317,13 @@ export function renderFullHtmlPage(): string {
       'use strict';
       const DEFAULT_PROVIDERS = [
         { id: 'apibay', name: 'ThePirateBay (Global)' },
-        { id: 'nyaa', name: 'Nyaa (Asian/Media)' },
         { id: 'dmhy', name: '动漫花园 DMHY (中文)' },
+        { id: 'nyaa', name: 'Nyaa (Asian/Media)' },
         { id: 'acg-rip', name: 'ACG.RIP (中文)' },
+        { id: 'yts', name: 'YTS (Movies HD/4K)' },
+        { id: 'eztv', name: 'EZTV (TV Series)' },
+        { id: 'solidtorrents', name: 'SolidTorrents (DHT)' },
+        { id: 'bangumi', name: '萌番组 Bangumi (中文)' },
         { id: 'archive-org', name: 'Internet Archive' },
         { id: 'linuxtracker', name: 'LinuxTracker' }
       ];
@@ -352,7 +356,7 @@ export function renderFullHtmlPage(): string {
       };
 
       function formatBytes(bytes) {
-        if (!bytes || bytes === 0) return '0 B';
+        if (bytes === null || bytes === undefined || bytes <= 1) return 'N/A';
         const k = 1024;
         const sizes = ['B', 'KiB', 'MiB', 'GiB', 'TiB'];
         const i = Math.floor(Math.log(bytes) / Math.log(k));

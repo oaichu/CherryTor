@@ -9,12 +9,40 @@ import { validateSearchItem } from '../../schemas/src/validate.ts';
 const PUBLIC_TRACKERS = [
   'udp://tracker.opentrackr.org:1337/announce',
   'udp://open.stealth.si:80/announce',
-  'udp://tracker.torrent.eu.org:451/announce'
+  'udp://tracker.torrent.eu.org:451/announce',
+  'udp://tracker.moeking.me:6969/announce'
 ];
 
-function buildMagnet(infoHash: string, title: string): string {
+export function buildMagnet(infoHash: string, title: string): string {
   const trs = PUBLIC_TRACKERS.map(t => `tr=${encodeURIComponent(t)}`).join('&');
   return `magnet:?xt=urn:btih:${infoHash.toLowerCase()}&dn=${encodeURIComponent(title)}&${trs}`;
+}
+
+export function parseHumanSizeToBytes(raw: string | number | null | undefined): number | null {
+  if (typeof raw === 'number') {
+    return Number.isInteger(raw) && raw > 1 ? raw : null;
+  }
+  if (!raw || typeof raw !== 'string') return null;
+
+  const str = raw.trim();
+  if (/^\d+$/.test(str)) {
+    const n = parseInt(str, 10);
+    return n > 1 ? n : null;
+  }
+
+  // Regex matching e.g. "1.45 GB", "750 MB", "2.1 GiB", "850.5 MiB", "15.2 KB", "2.5TB"
+  const match = str.match(/(\d+(?:\.\d+)?)\s*(T|G|M|K)(?:i)?B/i);
+  if (!match || !match[1] || !match[2]) return null;
+
+  const val = parseFloat(match[1]);
+  const unit = match[2].toUpperCase();
+
+  if (unit === 'T') return Math.round(val * 1024 * 1024 * 1024 * 1024);
+  if (unit === 'G') return Math.round(val * 1024 * 1024 * 1024);
+  if (unit === 'M') return Math.round(val * 1024 * 1024);
+  if (unit === 'K') return Math.round(val * 1024);
+
+  return null;
 }
 
 function extractTagValue(xmlChunk: string, tagName: string): string | null {
@@ -22,7 +50,6 @@ function extractTagValue(xmlChunk: string, tagName: string): string | null {
   const closeTag = `</${tagName}>`;
   const start = xmlChunk.indexOf(openTag);
   if (start === -1) {
-    // Try namespace or case-insensitive regex if simple match fails
     const match = xmlChunk.match(new RegExp(`<${tagName}[^>]*>([\\s\\S]*?)<\\/${tagName}>`, 'i'));
     if (match && match[1]) {
       let val = match[1].trim();
@@ -46,13 +73,13 @@ export function parseRssXmlFeed(xmlText: string, sourceId: string, defaultCatego
   const items: SearchItem[] = [];
   const itemChunks = xmlText.split(/<item[\s>]/i);
 
-  // Skip the first chunk (header/channel metadata)
   for (let i = 1; i < itemChunks.length; i++) {
     const chunk = itemChunks[i]!;
     const title = extractTagValue(chunk, 'title') || 'Untitled';
     const link = extractTagValue(chunk, 'link') || '';
     const guid = extractTagValue(chunk, 'guid') || '';
     const pubDate = extractTagValue(chunk, 'pubDate') || undefined;
+    const description = extractTagValue(chunk, 'description') || '';
 
     // Check for magnet link in <link> or <enclosure> or raw chunk
     let magnetUri: string | undefined;
@@ -73,14 +100,12 @@ export function parseRssXmlFeed(xmlText: string, sourceId: string, defaultCatego
       }
     }
 
-    // Try custom tags (e.g. nyaa:infoHash, infoHash, hash)
     if (!infoHash) {
       infoHash = extractTagValue(chunk, 'nyaa:infoHash') ||
                  extractTagValue(chunk, 'infoHash') ||
                  extractTagValue(chunk, 'hash') || '';
     }
 
-    // Try finding 40-char hex string in guid or link or enclosure URL
     if (!infoHash) {
       const hexMatch = (guid + ' ' + link + ' ' + chunk).match(/\b([0-9a-fA-F]{40})\b/);
       if (hexMatch && hexMatch[1]) {
@@ -96,18 +121,31 @@ export function parseRssXmlFeed(xmlText: string, sourceId: string, defaultCatego
       magnetUri = buildMagnet(infoHash, title);
     }
 
-    // Swarm seeds/leechers if provided (e.g. nyaa:seeders)
+    // Swarm seeds / leechers
     const seedersStr = extractTagValue(chunk, 'nyaa:seeders') || extractTagValue(chunk, 'seeders');
     const seeders = seedersStr ? Math.max(0, parseInt(seedersStr, 10) || 0) : 10;
 
     const leechersStr = extractTagValue(chunk, 'nyaa:leechers') || extractTagValue(chunk, 'leechers');
     const leechers = leechersStr ? Math.max(0, parseInt(leechersStr, 10) || 0) : 1;
 
-    // Size if provided
+    // Smart File Size Extraction
     let sizeBytes: number | null = null;
-    const lengthMatch = chunk.match(/length=["'](\d+)["']/i);
-    if (lengthMatch && lengthMatch[1]) {
-      sizeBytes = parseInt(lengthMatch[1], 10) || null;
+    const rawSizeTag = extractTagValue(chunk, 'nyaa:size') || extractTagValue(chunk, 'size') || extractTagValue(chunk, 'torrent:contentLength');
+    if (rawSizeTag) {
+      sizeBytes = parseHumanSizeToBytes(rawSizeTag);
+    }
+
+    if (!sizeBytes) {
+      const lengthMatch = chunk.match(/length=["'](\d+)["']/i);
+      if (lengthMatch && lengthMatch[1]) {
+        const parsedLen = parseInt(lengthMatch[1], 10);
+        if (parsedLen > 1024) sizeBytes = parsedLen;
+      }
+    }
+
+    // Try extracting size from title or description (e.g. "[1.4 GB]", "(850MB)", "2.1GiB")
+    if (!sizeBytes) {
+      sizeBytes = parseHumanSizeToBytes(title) || parseHumanSizeToBytes(description);
     }
 
     const rawCandidate = {

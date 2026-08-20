@@ -10,9 +10,13 @@
   // Approved default providers
   const DEFAULT_PROVIDERS = [
     { id: 'apibay', name: 'ThePirateBay (Global)', enabled: true },
-    { id: 'nyaa', name: 'Nyaa (Asian/Media)', enabled: true },
     { id: 'dmhy', name: '动漫花园 DMHY (中文)', enabled: true },
+    { id: 'nyaa', name: 'Nyaa (Asian/Media)', enabled: true },
     { id: 'acg-rip', name: 'ACG.RIP (中文)', enabled: true },
+    { id: 'yts', name: 'YTS (Movies HD/4K)', enabled: true },
+    { id: 'eztv', name: 'EZTV (TV Series)', enabled: true },
+    { id: 'solidtorrents', name: 'SolidTorrents (DHT)', enabled: true },
+    { id: 'bangumi', name: '萌番组 Bangumi (中文)', enabled: true },
     { id: 'archive-org', name: 'Internet Archive', enabled: true },
     { id: 'linuxtracker', name: 'LinuxTracker', enabled: true }
   ];
@@ -50,7 +54,7 @@
   };
 
   function formatBytes(bytes) {
-    if (!bytes || bytes === 0) return '0 B';
+    if (bytes === null || bytes === undefined || bytes <= 1) return 'N/A';
     const k = 1024;
     const sizes = ['B', 'KiB', 'MiB', 'GiB', 'TiB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
