@@ -3232,7 +3232,6 @@ export function renderFullHtmlPage(): string {
             '<div class="settings-group-title"><span>🌐 Official Web Endpoints &amp; Source</span></div>' +
             '<div style="display:flex; flex-direction:column; gap:0.4rem; font-size:0.8125rem; font-family:var(--font-mono); margin-top:0.4rem;">' +
               '<div style="display:flex; justify-content:space-between;"><span style="color:var(--color-text-muted);">CherryTor Official:</span> <a href="https://cherrytor.io.vn" target="_blank" style="color:var(--color-cyan-400);">https://cherrytor.io.vn</a></div>' +
-              '<div style="display:flex; justify-content:space-between;"><span style="color:var(--color-text-muted);">Edge Mirror:</span> <a href="https://tor.oaichuhust.workers.dev" target="_blank" style="color:var(--color-text-accent);">https://tor.oaichuhust.workers.dev</a></div>' +
               '<div style="display:flex; justify-content:space-between;"><span style="color:var(--color-text-muted);">AeroPad Vault:</span> <a href="https://aeropad.pages.dev/" target="_blank" style="color:var(--color-cyan-400);">https://aeropad.pages.dev/</a></div>' +
               '<div style="display:flex; justify-content:space-between;"><span style="color:var(--color-text-muted);">GitHub Repository:</span> <a href="https://github.com/oaichu/CherryTor" target="_blank" style="color:var(--color-text-primary);">https://github.com/oaichu/CherryTor</a></div>' +
             '</div>' +

@@ -8,7 +8,6 @@
 
 <p align="center">
   <a href="https://cherrytor.io.vn"><img src="https://img.shields.io/badge/Official_Domain-cherrytor.io.vn-0284C7?style=for-the-badge&logo=internet-explorer" alt="Official Domain"></a>
-  <a href="https://tor.oaichuhust.workers.dev"><img src="https://img.shields.io/badge/Edge_Mirror-tor.oaichuhust.workers.dev-E11D48?style=for-the-badge&logo=cloudflare" alt="Edge Mirror"></a>
   <a href="https://aeropad.pages.dev/"><img src="https://img.shields.io/badge/AeroPad_Vault-aeropad.pages.dev-00F2FE?style=for-the-badge&logo=icloud" alt="AeroPad Vault"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge&logo=opensourceinitiative" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/Security-Zero--Log_Invariant-10B981?style=for-the-badge&logo=shield" alt="Zero Logs">
@@ -107,7 +106,6 @@ flowchart TD
 ## 🌐 Live Deployments
 
 - **Official Web Address**: [https://cherrytor.io.vn](https://cherrytor.io.vn)
-- **Direct Edge Mirror**: [https://tor.oaichuhust.workers.dev](https://tor.oaichuhust.workers.dev)
 - **Companion 2FA Vault (AeroPad)**: [https://aeropad.pages.dev](https://aeropad.pages.dev)
 
 ---
