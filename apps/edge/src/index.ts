@@ -1,4 +1,5 @@
 import { handleSearchApiRequest } from './router.ts';
+import { renderFullHtmlPage } from './html.ts';
 
 export default {
   async fetch(request: Request): Promise<Response> {
@@ -14,6 +15,18 @@ export default {
         }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
+    }
+
+    // Serve Full Web UI at Root
+    if (url.pathname === '/' || url.pathname === '/index.html') {
+      return new Response(renderFullHtmlPage(), {
+        status: 200,
+        headers: {
+          'Content-Type': 'text/html; charset=utf-8',
+          'Cache-Control': 'public, max-age=300',
+          'X-Content-Type-Options': 'nosniff'
+        }
+      });
     }
 
     if (url.pathname === '/api/v1/search') {
