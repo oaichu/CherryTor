@@ -3193,6 +3193,8 @@ export function renderFullHtmlPage(): string {
         });
 
         el.settingsBtn.addEventListener('click', openSettingsModal);
+        if (el.navLinkAeropad) el.navLinkAeropad.addEventListener('click', openAeropadModal);
+        if (el.navLinkAbout) el.navLinkAbout.addEventListener('click', openAboutModal);
         el.modalCloseBtn.addEventListener('click', closeSettingsModal);
         el.modalActionBtn.addEventListener('click', closeSettingsModal);
         el.modalBackdrop.addEventListener('click', (e) => {
