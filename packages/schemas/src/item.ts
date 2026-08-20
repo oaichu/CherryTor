@@ -10,6 +10,7 @@ export type Category =
   | 'Anime'
   | 'Music'
   | 'Games'
+  | 'Books'
   | 'Other';
 
 export interface RankingSignals {

@@ -118,7 +118,7 @@ export async function handleSearchApiRequest(request: Request): Promise<Response
   try {
     cb.assertCanExecute();
     const sanitizedQuery = normalizeAndValidateQuery(rawQuery);
-    const targetUrl = buildProviderUrl(config, sanitizedQuery);
+    const targetUrl = buildProviderUrl(config, sanitizedQuery, validation.value.category);
 
     const items = await withTimeout(
       async (signal: AbortSignal) => {

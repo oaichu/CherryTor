@@ -19,6 +19,7 @@ const ALLOWED_CATEGORIES: ReadonlySet<Category> = new Set([
   'Anime',
   'Music',
   'Games',
+  'Books',
   'Other'
 ]);
 

@@ -3,6 +3,7 @@ import type { SearchItem, Category } from '../../schemas/src/item.ts';
 import { validateSearchItem } from '../../schemas/src/validate.ts';
 import { ProviderBadResponseError } from '../../core/src/errors.ts';
 import { parseRssXmlFeed, buildMagnet, parseHumanSizeToBytes } from './xml-adapter.ts';
+import { detectCategory } from './classifier.ts';
 
 export async function parseProviderResponse(
   config: ProviderEndpointConfig,
@@ -122,7 +123,7 @@ export async function parseProviderResponse(
     return validatedItems;
   }
 
-  // Special Adapter: SolidTorrents (DHT with exact size)
+  // Special Adapter: SolidTorrents (DHT with exact size & category)
   if (config.adapter === 'solidtorrents' && typeof rawJson === 'object' && rawJson !== null) {
     const obj = rawJson as Record<string, unknown>;
     const results = Array.isArray(obj['results']) ? obj['results'] : [];
@@ -138,40 +139,12 @@ export async function parseProviderResponse(
       const seeders = typeof swarm['seeders'] === 'number' ? Math.max(0, swarm['seeders']) : 5;
       const leechers = typeof swarm['leechers'] === 'number' ? Math.max(0, swarm['leechers']) : 1;
       const sizeBytes = typeof t['size'] === 'number' && t['size'] > 0 ? t['size'] : null;
-
-      const catRaw = String(t['category'] || '').toLowerCase();
-      let mappedCategory: Category = 'Other';
-      if (catRaw.includes('video') || catRaw.includes('movie') || catRaw.includes('show')) {
-        mappedCategory = 'Movies';
-      } else if (catRaw.includes('game')) {
-        mappedCategory = 'Games';
-      } else if (catRaw.includes('program') || catRaw.includes('app') || catRaw.includes('software')) {
-        mappedCategory = 'Software';
-      } else if (catRaw.includes('music') || catRaw.includes('audio')) {
-        mappedCategory = 'Music';
-      } else if (catRaw.includes('book') || catRaw.includes('ebook')) {
-        mappedCategory = 'Other';
-      } else if (catRaw.includes('anime')) {
-        mappedCategory = 'Anime';
-      } else {
-        const lower = title.toLowerCase();
-        if (/(1080p|2160p|720p|4k|bluray|web-dl|x264|x265|hevc|remux|dvdrip|bdrip|hdrip|season|s0\d|e0\d|movie)/i.test(lower)) {
-          mappedCategory = 'Movies';
-        } else if (/(repack|fitgirl|dodi|iso|crack|patch|trainer|switch|nsp|xci|gog|game)/i.test(lower)) {
-          mappedCategory = 'Games';
-        } else if (/(flac|mp3|320kbps|lossless|alac|discography|soundtrack|ost)/i.test(lower)) {
-          mappedCategory = 'Music';
-        } else if (/(pdf|epub|mobi|cbz|cbr|book)/i.test(lower)) {
-          mappedCategory = 'Other';
-        } else if (/(setup|installer|x64|x86|windows|macos|linux|portable|v\d+\.\d+)/i.test(lower)) {
-          mappedCategory = 'Software';
-        }
-      }
+      const category = detectCategory(t['category'] as string, title, config.id);
 
       const candidate = {
         id: `${config.id}-${hash}`,
         title,
-        category: mappedCategory,
+        category,
         sizeBytes,
         seeders,
         leechers,
@@ -187,7 +160,7 @@ export async function parseProviderResponse(
     return validatedItems;
   }
 
-  // Special Adapter: Apibay / ThePirateBay
+  // Special Adapter: Apibay / ThePirateBay (With exact category mapping)
   if (config.adapter === 'apibay' && Array.isArray(rawJson)) {
     for (const rawItem of rawJson) {
       if (!rawItem || typeof rawItem !== 'object') continue;
@@ -204,38 +177,12 @@ export async function parseProviderResponse(
       const sizeBytes = parseInt(String(item['size'] || '0'), 10) || null;
       const addedTs = parseInt(String(item['added'] || '0'), 10);
       const publishedAt = addedTs > 0 ? new Date(addedTs * 1000).toISOString() : new Date().toISOString();
-
-      const catCode = parseInt(String(item['category'] || '0'), 10) || 0;
-      let mappedCategory: Category = 'Other';
-      if (catCode >= 200 && catCode < 300) {
-        mappedCategory = 'Movies';
-      } else if (catCode >= 400 && catCode < 500) {
-        mappedCategory = 'Games';
-      } else if (catCode >= 300 && catCode < 400) {
-        mappedCategory = 'Software';
-      } else if (catCode >= 100 && catCode < 200) {
-        mappedCategory = 'Music';
-      } else if (catCode >= 600 && catCode < 700) {
-        mappedCategory = 'Other';
-      } else {
-        const lower = name.toLowerCase();
-        if (/(1080p|2160p|720p|4k|bluray|web-dl|x264|x265|hevc|remux|dvdrip|bdrip|hdrip|season|s0\d|e0\d|movie)/i.test(lower)) {
-          mappedCategory = 'Movies';
-        } else if (/(repack|fitgirl|dodi|iso|crack|patch|trainer|switch|nsp|xci|gog|game)/i.test(lower)) {
-          mappedCategory = 'Games';
-        } else if (/(flac|mp3|320kbps|lossless|alac|discography|soundtrack|ost)/i.test(lower)) {
-          mappedCategory = 'Music';
-        } else if (/(pdf|epub|mobi|cbz|cbr|book)/i.test(lower)) {
-          mappedCategory = 'Other';
-        } else if (/(setup|installer|x64|x86|windows|macos|linux|portable|v\d+\.\d+)/i.test(lower)) {
-          mappedCategory = 'Software';
-        }
-      }
+      const category = detectCategory(item['category'] as string | number, name, config.id);
 
       const candidate = {
         id: `${config.id}-${infoHash}`,
         title: name,
-        category: mappedCategory,
+        category,
         sizeBytes,
         seeders,
         leechers,
@@ -269,24 +216,24 @@ export async function parseProviderResponse(
       if (!identifier) continue;
 
       let sizeBytes: number | null = null;
-      if (typeof doc['item_size'] === 'number' && doc['item_size'] > 0) {
+      if (typeof doc['item_size'] === 'number') {
         sizeBytes = doc['item_size'];
-      } else if (typeof doc['size'] === 'number' && doc['size'] > 0) {
+      } else if (typeof doc['size'] === 'number') {
         sizeBytes = doc['size'];
       } else if (typeof doc['item_size'] === 'string') {
-        const parsed = parseInt(doc['item_size'], 10);
-        if (!isNaN(parsed) && parsed > 0) sizeBytes = parsed;
+        sizeBytes = parseHumanSizeToBytes(doc['item_size']);
       }
       if (!sizeBytes) {
         sizeBytes = parseHumanSizeToBytes(title);
       }
 
+      const category = detectCategory(doc['mediatype'] as string, title, config.id);
       const paddedHash = (identifier + '0000000000000000000000000000000000000000').substring(0, 40).replace(/[^a-fA-F0-9]/g, 'a');
 
       const candidate = {
         id: `archive-${identifier}`,
         title,
-        category: 'Other' as Category,
+        category,
         sizeBytes,
         seeders: 12,
         leechers: 1,

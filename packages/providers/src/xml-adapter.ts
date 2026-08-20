@@ -5,6 +5,7 @@
 
 import type { SearchItem, Category } from '../../schemas/src/item.ts';
 import { validateSearchItem } from '../../schemas/src/validate.ts';
+import { detectCategory } from './classifier.ts';
 
 const PUBLIC_TRACKERS = [
   'udp://tracker.opentrackr.org:1337/announce',
@@ -80,6 +81,7 @@ export function parseRssXmlFeed(xmlText: string, sourceId: string, defaultCatego
     const guid = extractTagValue(chunk, 'guid') || '';
     const pubDate = extractTagValue(chunk, 'pubDate') || undefined;
     const description = extractTagValue(chunk, 'description') || '';
+    const rawCategoryTag = extractTagValue(chunk, 'category') || extractTagValue(chunk, 'nyaa:category');
 
     // Check for magnet link in <link> or <enclosure> or raw chunk
     let magnetUri: string | undefined;
@@ -148,10 +150,13 @@ export function parseRssXmlFeed(xmlText: string, sourceId: string, defaultCatego
       sizeBytes = parseHumanSizeToBytes(title) || parseHumanSizeToBytes(description);
     }
 
+    // Determine category dynamically
+    const category = detectCategory(rawCategoryTag, title, sourceId) || defaultCategory;
+
     const rawCandidate = {
       id: `${sourceId}-${infoHash}`,
       title,
-      category: defaultCategory,
+      category,
       sizeBytes,
       seeders,
       leechers,
