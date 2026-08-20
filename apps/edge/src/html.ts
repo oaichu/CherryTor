@@ -2574,6 +2574,23 @@ export function renderFullHtmlPage(): string {
       function getProcessedItems() {
         let list = state.selectedCategory === 'BOOKMARKS' ? [...state.bookmarks] : [...state.items];
 
+        // Category Filter
+        if (state.selectedCategory !== 'ALL' && state.selectedCategory !== 'BOOKMARKS') {
+          if (state.selectedCategory === 'MOVIES') {
+            list = list.filter(item => ['Movies', 'TV'].includes(item.category) || /(1080p|2160p|720p|4k|bluray|web-dl|x264|x265|hevc|remux|dvdrip|hdrip|season|s0\d|e0\d|movie)/i.test(item.title));
+          } else if (state.selectedCategory === 'ANIME') {
+            list = list.filter(item => item.category === 'Anime' || /(anime|nyaa|dmhy|bangumi|manga|acg)/i.test(item.title));
+          } else if (state.selectedCategory === 'GAMES') {
+            list = list.filter(item => item.category === 'Games' || /(repack|fitgirl|dodi|iso|game|switch|nsp|xci|gog)/i.test(item.title));
+          } else if (state.selectedCategory === 'SOFTWARE') {
+            list = list.filter(item => ['Software', 'OS'].includes(item.category) || /(setup|installer|x64|windows|macos|linux|portable)/i.test(item.title));
+          } else if (state.selectedCategory === 'BOOKS') {
+            list = list.filter(item => item.category === 'Books' || /(pdf|epub|mobi|cbz|cbr|book)/i.test(item.title));
+          } else if (state.selectedCategory === 'MUSIC') {
+            list = list.filter(item => item.category === 'Music' || /(flac|mp3|lossless|audio|soundtrack|ost)/i.test(item.title));
+          }
+        }
+
         // Safe Mode filter
         if (state.safeMode) {
           const nsfwRegex = /(xxx|porn|hentai|18\+|adult|erotic|r18|nsfw)/i;
@@ -2587,7 +2604,11 @@ export function renderFullHtmlPage(): string {
 
         // Sorting
         if (state.sortOrder === 'seeders_desc') {
-          list.sort((a, b) => (b.seeders || 0) - (a.seeders || 0));
+          list.sort((a, b) => {
+            const seedDiff = (b.seeders || 0) - (a.seeders || 0);
+            if (seedDiff !== 0) return seedDiff;
+            return (b.sizeBytes || 0) - (a.sizeBytes || 0);
+          });
         } else if (state.sortOrder === 'size_desc') {
           list.sort((a, b) => (b.sizeBytes || 0) - (a.sizeBytes || 0));
         } else if (state.sortOrder === 'size_asc') {
