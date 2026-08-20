@@ -153,6 +153,14 @@ export function parseRssXmlFeed(xmlText: string, sourceId: string, defaultCatego
     // Determine category dynamically
     const category = detectCategory(rawCategoryTag, title, sourceId) || defaultCategory;
 
+    let validPubDate = new Date().toISOString();
+    if (pubDate) {
+      const parsedDate = new Date(pubDate);
+      if (!isNaN(parsedDate.getTime())) {
+        validPubDate = parsedDate.toISOString();
+      }
+    }
+
     const rawCandidate = {
       id: `${sourceId}-${infoHash}`,
       title,
@@ -163,7 +171,7 @@ export function parseRssXmlFeed(xmlText: string, sourceId: string, defaultCatego
       infoHash: infoHash.toLowerCase(),
       magnetUri,
       sourceId,
-      publishedAt: pubDate ? new Date(pubDate).toISOString() : new Date().toISOString()
+      publishedAt: validPubDate
     };
 
     const validation = validateSearchItem(rawCandidate);

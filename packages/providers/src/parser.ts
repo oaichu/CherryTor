@@ -230,6 +230,14 @@ export async function parseProviderResponse(
       const category = detectCategory(doc['mediatype'] as string, title, config.id);
       const paddedHash = (identifier + '0000000000000000000000000000000000000000').substring(0, 40).replace(/[^a-fA-F0-9]/g, 'a');
 
+      let validPubDate = new Date().toISOString();
+      if (pubDate) {
+        const parsedDate = new Date(pubDate);
+        if (!isNaN(parsedDate.getTime())) {
+          validPubDate = parsedDate.toISOString();
+        }
+      }
+
       const candidate = {
         id: `archive-${identifier}`,
         title,
@@ -240,7 +248,7 @@ export async function parseProviderResponse(
         infoHash: paddedHash.toLowerCase(),
         magnetUri: buildMagnet(paddedHash, title),
         sourceId: config.id,
-        publishedAt: new Date(pubDate).toISOString()
+        publishedAt: validPubDate
       };
 
       const result = validateSearchItem(candidate);

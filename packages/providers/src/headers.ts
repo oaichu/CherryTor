@@ -20,8 +20,7 @@ export function buildSanitizedProviderHeaders(
 ): Headers {
   const headers = new Headers();
 
-  // Standard safe browser/feed reader User-Agent to avoid generic bot blocks from public RSS/API endpoints
-  headers.set('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36 (compatible; CherryTor/1.0)');
+  headers.set('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36');
   headers.set('Accept', config.format === 'xml' ? 'application/xml, text/xml, application/rss+xml, text/plain, */*' : 'application/json, text/plain, */*');
   headers.set('Accept-Language', 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,ja;q=0.6');
   headers.set('Cache-Control', 'no-cache');
