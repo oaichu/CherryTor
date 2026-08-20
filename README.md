@@ -9,8 +9,8 @@
 <p align="center">
   <a href="https://cherrytor.io.vn"><img src="https://img.shields.io/badge/Official_Domain-cherrytor.io.vn-0284C7?style=for-the-badge&logo=internet-explorer" alt="Official Domain"></a>
   <a href="https://tor.oaichuhust.workers.dev"><img src="https://img.shields.io/badge/Edge_Mirror-tor.oaichuhust.workers.dev-E11D48?style=for-the-badge&logo=cloudflare" alt="Edge Mirror"></a>
+  <a href="https://aeropad.pages.dev/"><img src="https://img.shields.io/badge/AeroPad_Vault-aeropad.pages.dev-00F2FE?style=for-the-badge&logo=icloud" alt="AeroPad Vault"></a>
   <img src="https://img.shields.io/badge/Security-Zero--Log_Invariant-10B981?style=for-the-badge&logo=shield" alt="Zero Logs">
-  <img src="https://img.shields.io/badge/TypeScript-Strict_v5-3178C6?style=for-the-badge&logo=typescript" alt="TypeScript">
   <img src="https://img.shields.io/badge/Edge_Latency-<15ms-8B5CF6?style=for-the-badge&logo=speedtest" alt="Latency">
 </p>
 
@@ -37,11 +37,12 @@ Engineered with a **Zero-Trust, Zero-Log architecture**, CherryTor guarantees co
 - **Anti-Proxy Invariant (INV-01 & INV-02)**: Strict protocol prevents arbitrary proxying or illegal file relaying. CherryTor serves verified swarm metadata and standard RFC Magnet links only.
 - **Client-Side Data Storage**: Bookmarks, history, and preferences stay 100% on your local device via browser `LocalStorage`.
 
-### 2. 📝 Aeropad: The Integrated Zero-Log Torrent Scratchpad
-Built directly into the CherryTor ecosystem, **Aeropad** empowers users to manage, parse, and export swarm magnet links seamlessly:
-- **Instant Magnet Extraction**: Paste unstructured text, logs, or release notes to automatically parse valid `magnet:?xt=urn:btih:...` URIs and infohashes.
-- **Batch Export**: 1-click batch copy formatted for BitTorrent clients (qBittorrent, Transmission, Aria2) or export to JSON/TXT.
-- **Offline & Persistent**: Works offline in your browser with zero server tracking.
+### 2. 📝 AeroPad: The 2FA Vault & Zero-Knowledge Security Studio
+A core companion project in our ecosystem is **[AeroPad](https://aeropad.pages.dev/)** ([https://aeropad.pages.dev](https://aeropad.pages.dev)):
+- **2FA Studio & Offline TOTP**: Generate and scan time-based one-time passwords (RFC 6238) with real-time QR camera scanning without cloud dependencies.
+- **Client-Side AES-GCM Cipher Vault**: Store encrypted notes, seed phrases, and credentials protected by master encryption.
+- **Instant Magnet & Swarm Extractor**: Paste unstructured text, logs, or release notes to automatically extract all valid `magnet:?xt=urn:btih:...` URIs and infohashes for 1-click batch export.
+- **100% Client-Side Privacy**: Operates fully offline in your browser with zero server logs or tracking.
 
 ### 3. ⚡ 15+ Verified Global Upstream Feeds
 Queries the world's most trusted public indexers in parallel with sub-second response times:

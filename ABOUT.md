@@ -17,19 +17,19 @@ Modern search engines and torrent aggregators are plagued with pervasive trackin
 
 ---
 
-## 📝 Meet Aeropad: The Zero-Log Magnet & Torrent Scratchpad
+## 📝 Meet AeroPad: The 2FA Vault & Zero-Knowledge Security Studio
 
-Integrated directly into the CherryTor ecosystem, **Aeropad** is an ephemeral client-side workspace designed for power users who manage torrent swarms and magnet links:
+A core companion project in our ecosystem is **[AeroPad](https://aeropad.pages.dev/)** — an Apple-grade cryptographic security workspace and 2FA vault:
 
 <p align="center">
-  <img src="docs/assets/cherrytor-ui-mockup.svg" alt="Aeropad & CherryTor Interface" width="100%">
+  <img src="docs/assets/cherrytor-ui-mockup.svg" alt="AeroPad & CherryTor Interface" width="100%">
 </p>
 
-### Key Capabilities of Aeropad:
-- **Instant Magnet Parsing**: Paste raw blocks of text, log files, or release notes. Aeropad automatically extracts all valid `magnet:?xt=urn:btih:...` URIs and 40-character hex / 32-character Base32 infohashes.
-- **Batch Swarm Management**: Copy all parsed magnet links in one click, format them for torrent clients (qBittorrent, Transmission, Aria2), or export them as JSON/TXT files.
-- **Offline & Local-Only**: All notes, links, and scratchpad data remain 100% in your browser's `LocalStorage`. Nothing is ever transmitted to remote servers.
-- **Direct Torrent Client Handoff**: Open individual magnets directly in your default desktop or mobile BitTorrent client with zero intermediate redirects.
+### Key Capabilities of AeroPad ([https://aeropad.pages.dev](https://aeropad.pages.dev)):
+- **2FA Studio & Offline TOTP**: Generate and scan time-based one-time passwords (RFC 6238) with QR camera scanner entirely client-side without cloud leaks.
+- **Smart Encrypted Notepad**: Client-side AES-GCM encrypted notes and cipher vault with biometric / master password protection.
+- **Instant Magnet & Swarm Extractor**: Paste raw text, log files, or release notes. AeroPad extracts valid `magnet:?xt=urn:btih:...` URIs and infohashes for batch handoff.
+- **100% Client-Side & Zero-Knowledge**: Keys and secret tokens never leave your browser isolate. Fully functional offline.
 
 ---
 
@@ -76,5 +76,5 @@ Both CherryTor and Aeropad natively support 6 major languages:
 
 <p align="center">
   <em>Built with ❤️ and distributed under the permissive MIT License.</em><br>
-  <strong>Official URL:</strong> <a href="https://cherrytor.io.vn">https://cherrytor.io.vn</a> &bull; <strong>Backup Edge:</strong> <a href="https://tor.oaichuhust.workers.dev">https://tor.oaichuhust.workers.dev</a>
+  <strong>CherryTor:</strong> <a href="https://cherrytor.io.vn">https://cherrytor.io.vn</a> &bull; <strong>Edge Mirror:</strong> <a href="https://tor.oaichuhust.workers.dev">https://tor.oaichuhust.workers.dev</a> &bull; <strong>AeroPad:</strong> <a href="https://aeropad.pages.dev/">https://aeropad.pages.dev/</a>
 </p>

@@ -652,15 +652,18 @@ export function renderFullHtmlPage(): string {
               🚀 CÁC SẢN PHẨM KHÁC / ECOSYSTEM PRODUCTS
             </div>
             <div style="background: var(--color-bg-canvas); border: var(--border-subtle); border-radius: var(--radius-xs); padding: 1rem;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
                 <span style="font-weight: 800; font-size: 0.9375rem; color: var(--color-text-primary); display: flex; align-items: center; gap: 0.4rem;">
-                  📝 Aeropad
-                  <span class="badge badge-accent" style="font-size: 0.65rem;">Companion</span>
+                  📝 AeroPad
+                  <span class="badge badge-accent" style="font-size: 0.65rem;">2FA &amp; Cipher Vault</span>
                 </span>
-                <button type="button" class="button button--primary button--sm" onclick="openAeropadModal()" style="font-size: 0.75rem; padding: 0.25rem 0.6rem;">Mở Aeropad ↗</button>
+                <div style="display: flex; gap: 0.4rem;">
+                  <button type="button" class="button button--sm" onclick="openAeropadModal()" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" title="Quick Magnet Scratchpad">Quick Pad 🧲</button>
+                  <a href="https://aeropad.pages.dev/" target="_blank" rel="noopener noreferrer" class="button button--primary button--sm" style="font-size: 0.75rem; padding: 0.25rem 0.6rem; text-decoration: none;">Mở AeroPad ↗</a>
+                </div>
               </div>
               <p id="footer-aeropad-desc" style="font-size: 0.8125rem; color: var(--color-text-muted); line-height: 1.5; margin: 0;">
-                Bảng ghi nhớ siêu dữ liệu và bóc tách liên kết Magnet hàng loạt không lưu vết (Zero-Log). Quản lý, lọc và xuất danh sách Magnet link cho qBittorrent, Aria2 ngay trên trình duyệt.
+                Studio bảo mật Web3 &amp; Két mã hóa 2FA: Ghi chú mã hóa Client-side AES-GCM, trình tạo mã 2FA/TOTP ngoại tuyến, bóc tách và xuất Magnet links không lưu vết (Zero-Knowledge).
               </p>
             </div>
           </div>
