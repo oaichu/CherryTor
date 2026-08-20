@@ -2,7 +2,7 @@ import type { ProviderEndpointConfig } from './types.ts';
 import type { SearchItem, Category } from '../../schemas/src/item.ts';
 import { validateSearchItem } from '../../schemas/src/validate.ts';
 import { ProviderBadResponseError } from '../../core/src/errors.ts';
-import { parseRssXmlFeed, buildMagnet } from './xml-adapter.ts';
+import { parseRssXmlFeed, buildMagnet, parseHumanSizeToBytes } from './xml-adapter.ts';
 
 export async function parseProviderResponse(
   config: ProviderEndpointConfig,
@@ -212,13 +212,26 @@ export async function parseProviderResponse(
 
       if (!identifier) continue;
 
+      let sizeBytes: number | null = null;
+      if (typeof doc['item_size'] === 'number' && doc['item_size'] > 0) {
+        sizeBytes = doc['item_size'];
+      } else if (typeof doc['size'] === 'number' && doc['size'] > 0) {
+        sizeBytes = doc['size'];
+      } else if (typeof doc['item_size'] === 'string') {
+        const parsed = parseInt(doc['item_size'], 10);
+        if (!isNaN(parsed) && parsed > 0) sizeBytes = parsed;
+      }
+      if (!sizeBytes) {
+        sizeBytes = parseHumanSizeToBytes(title);
+      }
+
       const paddedHash = (identifier + '0000000000000000000000000000000000000000').substring(0, 40).replace(/[^a-fA-F0-9]/g, 'a');
 
       const candidate = {
         id: `archive-${identifier}`,
         title,
         category: 'Other' as Category,
-        sizeBytes: null,
+        sizeBytes,
         seeders: 12,
         leechers: 1,
         infoHash: paddedHash.toLowerCase(),
