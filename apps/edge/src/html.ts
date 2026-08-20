@@ -3055,12 +3055,23 @@ export function renderFullHtmlPage(): string {
           function parseMagnets() {
             const text = textarea ? textarea.value : '';
             localStorage.setItem('cherrytor_aeropad_content', text);
-            const matches = text.match(/magnet:\?[^\\s"'<>]+/gi) || [];
-            const hexMatches = text.match(/\\b[0-9a-fA-F]{40}\\b/g) || [];
-            
+            const lines = text.split(/[\r\n]+/);
             const uniqueMagnets = new Set();
-            matches.forEach(m => uniqueMagnets.add(m.replace(/&amp;/g, '&')));
-            hexMatches.forEach(h => uniqueMagnets.add('magnet:?xt=urn:btih:' + h.toLowerCase()));
+
+            lines.forEach(line => {
+              const trimmed = line.trim();
+              if (!trimmed) return;
+              const magIdx = trimmed.indexOf('magnet:?');
+              if (magIdx !== -1) {
+                const rawMag = trimmed.substring(magIdx).split(/[\s"'<>]+/)[0];
+                if (rawMag) uniqueMagnets.add(rawMag.replace(/&amp;/g, '&'));
+              } else {
+                const hexMatch = trimmed.match(/[0-9a-fA-F]{40}/);
+                if (hexMatch) {
+                  uniqueMagnets.add('magnet:?xt=urn:btih:' + hexMatch[0].toLowerCase());
+                }
+              }
+            });
 
             const arr = Array.from(uniqueMagnets);
             if (status) status.textContent = arr.length + ' magnet link' + (arr.length === 1 ? '' : 's') + ' parsed';
@@ -3096,11 +3107,10 @@ export function renderFullHtmlPage(): string {
 
           if (copyAllBtn) {
             copyAllBtn.addEventListener('click', () => {
-              const text = textarea ? textarea.value : '';
-              const matches = text.match(/magnet:\?[^\\s"'<>]+/gi) || [];
-              if (matches.length > 0) {
-                navigator.clipboard?.writeText(matches.join(String.fromCharCode(10))).catch(() => {});
-                showToast('✓ ' + matches.length + ' magnets copied to clipboard!');
+              const arr = Array.from(document.querySelectorAll('#aeropad-parsed-list .code-box span')).map(s => s.textContent);
+              if (arr.length > 0) {
+                navigator.clipboard?.writeText(arr.join(String.fromCharCode(10))).catch(() => {});
+                showToast('✓ ' + arr.length + ' magnets copied to clipboard!');
               } else {
                 showToast('No valid magnets found to copy.');
               }
@@ -3109,9 +3119,8 @@ export function renderFullHtmlPage(): string {
 
           if (exportTxtBtn) {
             exportTxtBtn.addEventListener('click', () => {
-              const text = textarea ? textarea.value : '';
-              const matches = text.match(/magnet:\?[^\\s"'<>]+/gi) || [];
-              const blob = new Blob([matches.join(String.fromCharCode(10))], { type: 'text/plain;charset=utf-8' });
+              const arr = Array.from(document.querySelectorAll('#aeropad-parsed-list .code-box span')).map(s => s.textContent);
+              const blob = new Blob([arr.join(String.fromCharCode(10))], { type: 'text/plain;charset=utf-8' });
               const a = document.createElement('a');
               a.href = URL.createObjectURL(blob);
               a.download = 'aeropad_magnets.txt';
