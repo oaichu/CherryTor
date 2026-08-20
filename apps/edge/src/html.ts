@@ -641,77 +641,26 @@ export function renderFullHtmlPage(): string {
       </div>
     </section>
 
-    <!-- Footer / Other Products Section -->
-    <footer class="app-footer" style="margin-top: 4rem; padding-top: 2.5rem; border-top: var(--border-default); background: var(--color-bg-subtle);">
-      <div style="max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem;">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-bottom: 2rem;">
-          
-          <!-- Column 1: Ecosystem & Other Products -->
-          <div class="footer-col">
-            <div id="footer-eco-title" style="font-size: 0.75rem; font-family: var(--font-mono); font-weight: 700; color: var(--color-text-accent); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
-              🚀 CÁC SẢN PHẨM KHÁC / ECOSYSTEM PRODUCTS
-            </div>
-            <div style="background: var(--color-bg-canvas); border: var(--border-subtle); border-radius: var(--radius-xs); padding: 1rem;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; flex-wrap: wrap; gap: 0.5rem;">
-                <span style="font-weight: 800; font-size: 0.9375rem; color: var(--color-text-primary); display: flex; align-items: center; gap: 0.4rem;">
-                  📝 AeroPad
-                  <span class="badge badge-accent" style="font-size: 0.65rem;">2FA &amp; Cipher Vault</span>
-                </span>
-                <div style="display: flex; gap: 0.4rem;">
-                  <button type="button" class="button button--sm" onclick="openAeropadModal()" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;" title="Quick Magnet Scratchpad">Quick Pad 🧲</button>
-                  <a href="https://aeropad.pages.dev/" target="_blank" rel="noopener noreferrer" class="button button--primary button--sm" style="font-size: 0.75rem; padding: 0.25rem 0.6rem; text-decoration: none;">Mở AeroPad ↗</a>
-                </div>
-              </div>
-              <p id="footer-aeropad-desc" style="font-size: 0.8125rem; color: var(--color-text-muted); line-height: 1.5; margin: 0;">
-                Studio bảo mật Web3 &amp; Két mã hóa 2FA: Ghi chú mã hóa Client-side AES-GCM, trình tạo mã 2FA/TOTP ngoại tuyến, bóc tách và xuất Magnet links không lưu vết (Zero-Knowledge).
-              </p>
-            </div>
-          </div>
-
-          <!-- Column 2: Quick Links & Documentation -->
-          <div class="footer-col">
-            <div id="footer-res-title" style="font-size: 0.75rem; font-family: var(--font-mono); font-weight: 700; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
-              📚 TÀI LIỆU &amp; TÀI NGUYÊN (RESOURCES)
-            </div>
-            <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.8125rem;">
-              <li><a href="#" onclick="openAboutModal(); return false;" style="color: var(--color-text-secondary); text-decoration: none;">ℹ️ Giới thiệu CherryTor &amp; Aeropad (About)</a></li>
-              <li><a href="https://github.com/oaichu/CherryTor/blob/main/README.md" target="_blank" style="color: var(--color-text-secondary); text-decoration: none;">📖 Hướng dẫn sử dụng &amp; API Docs (GitHub)</a></li>
-              <li><a href="https://github.com/oaichu/CherryTor" target="_blank" style="color: var(--color-text-secondary); text-decoration: none;">⭐ Mã nguồn mở GitHub Repository</a></li>
-              <li><a href="#invariants" style="color: var(--color-text-secondary); text-decoration: none;">🛡️ 10 Quy tắc bảo mật Invariants</a></li>
-            </ul>
-          </div>
-
-          <!-- Column 3: Live Endpoints & Status -->
-          <div class="footer-col">
-            <div id="footer-edge-title" style="font-size: 0.75rem; font-family: var(--font-mono); font-weight: 700; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.75rem;">
-              ⚡ TRẠM MÁY CHỦ (EDGE DEPLOYMENTS)
-            </div>
-            <div style="display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.8125rem; font-family: var(--font-mono);">
-              <div style="display: flex; justify-content: space-between;">
-                <span style="color: var(--color-text-muted);">Custom Domain:</span>
-                <a href="https://cherrytor.io.vn" target="_blank" style="color: var(--color-cyan-400);">cherrytor.io.vn</a>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <span style="color: var(--color-text-muted);">Edge Mirror:</span>
-                <a href="https://tor.oaichuhust.workers.dev" target="_blank" style="color: var(--color-text-accent);">tor.oaichuhust.workers.dev</a>
-              </div>
-              <div style="display: flex; justify-content: space-between;">
-                <span style="color: var(--color-text-muted);">Status:</span>
-                <span style="color: var(--color-green-400); font-weight: 700;">● Live 100% (Edge 15ms)</span>
-              </div>
-            </div>
-          </div>
-
+    <!-- Compact Minimal Footbar -->
+    <footer class="app-footer" style="margin-top: 3.5rem; padding: 1.5rem 0 2rem; border-top: var(--border-default); background: var(--color-bg-subtle);">
+      <div style="max-width: var(--max-width); margin: 0 auto; padding: 0 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        
+        <!-- Left: Ecosystem Link to AeroPad -->
+        <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+          <span id="footer-eco-label" style="font-size: 0.75rem; font-family: var(--font-mono); font-weight: 700; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.05em;">Sản phẩm khác:</span>
+          <a href="https://aeropad.pages.dev/" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.8125rem; font-weight: 700; color: var(--color-text-primary); text-decoration: none; background: var(--color-bg-canvas); border: var(--border-subtle); padding: 0.35rem 0.75rem; border-radius: var(--radius-xs); transition: border-color 0.15s ease;">
+            <span>📝 <strong>AeroPad</strong> &bull; 2FA &amp; Cipher Vault</span>
+            <span style="color: var(--color-cyan-400); font-size: 0.75rem;">↗</span>
+          </a>
         </div>
 
-        <div style="border-top: var(--border-subtle); padding: 1.25rem 0 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; font-size: 0.75rem; color: var(--color-text-muted);">
-          <div>
-            &copy; 2026 <strong>CherryTor</strong> &bull; Released under the <a href="https://opensource.org/licenses/MIT" target="_blank" style="color: var(--color-text-secondary);">MIT License</a>.
-          </div>
-          <div style="display: flex; gap: 1rem;">
-            <span>Zero Tracking</span> &bull; <span>Zero Logs</span> &bull; <span>No Arbitrary Proxy</span>
-          </div>
+        <!-- Right: Copyright & Invariants -->
+        <div style="font-size: 0.75rem; color: var(--color-text-muted); display: flex; align-items: center; gap: 0.75rem;">
+          <span>&copy; 2026 <strong>CherryTor</strong></span> &bull;
+          <span style="color: var(--color-green-400);">Zero-Log</span> &bull;
+          <span><a href="https://github.com/oaichu/CherryTor" target="_blank" style="color: var(--color-text-secondary); text-decoration: none;">GitHub</a></span>
         </div>
+
       </div>
     </footer>
 
@@ -818,10 +767,7 @@ export function renderFullHtmlPage(): string {
           btn_reset: 'Khôi Phục Mặc Định',
           btn_done: 'Hoàn Tất',
           btn_open_client: 'Mở Ứng Dụng Torrent',
-          footer_eco_title: '🚀 CÁC SẢN PHẨM KHÁC / ECOSYSTEM PRODUCTS',
-          footer_aeropad_desc: 'Bảng ghi nhớ siêu dữ liệu và bóc tách liên kết Magnet hàng loạt không lưu vết (Zero-Log). Quản lý, lọc và xuất danh sách Magnet link cho qBittorrent, Aria2 ngay trên trình duyệt.',
-          footer_res_title: '📚 TÀI LIỆU & TÀI NGUYÊN (RESOURCES)',
-          footer_edge_title: '⚡ TRẠM MÁY CHỦ (EDGE DEPLOYMENTS)'
+          footer_eco_label: 'Sản phẩm khác:'
         },
         en: {
           nav_search: 'Search',
@@ -902,10 +848,7 @@ export function renderFullHtmlPage(): string {
           btn_reset: 'Reset All Defaults',
           btn_done: 'Done',
           btn_open_client: 'Open in Torrent Client',
-          footer_eco_title: '🚀 ECOSYSTEM & OTHER PRODUCTS',
-          footer_aeropad_desc: 'Zero-Log ephemeral metadata scratchpad and batch magnet extractor for torrent swarms. Manage, filter, and export magnets for qBittorrent and Aria2 directly in your browser.',
-          footer_res_title: '📚 RESOURCES & DOCUMENTATION',
-          footer_edge_title: '⚡ EDGE DEPLOYMENTS'
+          footer_eco_label: 'Other Products:'
         },
         zh: {
           nav_search: '搜索',
@@ -2514,15 +2457,8 @@ export function renderFullHtmlPage(): string {
         el.modalActionBtn.textContent = t('btn_done');
         el.modalTitle.textContent = t('modal_title');
 
-        const ecoTitle = document.getElementById('footer-eco-title');
-        const aeropadDesc = document.getElementById('footer-aeropad-desc');
-        const resTitle = document.getElementById('footer-res-title');
-        const edgeTitle = document.getElementById('footer-edge-title');
-
-        if (ecoTitle) ecoTitle.textContent = t('footer_eco_title') || '🚀 ECOSYSTEM & OTHER PRODUCTS';
-        if (aeropadDesc) aeropadDesc.textContent = t('footer_aeropad_desc') || 'Zero-Log ephemeral metadata scratchpad and batch magnet extractor for torrent swarms. Export directly to torrent clients.';
-        if (resTitle) resTitle.textContent = t('footer_res_title') || '📚 RESOURCES & DOCUMENTATION';
-        if (edgeTitle) edgeTitle.textContent = t('footer_edge_title') || '⚡ EDGE DEPLOYMENTS';
+        const ecoLabel = document.getElementById('footer-eco-label');
+        if (ecoLabel) ecoLabel.textContent = t('footer_eco_label') || 'Sản phẩm khác:';
         
         renderProviders();
         renderResults();
