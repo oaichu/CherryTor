@@ -477,7 +477,8 @@ export function renderFullHtmlPage(): string {
       <div class="nav-links">
         <span class="nav-link is-active" id="nav-link-search">Search</span>
         <span class="nav-link" id="nav-link-bookmarks">⭐ Bookmarks</span>
-        <a href="#invariants" class="nav-link" id="nav-link-invariants">Invariants</a>
+        <span class="nav-link" id="nav-link-aeropad">📝 Aeropad</span>
+        <span class="nav-link" id="nav-link-about">ℹ️ About</span>
       </div>
 
       <div class="nav-actions">
@@ -2350,7 +2351,8 @@ export function renderFullHtmlPage(): string {
         
         navLinkSearch: document.getElementById('nav-link-search'),
         navLinkBookmarks: document.getElementById('nav-link-bookmarks'),
-        navLinkInvariants: document.getElementById('nav-link-invariants'),
+        navLinkAeropad: document.getElementById('nav-link-aeropad'),
+        navLinkAbout: document.getElementById('nav-link-about'),
         heroSubPre: document.getElementById('hero-sub-pre'),
         heroSubPost: document.getElementById('hero-sub-post'),
         heroOrient: document.getElementById('hero-orient-text'),
@@ -2385,7 +2387,8 @@ export function renderFullHtmlPage(): string {
         
         el.navLinkSearch.textContent = t('nav_search');
         el.navLinkBookmarks.textContent = t('nav_bookmarks');
-        el.navLinkInvariants.textContent = t('nav_invariants');
+        if (el.navLinkAeropad) el.navLinkAeropad.textContent = '📝 Aeropad';
+        if (el.navLinkAbout) el.navLinkAbout.textContent = 'ℹ️ About';
         el.themeToggleBtn.textContent = state.theme === 'dark' ? t('btn_theme_dark') : t('btn_theme_light');
         el.settingsBtn.textContent = t('btn_settings');
 
@@ -3016,6 +3019,154 @@ export function renderFullHtmlPage(): string {
         el.modalBackdrop.classList.remove('is-hidden');
       }
 
+      function openAeropadModal() {
+        el.modalTitle.textContent = '📝 AEROPAD — ZERO-LOG MAGNET & SWARM SCRATCHPAD';
+        el.modalBody.replaceChildren();
+
+        const padDiv = document.createElement('div');
+        padDiv.innerHTML = '<div style="font-size:0.875rem; color:var(--color-text-muted); margin-bottom:1rem; line-height:1.5;">' +
+          'Paste raw magnet links, hash lists, or release notes below. Aeropad automatically extracts all valid magnets for 1-click batch copy or client handoff.' +
+        '</div>' +
+        '<textarea id="aeropad-textarea" style="width:100%; height:150px; background:var(--color-bg-canvas); color:var(--color-text-primary); border:var(--border-subtle); border-radius:var(--radius-xs); padding:0.75rem; font-family:var(--font-mono); font-size:0.8125rem; resize:vertical; box-sizing:border-box;" placeholder="Paste magnet:?xt=urn:btih:... links or raw text here..."></textarea>' +
+        '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem; flex-wrap:wrap; gap:0.5rem;">' +
+          '<div id="aeropad-status" style="font-size:0.8125rem; font-weight:700; color:var(--color-text-accent);">0 magnets parsed</div>' +
+          '<div style="display:flex; gap:0.5rem;">' +
+            '<button type="button" id="btn-aeropad-copy-all" class="button button--primary button--sm">Copy All Magnets 🧲</button>' +
+            '<button type="button" id="btn-aeropad-export-txt" class="button button--sm">Download .txt</button>' +
+            '<button type="button" id="btn-aeropad-clear" class="button button--sm">Clear Pad</button>' +
+          '</div>' +
+        '</div>' +
+        '<div id="aeropad-parsed-list" style="margin-top:1rem; max-height:200px; overflow-y:auto; display:flex; flex-direction:column; gap:0.5rem;"></div>';
+
+        el.modalBody.appendChild(padDiv);
+        el.modalBackdrop.classList.remove('is-hidden');
+
+        setTimeout(() => {
+          const textarea = document.getElementById('aeropad-textarea');
+          const status = document.getElementById('aeropad-status');
+          const listDiv = document.getElementById('aeropad-parsed-list');
+          const copyAllBtn = document.getElementById('btn-aeropad-copy-all');
+          const exportTxtBtn = document.getElementById('btn-aeropad-export-txt');
+          const clearBtn = document.getElementById('btn-aeropad-clear');
+
+          const savedPad = localStorage.getItem('cherrytor_aeropad_content') || '';
+          if (textarea) textarea.value = savedPad;
+
+          function parseMagnets() {
+            const text = textarea ? textarea.value : '';
+            localStorage.setItem('cherrytor_aeropad_content', text);
+            const matches = text.match(/magnet:\?[^\s"'<>]+/gi) || [];
+            const hexMatches = text.match(/\b[0-9a-fA-F]{40}\b/g) || [];
+            
+            const uniqueMagnets = new Set();
+            matches.forEach(m => uniqueMagnets.add(m.replace(/&amp;/g, '&')));
+            hexMatches.forEach(h => uniqueMagnets.add('magnet:?xt=urn:btih:' + h.toLowerCase()));
+
+            const arr = Array.from(uniqueMagnets);
+            if (status) status.textContent = arr.length + ' magnet link' + (arr.length === 1 ? '' : 's') + ' parsed';
+
+            if (listDiv) {
+              listDiv.replaceChildren();
+              arr.forEach((mag) => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'code-box';
+                itemDiv.style.display = 'flex';
+                itemDiv.style.justifyContent = 'space-between';
+                itemDiv.style.alignItems = 'center';
+                itemDiv.style.padding = '0.5rem 0.75rem';
+                itemDiv.innerHTML = '<span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:80%; font-size:0.75rem;">' + mag + '</span>' +
+                  '<button type="button" class="button button--sm button--primary" style="padding:0.25rem 0.5rem; font-size:0.75rem;">Copy</button>';
+                
+                const btn = itemDiv.querySelector('button');
+                if (btn) {
+                  btn.addEventListener('click', () => {
+                    navigator.clipboard?.writeText(mag).catch(() => {});
+                    showToast(t('toast_copied'));
+                  });
+                }
+                listDiv.appendChild(itemDiv);
+              });
+            }
+          }
+
+          if (textarea) {
+            textarea.addEventListener('input', parseMagnets);
+            parseMagnets();
+          }
+
+          if (copyAllBtn) {
+            copyAllBtn.addEventListener('click', () => {
+              const text = textarea ? textarea.value : '';
+              const matches = text.match(/magnet:\?[^\s"'<>]+/gi) || [];
+              if (matches.length > 0) {
+                navigator.clipboard?.writeText(matches.join('\n')).catch(() => {});
+                showToast('✓ ' + matches.length + ' magnets copied to clipboard!');
+              } else {
+                showToast('No valid magnets found to copy.');
+              }
+            });
+          }
+
+          if (exportTxtBtn) {
+            exportTxtBtn.addEventListener('click', () => {
+              const text = textarea ? textarea.value : '';
+              const matches = text.match(/magnet:\?[^\s"'<>]+/gi) || [];
+              const blob = new Blob([matches.join('\n')], { type: 'text/plain;charset=utf-8' });
+              const a = document.createElement('a');
+              a.href = URL.createObjectURL(blob);
+              a.download = 'aeropad_magnets.txt';
+              a.click();
+              a.remove();
+              showToast('✓ Exported aeropad_magnets.txt');
+            });
+          }
+
+          if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+              if (textarea) textarea.value = '';
+              localStorage.removeItem('cherrytor_aeropad_content');
+              parseMagnets();
+              showToast('✓ Aeropad cleared');
+            });
+          }
+        }, 50);
+      }
+
+      function openAboutModal() {
+        el.modalTitle.textContent = 'ℹ️ ABOUT CHERRYTOR & AEROPAD';
+        el.modalBody.replaceChildren();
+
+        const aboutDiv = document.createElement('div');
+        aboutDiv.innerHTML = '<div style="font-size:0.875rem; color:var(--color-text-muted); line-height:1.6;">' +
+          '<div style="font-size:1.15rem; font-weight:800; color:var(--color-text-primary); margin-bottom:0.5rem;">' +
+            '⚡ The Ultra-Fast, Security-First, Zero-Log Swarm Aggregator' +
+          '</div>' +
+          '<p style="margin-bottom:1rem;">' +
+            '<strong>CherryTor</strong> and its companion tool <strong>Aeropad</strong> provide a modern, private, and high-density swarm metadata exploration experience running on Cloudflare Serverless Edge.' +
+          '</p>' +
+          '<div class="settings-group">' +
+            '<div class="settings-group-title"><span>🛡️ Core Architecture &amp; Guarantees</span></div>' +
+            '<ul style="margin:0.5rem 0 0 1.25rem; font-size:0.8125rem; color:var(--color-text-primary); line-height:1.7;">' +
+              '<li><strong>Zero-Log Invariant:</strong> No IP tracking, no search history logs, zero analytics trackers.</li>' +
+              '<li><strong>15+ Global Upstreams:</strong> Parallel aggregation across ThePirateBay, DMHY, Nyaa, ACG.RIP, Bangumi, YTS, EZTV, FitGirl, DODI, Archive.org.</li>' +
+              '<li><strong>Aeropad Scratchpad:</strong> Offline client-side magnet extractor and batch dispatcher.</li>' +
+              '<li><strong>Multi-Signal Classifier:</strong> Instant real-time category filtering (Movies, Anime, Games, Software, Books, Music).</li>' +
+            '</ul>' +
+          '</div>' +
+          '<div class="settings-group">' +
+            '<div class="settings-group-title"><span>🌐 Official Web Addresses</span></div>' +
+            '<div style="display:flex; flex-direction:column; gap:0.5rem; font-size:0.8125rem; font-family:var(--font-mono);">' +
+              '<div>• Custom Domain: <a href="https://cherrytor.io.vn" target="_blank" style="color:var(--color-cyan-400);">https://cherrytor.io.vn</a></div>' +
+              '<div>• Edge Mirror: <a href="https://tor.oaichuhust.workers.dev" target="_blank" style="color:var(--color-text-accent);">https://tor.oaichuhust.workers.dev</a></div>' +
+              '<div>• GitHub Source: <a href="https://github.com/oaichu/CherryTor" target="_blank" style="color:var(--color-text-primary);">https://github.com/oaichu/CherryTor</a></div>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+
+        el.modalBody.appendChild(aboutDiv);
+        el.modalBackdrop.classList.remove('is-hidden');
+      }
+
       function closeSettingsModal() {
         el.modalBackdrop.classList.add('is-hidden');
       }
@@ -3098,6 +3249,18 @@ export function renderFullHtmlPage(): string {
           state.selectedCategory = 'BOOKMARKS';
           renderResults();
         });
+
+        if (el.navLinkAeropad) {
+          el.navLinkAeropad.addEventListener('click', () => {
+            openAeropadModal();
+          });
+        }
+
+        if (el.navLinkAbout) {
+          el.navLinkAbout.addEventListener('click', () => {
+            openAboutModal();
+          });
+        }
 
         document.querySelectorAll('.filter-chip').forEach(btn => {
           btn.addEventListener('click', () => {
