@@ -3055,18 +3055,27 @@ export function renderFullHtmlPage(): string {
           function parseMagnets() {
             const text = textarea ? textarea.value : '';
             localStorage.setItem('cherrytor_aeropad_content', text);
-            const lines = text.split(/[\r\n]+/);
+            const lines = text.split(String.fromCharCode(10));
             const uniqueMagnets = new Set();
+            const hexRegex = /[0-9a-fA-F]{40}/;
 
-            lines.forEach(line => {
+            lines.forEach((line) => {
               const trimmed = line.trim();
               if (!trimmed) return;
               const magIdx = trimmed.indexOf('magnet:?');
               if (magIdx !== -1) {
-                const rawMag = trimmed.substring(magIdx).split(/[\s"'<>]+/)[0];
+                let endIdx = trimmed.length;
+                for (let i = magIdx; i < trimmed.length; i++) {
+                  const ch = trimmed.charCodeAt(i);
+                  if (ch <= 32 || ch === 34 || ch === 39 || ch === 60 || ch === 62) {
+                    endIdx = i;
+                    break;
+                  }
+                }
+                const rawMag = trimmed.substring(magIdx, endIdx);
                 if (rawMag) uniqueMagnets.add(rawMag.replace(/&amp;/g, '&'));
               } else {
-                const hexMatch = trimmed.match(/[0-9a-fA-F]{40}/);
+                const hexMatch = hexRegex.exec(trimmed);
                 if (hexMatch) {
                   uniqueMagnets.add('magnet:?xt=urn:btih:' + hexMatch[0].toLowerCase());
                 }
