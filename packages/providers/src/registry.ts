@@ -2,77 +2,66 @@ import type { ProviderEndpointConfig } from './types.ts';
 
 const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map([
   [
-    'canonical-releases',
+    'apibay',
     {
-      id: 'canonical-releases',
-      name: 'Ubuntu / Canonical Releases',
-      origin: 'https://torrent.ubuntu.com',
-      pathTemplate: '/api/v1/search?q={query}',
-      allowedRedirectHosts: ['torrent.ubuntu.com', 'releases.ubuntu.com'],
-      timeoutMs: 4000,
-      maxPayloadBytes: 2097152, // 2MB
-      requiresAuth: false,
-      format: 'json',
-      enabled: true
-    }
-  ],
-  [
-    'arch-mirror',
-    {
-      id: 'arch-mirror',
-      name: 'Arch Linux Mirror Feeds',
-      origin: 'https://geo.mirror.pkgbuild.com',
-      pathTemplate: '/iso/latest/query?q={query}',
-      allowedRedirectHosts: ['geo.mirror.pkgbuild.com', 'mirror.rackspace.com'],
-      timeoutMs: 4500,
-      maxPayloadBytes: 2097152,
-      requiresAuth: false,
-      format: 'json',
-      enabled: true
-    }
-  ],
-  [
-    'blender-foundation',
-    {
-      id: 'blender-foundation',
-      name: 'Blender Open Media Assets',
-      origin: 'https://download.blender.org',
-      pathTemplate: '/torrents/feed.json?q={query}',
-      allowedRedirectHosts: ['download.blender.org'],
+      id: 'apibay',
+      name: 'ThePirateBay / Apibay Index',
+      origin: 'https://apibay.org',
+      pathTemplate: '/q.php?q={query}',
+      allowedRedirectHosts: ['apibay.org', 'thepiratebay.org'],
       timeoutMs: 5000,
-      maxPayloadBytes: 2097152,
+      maxPayloadBytes: 5242880, // 5MB
       requiresAuth: false,
       format: 'json',
+      adapter: 'apibay',
       enabled: true
     }
   ],
   [
-    'godot-community',
+    'nyaa',
     {
-      id: 'godot-community',
-      name: 'Godot Engine Open Source Feeds',
-      origin: 'https://downloads.tuxfamily.org',
-      pathTemplate: '/godotengine/torrents.json?q={query}',
-      allowedRedirectHosts: ['downloads.tuxfamily.org'],
+      id: 'nyaa',
+      name: 'Nyaa Asian & Global Media',
+      origin: 'https://nyaa.si',
+      pathTemplate: '/?page=rss&q={query}',
+      allowedRedirectHosts: ['nyaa.si', 'sukebei.nyaa.si'],
       timeoutMs: 5000,
-      maxPayloadBytes: 2097152,
+      maxPayloadBytes: 5242880,
       requiresAuth: false,
-      format: 'json',
+      format: 'xml',
+      adapter: 'rss-xml',
       enabled: true
     }
   ],
   [
-    'debian-cd',
+    'dmhy',
     {
-      id: 'debian-cd',
-      name: 'Debian CD Image Archive',
-      origin: 'https://cdimage.debian.org',
-      pathTemplate: '/cdimage/release/current/torrents.json?q={query}',
-      allowedRedirectHosts: ['cdimage.debian.org'],
+      id: 'dmhy',
+      name: '动漫花园 DMHY (Chinese ACG)',
+      origin: 'https://share.dmhy.org',
+      pathTemplate: '/topics/rss/rss.xml?keyword={query}',
+      allowedRedirectHosts: ['share.dmhy.org', 'dmhy.org'],
       timeoutMs: 5000,
-      maxPayloadBytes: 2097152,
+      maxPayloadBytes: 5242880,
       requiresAuth: false,
-      format: 'json',
+      format: 'xml',
+      adapter: 'rss-xml',
+      enabled: true
+    }
+  ],
+  [
+    'acg-rip',
+    {
+      id: 'acg-rip',
+      name: 'ACG.RIP (Chinese Community)',
+      origin: 'https://acg.rip',
+      pathTemplate: '/1.xml?term={query}',
+      allowedRedirectHosts: ['acg.rip'],
+      timeoutMs: 5000,
+      maxPayloadBytes: 5242880,
+      requiresAuth: false,
+      format: 'xml',
+      adapter: 'rss-xml',
       enabled: true
     }
   ],
@@ -85,9 +74,10 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
       pathTemplate: '/advancedsearch.php?q={query}+AND+format:Torrent&output=json',
       allowedRedirectHosts: ['archive.org', 'ia800000.us.archive.org'],
       timeoutMs: 5000,
-      maxPayloadBytes: 2097152,
+      maxPayloadBytes: 5242880,
       requiresAuth: false,
       format: 'json',
+      adapter: 'archive-org',
       enabled: true
     }
   ],
@@ -100,9 +90,10 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
       pathTemplate: '/rss.php?search={query}',
       allowedRedirectHosts: ['linuxtracker.org'],
       timeoutMs: 5000,
-      maxPayloadBytes: 2097152,
+      maxPayloadBytes: 5242880,
       requiresAuth: false,
       format: 'xml',
+      adapter: 'rss-xml',
       enabled: true
     }
   ]

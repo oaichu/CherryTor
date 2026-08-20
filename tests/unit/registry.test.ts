@@ -3,10 +3,14 @@ import assert from 'node:assert/strict';
 import { getProviderConfig, listApprovedProviders, isApprovedProvider } from '../../packages/providers/src/registry.ts';
 
 test('Provider Registry - allows approved providers', () => {
-  const ubuntu = getProviderConfig('canonical-releases');
-  assert.ok(ubuntu);
-  assert.equal(ubuntu?.origin, 'https://torrent.ubuntu.com');
-  assert.equal(isApprovedProvider('canonical-releases'), true);
+  const apibay = getProviderConfig('apibay');
+  assert.ok(apibay);
+  assert.equal(apibay?.origin, 'https://apibay.org');
+  assert.equal(isApprovedProvider('apibay'), true);
+
+  const dmhy = getProviderConfig('dmhy');
+  assert.ok(dmhy);
+  assert.equal(isApprovedProvider('dmhy'), true);
 });
 
 test('Provider Registry - rejects unapproved / arbitrary hostnames', () => {

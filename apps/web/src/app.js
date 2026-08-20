@@ -9,11 +9,10 @@
 
   // Approved default providers
   const DEFAULT_PROVIDERS = [
-    { id: 'canonical-releases', name: 'Ubuntu Releases', enabled: true },
-    { id: 'arch-mirror', name: 'Arch Linux', enabled: true },
-    { id: 'blender-foundation', name: 'Blender Media', enabled: true },
-    { id: 'godot-community', name: 'Godot Engine', enabled: true },
-    { id: 'debian-cd', name: 'Debian CD', enabled: true },
+    { id: 'apibay', name: 'ThePirateBay (Global)', enabled: true },
+    { id: 'nyaa', name: 'Nyaa (Asian/Media)', enabled: true },
+    { id: 'dmhy', name: '动漫花园 DMHY (中文)', enabled: true },
+    { id: 'acg-rip', name: 'ACG.RIP (中文)', enabled: true },
     { id: 'archive-org', name: 'Internet Archive', enabled: true },
     { id: 'linuxtracker', name: 'LinuxTracker', enabled: true }
   ];

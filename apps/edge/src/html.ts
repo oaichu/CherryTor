@@ -249,7 +249,7 @@ export function renderFullHtmlPage(): string {
       <div class="frame-toolbar" id="providers">
         <div class="feeds-pills" id="provider-toggles"></div>
         <div>
-          <span id="active-provider-count" class="badge badge-accent">7 Active</span>
+          <span id="active-provider-count" class="badge badge-accent">6 Active</span>
         </div>
       </div>
 
@@ -316,11 +316,10 @@ export function renderFullHtmlPage(): string {
     (function () {
       'use strict';
       const DEFAULT_PROVIDERS = [
-        { id: 'canonical-releases', name: 'Ubuntu Releases' },
-        { id: 'arch-mirror', name: 'Arch Linux' },
-        { id: 'blender-foundation', name: 'Blender Media' },
-        { id: 'godot-community', name: 'Godot Engine' },
-        { id: 'debian-cd', name: 'Debian CD' },
+        { id: 'apibay', name: 'ThePirateBay (Global)' },
+        { id: 'nyaa', name: 'Nyaa (Asian/Media)' },
+        { id: 'dmhy', name: '动漫花园 DMHY (中文)' },
+        { id: 'acg-rip', name: 'ACG.RIP (中文)' },
         { id: 'archive-org', name: 'Internet Archive' },
         { id: 'linuxtracker', name: 'LinuxTracker' }
       ];

@@ -4,18 +4,18 @@ import { getProviderConfig } from '../../packages/providers/src/registry.ts';
 import { buildProviderUrl } from '../../packages/providers/src/builder.ts';
 
 test('URL Builder - generates valid HTTPS URL with encoded query', () => {
-  const config = getProviderConfig('canonical-releases');
+  const config = getProviderConfig('apibay');
   assert.ok(config);
 
   const url = buildProviderUrl(config!, 'ubuntu 24.04 lts');
   assert.equal(url.protocol, 'https:');
-  assert.equal(url.hostname, 'torrent.ubuntu.com');
-  assert.equal(url.pathname, '/api/v1/search');
+  assert.equal(url.hostname, 'apibay.org');
+  assert.equal(url.pathname, '/q.php');
   assert.equal(url.searchParams.get('q'), 'ubuntu 24.04 lts');
 });
 
 test('URL Builder - prevents arbitrary hostname injection attempts', () => {
-  const config = getProviderConfig('canonical-releases');
+  const config = getProviderConfig('apibay');
   assert.ok(config);
 
   const attacks = [
@@ -28,6 +28,6 @@ test('URL Builder - prevents arbitrary hostname injection attempts', () => {
 
   for (const attack of attacks) {
     const url = buildProviderUrl(config!, attack);
-    assert.equal(url.hostname, 'torrent.ubuntu.com', `Failed to lock hostname against attack: ${attack}`);
+    assert.equal(url.hostname, 'apibay.org', `Failed to lock hostname against attack: ${attack}`);
   }
 });
