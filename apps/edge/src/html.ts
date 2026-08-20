@@ -3055,8 +3055,8 @@ export function renderFullHtmlPage(): string {
           function parseMagnets() {
             const text = textarea ? textarea.value : '';
             localStorage.setItem('cherrytor_aeropad_content', text);
-            const matches = text.match(/magnet:\?[^\s"'<>]+/gi) || [];
-            const hexMatches = text.match(/\b[0-9a-fA-F]{40}\b/g) || [];
+            const matches = text.match(/magnet:\?[^\\s"'<>]+/gi) || [];
+            const hexMatches = text.match(/\\b[0-9a-fA-F]{40}\\b/g) || [];
             
             const uniqueMagnets = new Set();
             matches.forEach(m => uniqueMagnets.add(m.replace(/&amp;/g, '&')));
@@ -3097,7 +3097,7 @@ export function renderFullHtmlPage(): string {
           if (copyAllBtn) {
             copyAllBtn.addEventListener('click', () => {
               const text = textarea ? textarea.value : '';
-              const matches = text.match(/magnet:\?[^\s"'<>]+/gi) || [];
+              const matches = text.match(/magnet:\?[^\\s"'<>]+/gi) || [];
               if (matches.length > 0) {
                 navigator.clipboard?.writeText(matches.join(String.fromCharCode(10))).catch(() => {});
                 showToast('✓ ' + matches.length + ' magnets copied to clipboard!');
@@ -3110,7 +3110,7 @@ export function renderFullHtmlPage(): string {
           if (exportTxtBtn) {
             exportTxtBtn.addEventListener('click', () => {
               const text = textarea ? textarea.value : '';
-              const matches = text.match(/magnet:\?[^\s"'<>]+/gi) || [];
+              const matches = text.match(/magnet:\?[^\\s"'<>]+/gi) || [];
               const blob = new Blob([matches.join(String.fromCharCode(10))], { type: 'text/plain;charset=utf-8' });
               const a = document.createElement('a');
               a.href = URL.createObjectURL(blob);
