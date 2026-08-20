@@ -814,7 +814,11 @@ export function renderFullHtmlPage(): string {
           btn_import_bm: 'Nhập Bookmark (JSON)',
           btn_reset: 'Khôi Phục Mặc Định',
           btn_done: 'Hoàn Tất',
-          btn_open_client: 'Mở Ứng Dụng Torrent'
+          btn_open_client: 'Mở Ứng Dụng Torrent',
+          footer_eco_title: '🚀 CÁC SẢN PHẨM KHÁC / ECOSYSTEM PRODUCTS',
+          footer_aeropad_desc: 'Bảng ghi nhớ siêu dữ liệu và bóc tách liên kết Magnet hàng loạt không lưu vết (Zero-Log). Quản lý, lọc và xuất danh sách Magnet link cho qBittorrent, Aria2 ngay trên trình duyệt.',
+          footer_res_title: '📚 TÀI LIỆU & TÀI NGUYÊN (RESOURCES)',
+          footer_edge_title: '⚡ TRẠM MÁY CHỦ (EDGE DEPLOYMENTS)'
         },
         en: {
           nav_search: 'Search',
@@ -894,7 +898,11 @@ export function renderFullHtmlPage(): string {
           btn_import_bm: 'Import Bookmarks (JSON)',
           btn_reset: 'Reset All Defaults',
           btn_done: 'Done',
-          btn_open_client: 'Open in Torrent Client'
+          btn_open_client: 'Open in Torrent Client',
+          footer_eco_title: '🚀 ECOSYSTEM & OTHER PRODUCTS',
+          footer_aeropad_desc: 'Zero-Log ephemeral metadata scratchpad and batch magnet extractor for torrent swarms. Manage, filter, and export magnets for qBittorrent and Aria2 directly in your browser.',
+          footer_res_title: '📚 RESOURCES & DOCUMENTATION',
+          footer_edge_title: '⚡ EDGE DEPLOYMENTS'
         },
         zh: {
           nav_search: '搜索',
