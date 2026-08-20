@@ -477,8 +477,8 @@ export function renderFullHtmlPage(): string {
       <div class="nav-links">
         <button type="button" class="nav-link is-active" id="nav-link-search">Search</button>
         <button type="button" class="nav-link" id="nav-link-bookmarks">⭐ Bookmarks</button>
-        <button type="button" class="nav-link" id="nav-link-aeropad">📝 Aeropad</button>
-        <button type="button" class="nav-link" id="nav-link-about">ℹ️ About</button>
+        <button type="button" class="nav-link" id="nav-link-aeropad" onclick="openAeropadModal()">📝 Aeropad</button>
+        <button type="button" class="nav-link" id="nav-link-about" onclick="openAboutModal()">ℹ️ About</button>
       </div>
 
       <div class="nav-actions">
@@ -3170,6 +3170,11 @@ export function renderFullHtmlPage(): string {
       function closeSettingsModal() {
         el.modalBackdrop.classList.add('is-hidden');
       }
+
+      window.openAeropadModal = openAeropadModal;
+      window.openAboutModal = openAboutModal;
+      window.openSettingsModal = openSettingsModal;
+      window.closeSettingsModal = closeSettingsModal;
 
       function init() {
         applyTranslations();
