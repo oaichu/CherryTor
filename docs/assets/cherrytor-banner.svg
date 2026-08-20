@@ -1,0 +1,63 @@
+<svg width="1200" height="360" viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="360" rx="16" fill="#0A0A0C"/>
+  
+  <!-- Subtle Grid Lines -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1F1F24" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="cherryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF3366"/>
+      <stop offset="100%" stop-color="#E11D48"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF3366" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  
+  <rect width="1200" height="360" fill="url(#grid)" opacity="0.6"/>
+  <circle cx="200" cy="180" r="140" fill="url(#glowGrad)"/>
+
+  <!-- Logo Icon -->
+  <g transform="translate(100, 100)">
+    <rect width="100" height="100" rx="24" fill="#141419" stroke="#2D2D38" stroke-width="2"/>
+    <circle cx="38" cy="62" r="18" fill="url(#cherryGrad)"/>
+    <circle cx="64" cy="56" r="18" fill="url(#cherryGrad)"/>
+    <path d="M38 52 C38 35, 52 24, 70 20 C68 28, 54 36, 62 48" fill="none" stroke="#10B981" stroke-width="4" stroke-linecap="round"/>
+    <path d="M48 25 C56 22, 64 22, 70 20" fill="none" stroke="#10B981" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- Title & Tagline -->
+  <text x="230" y="150" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="52" font-weight="900" fill="#FFFFFF" letter-spacing="-1px">
+    Cherry<tspan fill="url(#cherryGrad)">Tor</tspan>
+  </text>
+  <rect x="520" y="112" width="130" height="28" rx="6" fill="#1E293B" stroke="#334155" stroke-width="1"/>
+  <text x="585" y="131" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="13" font-weight="700" fill="#38BDF8" text-anchor="middle">v1.0 CLOUDFLARE</text>
+
+  <text x="230" y="195" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="20" font-weight="500" fill="#94A3B8">
+    Security-First, Zero-Log Decentralized Swarm Aggregator &amp; Multi-Signal Search Engine
+  </text>
+
+  <!-- Feature Pills -->
+  <g transform="translate(230, 235)">
+    <rect x="0" y="0" width="165" height="34" rx="8" fill="#141419" stroke="#2D2D38"/>
+    <text x="82" y="22" font-family="monospace" font-size="13" fill="#E2E8F0" text-anchor="middle">⚡ 15+ Live Upstreams</text>
+
+    <rect x="175" y="0" width="160" height="34" rx="8" fill="#141419" stroke="#2D2D38"/>
+    <text x="255" y="22" font-family="monospace" font-size="13" fill="#10B981" text-anchor="middle">🛡️ 0 Logs / No Proxy</text>
+
+    <rect x="345" y="0" width="150" height="34" rx="8" fill="#141419" stroke="#2D2D38"/>
+    <text x="420" y="22" font-family="monospace" font-size="13" fill="#FBBF24" text-anchor="middle">🌐 6 Languages</text>
+
+    <rect x="505" y="0" width="160" height="34" rx="8" fill="#141419" stroke="#2D2D38"/>
+    <text x="585" y="22" font-family="monospace" font-size="13" fill="#A855F7" text-anchor="middle">🚀 Edge 0ms Cache</text>
+  </g>
+
+  <!-- Border Accent -->
+  <rect x="1" y="1" width="1198" height="358" rx="15" fill="none" stroke="#2D2D38" stroke-width="1.5"/>
+</svg>
