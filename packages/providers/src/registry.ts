@@ -1,6 +1,7 @@
 import type { ProviderEndpointConfig } from './types.ts';
 
 const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map([
+  // 1. Phim & Phim Châu Á (Asian & Global Movies / Dramas)
   [
     'apibay',
     {
@@ -21,7 +22,7 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
     'dmhy',
     {
       id: 'dmhy',
-      name: '动漫花园 DMHY (中文)',
+      name: '动漫花园 DMHY (中文 / 亚洲影视)',
       origin: 'https://share.dmhy.org',
       pathTemplate: '/topics/rss/rss.xml?keyword={query}',
       allowedRedirectHosts: ['share.dmhy.org', 'dmhy.org'],
@@ -37,7 +38,7 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
     'nyaa',
     {
       id: 'nyaa',
-      name: 'Nyaa (Global / Asian)',
+      name: 'Nyaa (Asian & Global Media)',
       origin: 'https://nyaa.si',
       pathTemplate: '/?page=rss&q={query}',
       allowedRedirectHosts: ['nyaa.si', 'sukebei.nyaa.si'],
@@ -53,7 +54,7 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
     'acg-rip',
     {
       id: 'acg-rip',
-      name: 'ACG.RIP (中文)',
+      name: 'ACG.RIP (中文影视社区)',
       origin: 'https://acg.rip',
       pathTemplate: '/1.xml?term={query}',
       allowedRedirectHosts: ['acg.rip'],
@@ -66,10 +67,42 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
     }
   ],
   [
+    'bangumi',
+    {
+      id: 'bangumi',
+      name: '萌番组 Bangumi (亚洲动画/剧集)',
+      origin: 'https://bangumi.moe',
+      pathTemplate: '/rss/latest?search={query}',
+      allowedRedirectHosts: ['bangumi.moe'],
+      timeoutMs: 5000,
+      maxPayloadBytes: 5242880,
+      requiresAuth: false,
+      format: 'xml',
+      adapter: 'rss-xml',
+      enabled: true
+    }
+  ],
+  [
+    'tokyotosho',
+    {
+      id: 'tokyotosho',
+      name: 'Tokyo Toshokan (Asian Media)',
+      origin: 'https://www.tokyotosho.info',
+      pathTemplate: '/rss.php?terms={query}',
+      allowedRedirectHosts: ['tokyotosho.info', 'www.tokyotosho.info'],
+      timeoutMs: 5000,
+      maxPayloadBytes: 5242880,
+      requiresAuth: false,
+      format: 'xml',
+      adapter: 'rss-xml',
+      enabled: true
+    }
+  ],
+  [
     'yts',
     {
       id: 'yts',
-      name: 'YTS / YIFY (Movies)',
+      name: 'YTS (Movies HD/4K)',
       origin: 'https://yts.mx',
       pathTemplate: '/api/v2/list_movies.json?query_term={query}&limit=25',
       allowedRedirectHosts: ['yts.mx', 'yts.lt', 'yts.am'],
@@ -85,7 +118,7 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
     'eztv',
     {
       id: 'eztv',
-      name: 'EZTV (TV Shows)',
+      name: 'EZTV (TV Series & Shows)',
       origin: 'https://eztv.re',
       pathTemplate: '/api/get-torrents?keywords={query}&limit=30',
       allowedRedirectHosts: ['eztv.re', 'eztv.it', 'eztv.ch'],
@@ -101,7 +134,7 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
     'solidtorrents',
     {
       id: 'solidtorrents',
-      name: 'SolidTorrents (DHT)',
+      name: 'SolidTorrents (DHT Search)',
       origin: 'https://solidtorrents.to',
       pathTemplate: '/api/v1/search?q={query}&limit=30',
       allowedRedirectHosts: ['solidtorrents.to', 'solidtorrents.net'],
@@ -113,14 +146,16 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
       enabled: true
     }
   ],
+
+  // 2. Phần mềm & Hệ điều hành (Software & OS)
   [
-    'bangumi',
+    'linuxtracker',
     {
-      id: 'bangumi',
-      name: '萌番组 Bangumi (中文)',
-      origin: 'https://bangumi.moe',
-      pathTemplate: '/rss/latest?search={query}',
-      allowedRedirectHosts: ['bangumi.moe'],
+      id: 'linuxtracker',
+      name: 'LinuxTracker (Linux & OSS)',
+      origin: 'https://linuxtracker.org',
+      pathTemplate: '/rss.php?search={query}',
+      allowedRedirectHosts: ['linuxtracker.org'],
       timeoutMs: 5000,
       maxPayloadBytes: 5242880,
       requiresAuth: false,
@@ -130,12 +165,82 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
     }
   ],
   [
-    'archive-org',
+    'archive-org-software',
     {
-      id: 'archive-org',
-      name: 'Internet Archive Media',
+      id: 'archive-org-software',
+      name: 'Archive.org Software (ISOs/Tools)',
       origin: 'https://archive.org',
-      pathTemplate: '/advancedsearch.php?q={query}+AND+format:Torrent&output=json',
+      pathTemplate: '/advancedsearch.php?q={query}+AND+mediatype:software&output=json',
+      allowedRedirectHosts: ['archive.org', 'ia800000.us.archive.org'],
+      timeoutMs: 5000,
+      maxPayloadBytes: 5242880,
+      requiresAuth: false,
+      format: 'json',
+      adapter: 'archive-org',
+      enabled: true
+    }
+  ],
+
+  // 3. Trò chơi (Games - PC / Repacks)
+  [
+    'fitgirl',
+    {
+      id: 'fitgirl',
+      name: 'FitGirl Repacks (PC Games)',
+      origin: 'https://fitgirl-repacks.site',
+      pathTemplate: '/feed/?s={query}',
+      allowedRedirectHosts: ['fitgirl-repacks.site'],
+      timeoutMs: 5000,
+      maxPayloadBytes: 5242880,
+      requiresAuth: false,
+      format: 'xml',
+      adapter: 'rss-xml',
+      enabled: true
+    }
+  ],
+  [
+    'dodi',
+    {
+      id: 'dodi',
+      name: 'DODI Repacks (PC Games)',
+      origin: 'https://dodi-repacks.site',
+      pathTemplate: '/feed/?s={query}',
+      allowedRedirectHosts: ['dodi-repacks.site'],
+      timeoutMs: 5000,
+      maxPayloadBytes: 5242880,
+      requiresAuth: false,
+      format: 'xml',
+      adapter: 'rss-xml',
+      enabled: true
+    }
+  ],
+
+  // 4. Sách & Tài liệu (Books & Texts)
+  [
+    'archive-org-texts',
+    {
+      id: 'archive-org-texts',
+      name: 'Archive.org Texts (Books & Ebooks)',
+      origin: 'https://archive.org',
+      pathTemplate: '/advancedsearch.php?q={query}+AND+mediatype:texts&output=json',
+      allowedRedirectHosts: ['archive.org', 'ia800000.us.archive.org'],
+      timeoutMs: 5000,
+      maxPayloadBytes: 5242880,
+      requiresAuth: false,
+      format: 'json',
+      adapter: 'archive-org',
+      enabled: true
+    }
+  ],
+
+  // 5. Âm nhạc & Lossless Audio (Music & Hi-Res)
+  [
+    'archive-org-audio',
+    {
+      id: 'archive-org-audio',
+      name: 'Archive.org Audio (FLAC / Hi-Res)',
+      origin: 'https://archive.org',
+      pathTemplate: '/advancedsearch.php?q={query}+AND+mediatype:audio&output=json',
       allowedRedirectHosts: ['archive.org', 'ia800000.us.archive.org'],
       timeoutMs: 5000,
       maxPayloadBytes: 5242880,
@@ -146,18 +251,18 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
     }
   ],
   [
-    'linuxtracker',
+    'archive-org',
     {
-      id: 'linuxtracker',
-      name: 'LinuxTracker',
-      origin: 'https://linuxtracker.org',
-      pathTemplate: '/rss.php?search={query}',
-      allowedRedirectHosts: ['linuxtracker.org'],
+      id: 'archive-org',
+      name: 'Internet Archive (General)',
+      origin: 'https://archive.org',
+      pathTemplate: '/advancedsearch.php?q={query}+AND+format:Torrent&output=json',
+      allowedRedirectHosts: ['archive.org', 'ia800000.us.archive.org'],
       timeoutMs: 5000,
       maxPayloadBytes: 5242880,
       requiresAuth: false,
-      format: 'xml',
-      adapter: 'rss-xml',
+      format: 'json',
+      adapter: 'archive-org',
       enabled: true
     }
   ]

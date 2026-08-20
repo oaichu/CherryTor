@@ -373,28 +373,86 @@
   }
 
   function openSettingsModal() {
-    el.modalTitle.textContent = 'Settings & Privacy Controls';
+    el.modalTitle.textContent = '⚙ Engine Settings & Provider Registry';
     el.modalBody.replaceChildren();
 
-    const sec = document.createElement('div');
-    const h = document.createElement('strong');
-    h.style.fontFamily = 'var(--font-mono)';
-    h.style.fontSize = '0.75rem';
-    h.textContent = 'ZERO SECRETS COMPLIANCE (INV-08)';
-    const p = document.createElement('p');
-    p.style.marginTop = '0.25rem';
-    p.style.color = 'var(--color-text-muted)';
-    p.textContent = 'No tokens, passwords, or private client RPC credentials are ever persisted.';
+    const grouped = {};
+    DEFAULT_PROVIDERS.forEach(p => {
+      const catName = p.id.includes('dmhy') || p.id.includes('nyaa') || p.id.includes('acg') || p.id.includes('bangumi')
+        ? '🌸 Phim Châu Á & Anime'
+        : p.id.includes('yts') || p.id.includes('eztv') || p.id.includes('apibay')
+        ? '🎬 Phim Điện Ảnh & Toàn Cầu'
+        : p.id.includes('linux')
+        ? '💻 Phần Mềm & OS'
+        : '🌐 Tư Liệu Mở & Khác';
+      if (!grouped[catName]) grouped[catName] = [];
+      grouped[catName].push(p);
+    });
 
-    const clearBtn = document.createElement('button');
-    clearBtn.type = 'button';
-    clearBtn.className = 'button button--sm';
-    clearBtn.style.marginTop = '0.75rem';
-    clearBtn.textContent = 'Purge Local Cache';
-    clearBtn.onclick = () => showToast('✓ Local cache purged.');
+    for (const [catName, providers] of Object.entries(grouped)) {
+      const groupDiv = document.createElement('div');
+      groupDiv.style.cssText = 'border:var(--border-subtle); border-radius:var(--radius-sm); padding:0.85rem; background:var(--color-bg-canvas); margin-bottom:0.75rem;';
 
-    sec.append(h, p, clearBtn);
-    el.modalBody.append(sec);
+      const titleDiv = document.createElement('div');
+      titleDiv.style.cssText = 'font-family:var(--font-mono); font-size:0.8125rem; font-weight:600; color:var(--color-text-accent); margin-bottom:0.5rem;';
+      titleDiv.textContent = catName;
+
+      const gridDiv = document.createElement('div');
+      gridDiv.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:0.5rem;';
+
+      providers.forEach(p => {
+        const card = document.createElement('div');
+        card.style.cssText = 'display:flex; align-items:center; gap:0.5rem; padding:0.4rem 0.6rem; background:var(--color-bg-elevated); border:var(--border-subtle); border-radius:var(--radius-xs);';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = 'web-chk-' + p.id;
+        checkbox.checked = state.enabledProviders.has(p.id);
+        checkbox.addEventListener('change', () => {
+          if (checkbox.checked) {
+            state.enabledProviders.add(p.id);
+          } else {
+            if (state.enabledProviders.size > 1) {
+              state.enabledProviders.delete(p.id);
+            } else {
+              checkbox.checked = true;
+              showToast('Ít nhất 1 nguồn phải được bật!');
+            }
+          }
+          renderProviders();
+        });
+
+        const label = document.createElement('label');
+        label.htmlFor = 'web-chk-' + p.id;
+        label.style.cssText = 'font-size:0.75rem; font-family:var(--font-mono); cursor:pointer; flex:1;';
+        label.textContent = p.name;
+
+        card.append(checkbox, label);
+        gridDiv.appendChild(card);
+      });
+
+      groupDiv.append(titleDiv, gridDiv);
+      el.modalBody.appendChild(groupDiv);
+    }
+
+    const privacyDiv = document.createElement('div');
+    privacyDiv.style.cssText = 'border:var(--border-subtle); border-radius:var(--radius-sm); padding:0.85rem; background:var(--color-bg-canvas);';
+    privacyDiv.innerHTML = '<div style="font-family:var(--font-mono); font-size:0.8125rem; font-weight:600; color:var(--color-text-primary); margin-bottom:0.5rem;">🛡️ Quyền Riêng Tư &amp; Bộ Nhớ Cache</div>' +
+      '<p style="font-size:0.75rem; color:var(--color-text-muted); margin-bottom:0.5rem;">Không lưu trữ cookies theo dõi, không proxy chuyển tiếp tùy ý (INV-01 / INV-08).</p>' +
+      '<button type="button" id="web-btn-purge" class="button button--sm">Xóa Lịch Sử &amp; Cache</button>';
+    el.modalBody.appendChild(privacyDiv);
+
+    setTimeout(() => {
+      const purgeBtn = document.getElementById('web-btn-purge');
+      if (purgeBtn) {
+        purgeBtn.addEventListener('click', () => {
+          state.items = [];
+          renderResults();
+          showToast('✓ Đã xóa sạch bộ nhớ cache!');
+        });
+      }
+    }, 50);
+
     el.modalBackdrop.classList.remove('is-hidden');
   }
 

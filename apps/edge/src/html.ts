@@ -1,70 +1,66 @@
 /**
- * Fullstack Edge UI Renderer for CherryTor
- * Serves the pi.dev Editorial Minimalist Web App directly from the Edge Worker.
+ * Production HTML Embedded Renderer for CherryTor Edge Gateway
+ * In accordance with Phase 2 / Gate A / pi.dev design contract
  */
 
 export function renderFullHtmlPage(): string {
   return `<!DOCTYPE html>
-<html lang="en" data-theme="dark" data-density="comfortable">
+<html lang="en" data-theme="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CherryTor // Minimal &amp; Secure Metadata Engine</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CherryTor // Minimal & Secure Metadata Engine</title>
+  <meta name="description" content="Minimal, security-first metadata aggregator with 0 arbitrary proxying, typed upstream registry, and multi-signal ranking." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
   <style>
-    /* Design Tokens */
     :root {
-      --color-black: #07090b;
-      --color-gray-950: #0c0e12;
-      --color-gray-900: #12161c;
-      --color-gray-850: #181d25;
-      --color-gray-800: #1f2630;
-      --color-gray-700: #2d3744;
-      --color-gray-600: #4b5b6f;
-      --color-gray-500: #7b8ea3;
-      --color-gray-300: #c2d0df;
-      --color-gray-100: #f0f4f8;
-
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      
+      --color-gray-950: #07090b;
+      --color-gray-900: #0d1117;
+      --color-gray-850: #13171f;
+      --color-gray-800: #1a202c;
+      --color-gray-700: #2d3748;
+      --color-gray-600: #4a5568;
+      --color-gray-500: #718096;
+      --color-gray-400: #a0aec0;
+      --color-gray-300: #cbd5e0;
+      --color-gray-200: #e2e8f0;
+      --color-gray-100: #f7fafc;
+      
+      --color-cherry-500: #f43f5e;
+      --color-cherry-600: #e11d48;
       --color-green-400: #4ade80;
       --color-green-500: #22c55e;
-      --color-cyan-500: #38bdf8;
-      --color-cherry-500: #f43f5e;
-      --color-yellow-500: #fbbf24;
-
-      --font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
-      --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
-
+      --color-cyan-500: #06b6d4;
+      --color-yellow-400: #facc15;
+      
       --radius-xs: 2px;
       --radius-sm: 4px;
       --radius-md: 6px;
-      --radius-pill: 9999px;
-
-      --color-bg-canvas: #090b0e;
-      --color-bg-surface: #10141b;
-      --color-bg-elevated: #161c24;
-      --color-bg-hover: #1e2632;
-
-      --color-text-primary: #f1f5f9;
-      --color-text-secondary: #cbd5e1;
-      --color-text-muted: #64748b;
+      --radius-lg: 8px;
+      --radius-full: 9999px;
+      
+      --color-bg-canvas: var(--color-gray-950);
+      --color-bg-surface: var(--color-gray-900);
+      --color-bg-elevated: var(--color-gray-850);
+      --color-bg-hover: var(--color-gray-800);
+      
+      --color-text-primary: #f8fafc;
+      --color-text-secondary: var(--color-gray-400);
+      --color-text-muted: var(--color-gray-500);
       --color-text-accent: var(--color-green-400);
       --color-text-cherry: var(--color-cherry-500);
-
-      --color-border-default: rgba(255, 255, 255, 0.09);
-      --color-border-subtle: rgba(255, 255, 255, 0.05);
-      --color-border-accent: var(--color-green-400);
-      --color-border-focus: var(--color-green-400);
-
-      --color-status-success: var(--color-green-400);
-      --color-status-danger: var(--color-cherry-500);
-
-      --border-default: 1px solid var(--color-border-default);
-      --border-subtle: 1px solid var(--color-border-subtle);
-      --shadow-panel: 0 4px 20px rgba(0, 0, 0, 0.5);
+      
+      --border-subtle: 1px solid rgba(255, 255, 255, 0.07);
+      --border-default: 1px solid rgba(255, 255, 255, 0.12);
+      --border-accent: 1px solid rgba(74, 222, 128, 0.4);
+      --border-cherry: 1px solid rgba(244, 63, 94, 0.4);
+      
+      --shadow-panel: 0 4px 20px -2px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05);
       --result-row-padding-y: 0.75rem;
     }
 
@@ -73,75 +69,194 @@ export function renderFullHtmlPage(): string {
       --color-bg-surface: #ffffff;
       --color-bg-elevated: #f1f5f9;
       --color-bg-hover: #e2e8f0;
+      
       --color-text-primary: #0f172a;
-      --color-text-secondary: #334155;
-      --color-text-muted: #64748b;
-      --color-border-default: rgba(0, 0, 0, 0.09);
-      --color-border-subtle: rgba(0, 0, 0, 0.05);
-      --shadow-panel: 0 4px 20px rgba(0, 0, 0, 0.06);
+      --color-text-secondary: #475569;
+      --color-text-muted: #94a3b8;
+      --color-text-accent: #16a34a;
+      --color-text-cherry: #e11d48;
+      
+      --border-subtle: 1px solid rgba(0, 0, 0, 0.06);
+      --border-default: 1px solid rgba(0, 0, 0, 0.12);
+      --border-accent: 1px solid rgba(22, 163, 74, 0.4);
+      --border-cherry: 1px solid rgba(225, 29, 72, 0.4);
+      --shadow-panel: 0 4px 20px -2px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.05);
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { font-size: 16px; background-color: var(--color-bg-canvas); color: var(--color-text-primary); font-family: var(--font-sans); -webkit-font-smoothing: antialiased; }
-    body { min-height: 100vh; background-color: var(--color-bg-canvas); color: var(--color-text-primary); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--color-bg-canvas);
+      color: var(--color-text-primary);
+      font-family: var(--font-sans);
+      font-size: 0.875rem;
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
 
-    .sticky-nav { position: sticky; top: 0; z-index: 100; background: rgba(9, 11, 14, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: var(--border-default); }
-    [data-theme="light"] .sticky-nav { background: rgba(255, 255, 255, 0.85); }
-    .sticky-nav-inner { max-width: 78rem; margin: 0 auto; padding: 0.75rem 1.5rem; display: flex; align-items: center; justify-content: space-between; }
-    .nav-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--color-text-primary); font-weight: 600; font-size: 0.9375rem; }
-    .nav-brand-icon { width: 24px; height: 24px; }
-    .nav-links { display: flex; align-items: center; gap: 1.5rem; font-size: 0.875rem; }
-    .nav-link { color: var(--color-text-muted); text-decoration: none; font-weight: 500; }
-    .nav-link:hover, .nav-link.is-active { color: var(--color-text-primary); }
-    .nav-actions { display: flex; align-items: center; gap: 0.75rem; }
+    .sticky-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--color-bg-surface);
+      border-bottom: var(--border-default);
+      backdrop-filter: blur(12px);
+    }
+    .sticky-nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 0.9375rem;
+      letter-spacing: -0.02em;
+      color: var(--color-text-primary);
+      text-decoration: none;
+    }
+    .nav-brand-icon { width: 22px; height: 22px; }
+    .nav-links { display: flex; align-items: center; gap: 1.25rem; }
+    .nav-link { font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-text-secondary); text-decoration: none; text-transform: uppercase; letter-spacing: 0.05em; transition: color 0.15s ease; }
+    .nav-link:hover, .nav-link.is-active { color: var(--color-text-accent); }
+    .nav-actions { display: flex; align-items: center; gap: 0.65rem; }
 
-    .page-shell { max-width: 78rem; margin: 0 auto; padding: 2.5rem 1.5rem 5rem; display: flex; flex-direction: column; gap: 2.5rem; }
-    .hero-zone { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1rem; padding: 1.5rem 0; }
-    .hero-subtitle { font-size: clamp(2rem, 4.5vw, 3.25rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.03em; }
-    .hero-subtitle-accent { color: var(--color-text-accent); font-style: italic; }
-    .hero-subtitle-cherry { color: var(--color-text-cherry); }
-    .hero-orient { font-size: 1.0625rem; color: var(--color-text-muted); max-width: 38rem; line-height: 1.6; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.45rem 0.85rem;
+      border-radius: var(--radius-xs);
+      border: var(--border-default);
+      background: var(--color-bg-elevated);
+      color: var(--color-text-primary);
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+    }
+    .button:hover { background: var(--color-bg-hover); border-color: var(--color-gray-500); }
+    .button--primary { background: var(--color-cherry-500); border-color: var(--color-cherry-600); color: #fff; }
+    .button--primary:hover { background: var(--color-cherry-600); }
+    .button--accent { background: rgba(74, 222, 128, 0.12); border-color: var(--border-accent); color: var(--color-text-accent); }
+    .button--accent:hover { background: rgba(74, 222, 128, 0.2); }
+    .button--sm { padding: 0.3rem 0.6rem; font-size: 0.6875rem; }
 
-    .search-switcher-box { width: 100%; max-width: 54rem; margin: 0 auto; border: var(--border-default); border-radius: var(--radius-md); background: var(--color-bg-surface); box-shadow: var(--shadow-panel); overflow: hidden; }
-    .switcher-tabs { display: flex; align-items: center; background: var(--color-bg-elevated); border-bottom: var(--border-default); padding: 0.25rem 0.5rem; gap: 0.25rem; }
-    .switcher-tab { background: transparent; border: none; color: var(--color-text-muted); padding: 0.4rem 0.85rem; font-family: var(--font-mono); font-size: 0.75rem; font-weight: 500; border-radius: var(--radius-xs); cursor: pointer; }
-    .switcher-tab.is-active { color: var(--color-text-primary); background: var(--color-bg-surface); }
-    .search-command-row { display: flex; align-items: center; padding: 0.5rem 0.75rem; background: var(--color-bg-surface); gap: 0.75rem; }
-    .shell-prompt-symbol { font-family: var(--font-mono); font-size: 0.875rem; color: var(--color-text-muted); user-select: none; }
-    .search-main-input { flex: 1; background: transparent; border: none; color: var(--color-text-primary); font-family: var(--font-mono); font-size: 0.9375rem; outline: none; }
+    .page-shell {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 4rem 1.5rem;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .hero-zone { text-align: center; max-width: 720px; margin: 0 auto; padding: 1.5rem 0; }
+    .hero-subtitle { font-size: clamp(1.75rem, 4vw, 2.5rem); font-weight: 800; line-height: 1.15; letter-spacing: -0.03em; margin-bottom: 0.85rem; }
+    .hero-subtitle-cherry { color: var(--color-cherry-500); }
+    .hero-subtitle-accent { color: var(--color-green-400); }
+    .hero-orient { font-size: 0.9375rem; color: var(--color-text-secondary); line-height: 1.6; }
+
+    .search-switcher-box {
+      background: var(--color-bg-surface);
+      border: var(--border-default);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      box-shadow: var(--shadow-panel);
+    }
+    .switcher-tabs {
+      display: flex;
+      background: var(--color-bg-canvas);
+      border-bottom: var(--border-default);
+      overflow-x: auto;
+    }
+    .switcher-tab {
+      padding: 0.65rem 1.1rem;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .switcher-tab:hover { color: var(--color-text-primary); }
+    .switcher-tab.is-active { color: var(--color-text-accent); border-bottom-color: var(--color-text-accent); background: var(--color-bg-surface); }
+
+    .search-command-row {
+      display: flex;
+      align-items: center;
+      padding: 0.65rem 1rem;
+      gap: 0.75rem;
+      background: var(--color-bg-surface);
+    }
+    .shell-prompt-symbol { font-family: var(--font-mono); font-size: 1rem; color: var(--color-text-accent); }
+    .search-main-input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      color: var(--color-text-primary);
+      outline: none;
+    }
     .search-main-input::placeholder { color: var(--color-text-muted); }
-    .search-shortcut-tag { font-family: var(--font-mono); font-size: 0.6875rem; color: var(--color-text-muted); border: var(--border-default); padding: 0.15rem 0.4rem; border-radius: var(--radius-xs); }
+    .search-shortcut-tag { font-family: var(--font-mono); font-size: 0.6875rem; color: var(--color-text-muted); padding: 0.15rem 0.4rem; background: var(--color-bg-elevated); border-radius: var(--radius-xs); border: var(--border-subtle); }
 
-    .button { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; height: 2.25rem; padding: 0 1rem; font-family: var(--font-sans); font-size: 0.8125rem; font-weight: 600; border-radius: var(--radius-sm); border: var(--border-default); background: var(--color-bg-elevated); color: var(--color-text-primary); cursor: pointer; text-decoration: none; }
-    .button:hover { background: var(--color-bg-hover); border-color: var(--color-border-accent); }
-    .button--primary { background: var(--color-text-primary); color: var(--color-bg-canvas); border-color: var(--color-text-primary); }
-    .button--primary:hover { background: var(--color-text-secondary); }
-    .button--sm { height: 1.875rem; padding: 0 0.65rem; font-size: 0.75rem; }
+    .figure-frame {
+      position: relative;
+      background: var(--color-bg-surface);
+      border: var(--border-default);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-panel);
+    }
+    .figure-corner { position: absolute; width: 6px; height: 6px; border-color: var(--color-cherry-500); z-index: 10; }
+    .figure-corner--tl { top: -1px; left: -1px; border-top: 2px solid; border-left: 2px solid; }
+    .figure-corner--tr { top: -1px; right: -1px; border-top: 2px solid; border-right: 2px solid; }
+    .figure-corner--bl { bottom: -1px; left: -1px; border-bottom: 2px solid; border-left: 2px solid; }
+    .figure-corner--br { bottom: -1px; right: -1px; border-bottom: 2px solid; border-right: 2px solid; }
 
-    .figure-frame { position: relative; background: var(--color-bg-surface); border: var(--border-default); border-radius: var(--radius-md); box-shadow: var(--shadow-panel); padding: 1.25rem; }
-    .figure-corner { position: absolute; width: 7px; height: 7px; pointer-events: none; }
-    .figure-corner--tl { top: -1px; left: -1px; border-top: 2px solid var(--color-text-accent); border-left: 2px solid var(--color-text-accent); }
-    .figure-corner--tr { top: -1px; right: -1px; border-top: 2px solid var(--color-text-accent); border-right: 2px solid var(--color-text-accent); }
-    .figure-corner--bl { bottom: -1px; left: -1px; border-bottom: 2px solid var(--color-text-accent); border-left: 2px solid var(--color-text-accent); }
-    .figure-corner--br { bottom: -1px; right: -1px; border-bottom: 2px solid var(--color-text-accent); border-right: 2px solid var(--color-text-accent); }
+    .figure-caption {
+      padding: 0.65rem 1.25rem;
+      border-bottom: var(--border-default);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--color-text-secondary);
+      background: var(--color-bg-elevated);
+    }
+    .figure-caption-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; text-transform: uppercase; }
+    .figure-caption-live-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-green-400); animation: pulseDot 2s infinite ease-in-out; }
+    @keyframes pulseDot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.85); } }
 
-    .figure-caption { display: flex; align-items: center; justify-content: space-between; padding-bottom: 1rem; margin-bottom: 1rem; border-bottom: var(--border-subtle); font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-text-muted); }
-    .figure-caption-title { display: flex; align-items: center; gap: 0.5rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; }
-    .figure-caption-live-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--color-status-success); box-shadow: 0 0 8px var(--color-status-success); animation: pulse-dot 2s infinite ease-in-out; }
-    @keyframes pulse-dot { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.85); } }
+    .frame-toolbar { padding: 0.75rem 1.25rem; border-bottom: var(--border-subtle); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; background: var(--color-bg-surface); }
+    .feeds-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+    .feed-pill { font-family: var(--font-mono); font-size: 0.6875rem; padding: 0.2rem 0.55rem; border-radius: var(--radius-xs); border: var(--border-default); background: var(--color-bg-elevated); color: var(--color-text-muted); cursor: pointer; transition: all 0.15s ease; }
+    .feed-pill.is-active { background: rgba(74, 222, 128, 0.12); border-color: var(--border-accent); color: var(--color-text-accent); }
 
-    .frame-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1rem; font-size: 0.8125rem; }
-    .feeds-pills { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
-    .feed-pill { display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.2rem 0.6rem; border-radius: var(--radius-pill); border: var(--border-default); background: var(--color-bg-elevated); font-family: var(--font-mono); font-size: 0.6875rem; color: var(--color-text-muted); cursor: pointer; }
-    .feed-pill.is-active { border-color: var(--color-border-accent); color: var(--color-text-accent); background: rgba(74, 222, 128, 0.08); }
-
-    .data-table-wrap { overflow-x: auto; width: 100%; }
-    .data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.875rem; }
+    .table-container { width: 100%; overflow-x: auto; min-height: 280px; }
+    .data-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.8125rem; }
     .data-table th { padding: 0.6rem 0.75rem; font-family: var(--font-mono); font-size: 0.6875rem; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-muted); border-bottom: var(--border-default); }
     .data-table td { padding: var(--result-row-padding-y) 0.75rem; border-bottom: var(--border-subtle); vertical-align: middle; }
     .data-row { transition: background-color 0.15s ease; cursor: pointer; }
     .data-row:hover { background: var(--color-bg-hover); }
-    .item-title-col { max-width: 440px; }
+    .item-title-col { max-width: 460px; }
     .item-title-link { font-weight: 500; color: var(--color-text-primary); display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .item-meta-row { display: flex; align-items: center; gap: 0.5rem; margin-top: 0.25rem; font-family: var(--font-mono); font-size: 0.6875rem; color: var(--color-text-muted); }
 
@@ -154,13 +269,25 @@ export function renderFullHtmlPage(): string {
     .feature-card-title { font-size: 1rem; font-weight: 600; color: var(--color-text-primary); display: flex; align-items: center; gap: 0.5rem; }
     .feature-card-body { font-size: 0.875rem; color: var(--color-text-muted); line-height: 1.55; }
 
+    /* Settings Modal Styles */
     .modal-backdrop { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(7, 9, 11, 0.75); backdrop-filter: blur(8px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 1rem; }
-    .modal-dialog { background: var(--color-bg-surface); border: var(--border-default); border-radius: var(--radius-md); width: 100%; max-width: 640px; box-shadow: var(--shadow-panel); overflow: hidden; }
-    .modal-header { padding: 1rem 1.25rem; border-bottom: var(--border-default); display: flex; align-items: center; justify-content: space-between; background: var(--color-bg-elevated); }
-    .modal-title { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 600; text-transform: uppercase; }
-    .modal-body { padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; font-size: 0.875rem; }
-    .modal-footer { padding: 0.85rem 1.25rem; border-top: var(--border-default); display: flex; justify-content: flex-end; gap: 0.5rem; background: var(--color-bg-elevated); }
-    .code-box { background: var(--color-bg-canvas); border: var(--border-default); padding: 0.75rem; font-family: var(--font-mono); font-size: 0.75rem; border-radius: var(--radius-xs); word-break: break-all; white-space: pre-wrap; color: var(--color-text-secondary); }
+    .modal-dialog { background: var(--color-bg-surface); border: var(--border-default); border-radius: var(--radius-md); width: 100%; max-width: 760px; max-height: 88vh; box-shadow: var(--shadow-panel); display: flex; flex-direction: column; overflow: hidden; }
+    .modal-header { padding: 1rem 1.25rem; border-bottom: var(--border-default); display: flex; align-items: center; justify-content: space-between; background: var(--color-bg-elevated); flex-shrink: 0; }
+    .modal-title { font-family: var(--font-mono); font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-primary); }
+    .modal-body { padding: 1.25rem; display: flex; flex-direction: column; gap: 1.5rem; font-size: 0.875rem; overflow-y: auto; }
+    .modal-footer { padding: 0.85rem 1.25rem; border-top: var(--border-default); display: flex; justify-content: space-between; align-items: center; background: var(--color-bg-elevated); flex-shrink: 0; }
+    
+    .settings-group { display: flex; flex-direction: column; gap: 0.75rem; border: var(--border-subtle); border-radius: var(--radius-sm); padding: 1rem; background: var(--color-bg-canvas); }
+    .settings-group-title { font-family: var(--font-mono); font-size: 0.8125rem; font-weight: 600; color: var(--color-text-accent); display: flex; align-items: center; justify-content: space-between; }
+    .settings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.6rem; }
+    .settings-checkbox-card { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.65rem; background: var(--color-bg-elevated); border: var(--border-subtle); border-radius: var(--radius-xs); cursor: pointer; transition: all 0.15s ease; }
+    .settings-checkbox-card:hover { border-color: var(--color-gray-500); }
+    .settings-checkbox-card input[type="checkbox"] { cursor: pointer; accent-color: var(--color-green-400); width: 15px; height: 15px; }
+    .settings-checkbox-card label { cursor: pointer; font-size: 0.75rem; font-family: var(--font-mono); color: var(--color-text-primary); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    .settings-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .settings-label { font-size: 0.8125rem; color: var(--color-text-primary); }
+    .settings-sublabel { font-size: 0.75rem; color: var(--color-text-muted); }
     .is-hidden { display: none !important; }
   </style>
 </head>
@@ -189,7 +316,7 @@ export function renderFullHtmlPage(): string {
 
       <div class="nav-actions">
         <button type="button" id="btn-toggle-theme" class="button button--sm">Theme: Dark</button>
-        <button type="button" id="btn-open-settings" class="button button--sm button--primary">Settings</button>
+        <button type="button" id="btn-open-settings" class="button button--sm button--primary">⚙ Settings</button>
       </div>
     </div>
   </nav>
@@ -208,10 +335,13 @@ export function renderFullHtmlPage(): string {
 
     <section class="search-switcher-box" id="search">
       <div class="switcher-tabs">
-        <button type="button" class="switcher-tab is-active filter-chip" data-category="ALL">All Feeds</button>
-        <button type="button" class="switcher-tab filter-chip" data-category="SOFTWARE">Software &amp; OS</button>
-        <button type="button" class="switcher-tab filter-chip" data-category="MOVIES">Open Media</button>
-        <button type="button" class="switcher-tab filter-chip" data-category="OTHER">Security Audit</button>
+        <button type="button" class="switcher-tab is-active filter-chip" data-category="ALL">All Categories</button>
+        <button type="button" class="switcher-tab filter-chip" data-category="MOVIES">🎬 Phim / Movies</button>
+        <button type="button" class="switcher-tab filter-chip" data-category="ANIME">🌸 Anime &amp; Drama</button>
+        <button type="button" class="switcher-tab filter-chip" data-category="SOFTWARE">💻 Phần Mềm / OS</button>
+        <button type="button" class="switcher-tab filter-chip" data-category="GAMES">🎮 Trò Chơi / Games</button>
+        <button type="button" class="switcher-tab filter-chip" data-category="BOOKS">📚 Sách / Books</button>
+        <button type="button" class="switcher-tab filter-chip" data-category="MUSIC">🎵 Âm Nhạc / Music</button>
       </div>
 
       <div class="search-command-row">
@@ -220,7 +350,7 @@ export function renderFullHtmlPage(): string {
           type="text" 
           id="search-input" 
           class="search-main-input" 
-          placeholder="Type query to search metadata (e.g. 'ubuntu', 'blender', 'debian')..." 
+          placeholder="Type query to search metadata (e.g. 'avatar', '鬼灭', 'ubuntu', 'elden ring')..." 
           autocomplete="off" 
           spellcheck="false"
         />
@@ -249,62 +379,65 @@ export function renderFullHtmlPage(): string {
       <div class="frame-toolbar" id="providers">
         <div class="feeds-pills" id="provider-toggles"></div>
         <div>
-          <span id="active-provider-count" class="badge badge-accent">10 Active</span>
+          <span id="active-provider-count" class="badge badge-accent">14 Active</span>
         </div>
       </div>
 
-      <div class="data-table-wrap">
+      <div class="table-container">
         <table class="data-table">
           <thead>
             <tr>
-              <th>Release Name / InfoHash</th>
-              <th>Category</th>
-              <th>Size</th>
-              <th>Swarm (S/L)</th>
-              <th>Health</th>
-              <th>Published</th>
-              <th style="text-align: right;">Actions</th>
+              <th style="width: 44%;">Title / Release</th>
+              <th style="width: 14%;">Category</th>
+              <th style="width: 12%;">Size</th>
+              <th style="width: 10%;">Swarm</th>
+              <th style="width: 10%;">Health</th>
+              <th style="width: 10%;">Date</th>
+              <th style="text-align: right; width: 10%;">Action</th>
             </tr>
           </thead>
-          <tbody id="results-tbody"></tbody>
+          <tbody id="results-tbody">
+            <tr>
+              <td colspan="7" style="text-align: center; padding: 3rem 1rem; color: var(--color-text-muted); font-family: var(--font-mono);">
+                READY TO QUERY LIVE SWARMS<br>
+                <span style="font-size: 0.75rem; color: var(--color-gray-600);">Type a search term above to aggregate verified torrent metadata.</span>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </section>
 
-    <section id="invariants" style="margin-top: 1.5rem;">
-      <h2 style="font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.5rem;">
-        What we didn't build
-      </h2>
-      <p style="color: var(--color-text-muted); font-size: 0.9375rem; margin-bottom: 1.5rem; max-width: 48rem;">
-        CherryTor avoids insecure anti-patterns common in traditional scrapers to guarantee zero client exposure.
-      </p>
-
+    <section id="invariants" style="margin-top: 1rem;">
+      <h2 style="font-size: 1.125rem; font-weight: 700; margin-bottom: 0.5rem;">Core Security Invariants (INV-01 — INV-10)</h2>
       <div class="feature-grid">
         <div class="feature-card">
-          <h3 class="feature-card-title"><span style="color: var(--color-status-danger);">×</span> No Generic Proxy</h3>
-          <p class="feature-card-body">INV-01 &amp; INV-02 strictly prohibit <code>?target=</code> or client URLs. Edge queries only server registries.</p>
+          <div class="feature-card-title"><span class="badge badge-accent">INV-01 / 02</span> Anti-Proxy Core</div>
+          <div class="feature-card-body">Arbitrary proxying and unvetted target URLs are strictly rejected at the Edge gateway level. Zero open-relay vulnerability.</div>
         </div>
         <div class="feature-card">
-          <h3 class="feature-card-title"><span style="color: var(--color-status-danger);">×</span> No Raw HTML Relay</h3>
-          <p class="feature-card-body">INV-04 &amp; INV-05 ensure all responses are sanitized into structured JSON.</p>
+          <div class="feature-card-title"><span class="badge badge-accent">INV-03 / 10</span> Verified Upstream Feeds</div>
+          <div class="feature-card-body">All external queries are locked to statically audited upstream registries with strict HTTPS schemes and payload limits.</div>
         </div>
         <div class="feature-card">
-          <h3 class="feature-card-title"><span style="color: var(--color-status-danger);">×</span> No Storage Secrets</h3>
-          <p class="feature-card-body">INV-08 &amp; INV-07 prevent storing passwords or RPC credentials in browser storage.</p>
+          <div class="feature-card-title"><span class="badge badge-cherry">INV-06 / 08</span> Zero Secrets In Storage</div>
+          <div class="feature-card-body">Zero private keys, tokens, or plaintext credentials in client storage. RFC-compliant deterministic magnet hashing.</div>
         </div>
       </div>
     </section>
 
   </main>
 
+  <!-- Settings & Metadata Modal -->
   <div id="modal-backdrop" class="modal-backdrop is-hidden">
     <div class="modal-dialog">
       <div class="modal-header">
-        <span id="modal-title" class="modal-title">Metadata Inspector</span>
-        <button type="button" id="modal-close-btn" class="button button--sm">×</button>
+        <span id="modal-title" class="modal-title">⚙ Engine Settings &amp; Provider Registry</span>
+        <button type="button" id="modal-close-btn" class="button button--sm">✕</button>
       </div>
       <div id="modal-body" class="modal-body"></div>
       <div class="modal-footer">
+        <button type="button" id="modal-reset-btn" class="button button--sm">Reset All Defaults</button>
         <button type="button" id="modal-action-btn" class="button button--primary button--sm">Done</button>
       </div>
     </div>
@@ -315,26 +448,43 @@ export function renderFullHtmlPage(): string {
   <script>
     (function () {
       'use strict';
-      const DEFAULT_PROVIDERS = [
-        { id: 'apibay', name: 'ThePirateBay (Global)' },
-        { id: 'dmhy', name: '动漫花园 DMHY (中文)' },
-        { id: 'nyaa', name: 'Nyaa (Asian/Media)' },
-        { id: 'acg-rip', name: 'ACG.RIP (中文)' },
-        { id: 'yts', name: 'YTS (Movies HD/4K)' },
-        { id: 'eztv', name: 'EZTV (TV Series)' },
-        { id: 'solidtorrents', name: 'SolidTorrents (DHT)' },
-        { id: 'bangumi', name: '萌番组 Bangumi (中文)' },
-        { id: 'archive-org', name: 'Internet Archive' },
-        { id: 'linuxtracker', name: 'LinuxTracker' }
+      
+      const ALL_CATEGORIZED_PROVIDERS = [
+        // Phim & Phim Châu Á (Asian & Global Movies / Dramas)
+        { id: 'apibay', name: 'ThePirateBay (Global)', cat: 'Phim & Tổng hợp', icon: '🎬' },
+        { id: 'dmhy', name: '动漫花园 DMHY (中文/亚洲影视)', cat: 'Phim Châu Á & Anime', icon: '🌸' },
+        { id: 'nyaa', name: 'Nyaa (Asian & Global Media)', cat: 'Phim Châu Á & Anime', icon: '🌸' },
+        { id: 'acg-rip', name: 'ACG.RIP (中文影视社区)', cat: 'Phim Châu Á & Anime', icon: '🌸' },
+        { id: 'bangumi', name: '萌番组 Bangumi (亚洲动画/剧集)', cat: 'Phim Châu Á & Anime', icon: '🌸' },
+        { id: 'tokyotosho', name: 'Tokyo Toshokan (Asian Media)', cat: 'Phim Châu Á & Anime', icon: '🌸' },
+        { id: 'yts', name: 'YTS (Movies HD/4K)', cat: 'Phim Điện Ảnh', icon: '🎬' },
+        { id: 'eztv', name: 'EZTV (TV Series & Shows)', cat: 'Phim Bộ & Truyền Hình', icon: '📺' },
+        { id: 'solidtorrents', name: 'SolidTorrents (DHT)', cat: 'Phim & Tổng hợp', icon: '🌐' },
+
+        // Phần mềm & OS
+        { id: 'linuxtracker', name: 'LinuxTracker (Linux OS)', cat: 'Phần mềm & Hệ điều hành', icon: '💻' },
+        { id: 'archive-org-software', name: 'Archive.org Software (Tools/ISO)', cat: 'Phần mềm & Hệ điều hành', icon: '💻' },
+
+        // Trò chơi (Games)
+        { id: 'fitgirl', name: 'FitGirl Repacks (PC Games)', cat: 'Trò chơi (Games)', icon: '🎮' },
+        { id: 'dodi', name: 'DODI Repacks (PC Games)', cat: 'Trò chơi (Games)', icon: '🎮' },
+
+        // Sách & Tài liệu
+        { id: 'archive-org-texts', name: 'Archive.org Texts (Books/Ebooks)', cat: 'Sách & Tài liệu', icon: '📚' },
+
+        // Âm nhạc & Audio Hi-Res
+        { id: 'archive-org-audio', name: 'Archive.org Audio (FLAC/Hi-Res)', cat: 'Âm nhạc & Lossless', icon: '🎵' }
       ];
 
       const state = {
         query: '',
         selectedCategory: 'ALL',
         theme: 'dark',
-        enabledProviders: new Set(DEFAULT_PROVIDERS.map(p => p.id)),
+        density: 'comfortable',
+        enabledProviders: new Set(ALL_CATEGORIZED_PROVIDERS.map(p => p.id)),
         items: [],
-        isLoading: false
+        isLoading: false,
+        historyEnabled: true
       };
 
       const el = {
@@ -352,6 +502,7 @@ export function renderFullHtmlPage(): string {
         modalBody: document.getElementById('modal-body'),
         modalCloseBtn: document.getElementById('modal-close-btn'),
         modalActionBtn: document.getElementById('modal-action-btn'),
+        modalResetBtn: document.getElementById('modal-reset-btn'),
         toast: document.getElementById('toast-notification')
       };
 
@@ -372,14 +523,19 @@ export function renderFullHtmlPage(): string {
 
       function renderProviders() {
         el.providerToggles.replaceChildren();
-        DEFAULT_PROVIDERS.forEach(provider => {
+        ALL_CATEGORIZED_PROVIDERS.forEach(p => {
           const btn = document.createElement('button');
           btn.type = 'button';
-          btn.className = 'feed-pill' + (state.enabledProviders.has(provider.id) ? ' is-active' : '');
-          btn.textContent = provider.name;
+          btn.className = 'feed-pill ' + (state.enabledProviders.has(p.id) ? 'is-active' : '');
+          btn.textContent = p.name;
           btn.addEventListener('click', () => {
-            if (state.enabledProviders.has(provider.id)) state.enabledProviders.delete(provider.id);
-            else state.enabledProviders.add(provider.id);
+            if (state.enabledProviders.has(p.id)) {
+              if (state.enabledProviders.size > 1) {
+                state.enabledProviders.delete(p.id);
+              }
+            } else {
+              state.enabledProviders.add(p.id);
+            }
             renderProviders();
             if (state.query.trim().length > 0) executeLiveSearch(state.query);
           });
@@ -390,17 +546,34 @@ export function renderFullHtmlPage(): string {
 
       function renderResults() {
         el.resultsBody.replaceChildren();
-        if (state.items.length === 0) {
-          const row = document.createElement('tr');
-          const cell = document.createElement('td');
-          cell.colSpan = 7;
-          cell.style.padding = '3.5rem 1rem';
-          cell.style.textAlign = 'center';
-          cell.style.color = 'var(--color-text-muted)';
-          cell.innerHTML = '<strong>' + (state.isLoading ? 'SEARCHING LIVE FEEDS...' : 'NO LIVE RESULTS DISPLAYED') + '</strong><br>' +
-            (state.isLoading ? 'Querying approved server-side provider registry...' : 'Type a search term above and press Enter to query upstream feeds.');
-          row.appendChild(cell);
-          el.resultsBody.appendChild(row);
+        
+        if (state.isLoading) {
+          const tr = document.createElement('tr');
+          const td = document.createElement('td');
+          td.colSpan = 7;
+          td.style.textAlign = 'center';
+          td.style.padding = '3rem 1rem';
+          td.style.color = 'var(--color-text-accent)';
+          td.style.fontFamily = 'var(--font-mono)';
+          td.innerHTML = '<span class="figure-caption-live-dot" style="display:inline-block; margin-right:0.5rem;"></span>SEARCHING LIVE FEEDS...<br><span style="font-size:0.75rem; color:var(--color-gray-500);">Querying ' + state.enabledProviders.size + ' approved server-side upstream registries in parallel...</span>';
+          tr.appendChild(td);
+          el.resultsBody.appendChild(tr);
+          return;
+        }
+
+        if (!state.items || state.items.length === 0) {
+          const tr = document.createElement('tr');
+          const td = document.createElement('td');
+          td.colSpan = 7;
+          td.style.textAlign = 'center';
+          td.style.padding = '3rem 1rem';
+          td.style.color = 'var(--color-text-muted)';
+          td.style.fontFamily = 'var(--font-mono)';
+          td.innerHTML = state.query.trim().length === 0 
+            ? 'READY TO QUERY LIVE SWARMS<br><span style="font-size:0.75rem; color:var(--color-gray-600);">Type a search term above to aggregate verified torrent metadata.</span>'
+            : 'NO METADATA RETURNED<br><span style="font-size:0.75rem; color:var(--color-gray-600);">Try adjusting your query or enabling more upstream providers.</span>';
+          tr.appendChild(td);
+          el.resultsBody.appendChild(tr);
           el.resultCount.textContent = '0 items';
           return;
         }
@@ -411,16 +584,19 @@ export function renderFullHtmlPage(): string {
 
           const tdTitle = document.createElement('td');
           tdTitle.className = 'item-title-col';
-          const title = document.createElement('span');
-          title.className = 'item-title-link';
-          title.textContent = item.title;
-          const meta = document.createElement('div');
-          meta.className = 'item-meta-row';
-          meta.innerHTML = '<span class="badge">hash:' + item.infoHash.substring(0, 8) + '…</span><span class="badge badge-accent">' + item.sourceId + '</span>';
-          tdTitle.append(title, meta);
+          const titleLink = document.createElement('span');
+          titleLink.className = 'item-title-link';
+          titleLink.textContent = item.title;
+          titleLink.title = item.title;
+
+          const metaRow = document.createElement('div');
+          metaRow.className = 'item-meta-row';
+          metaRow.innerHTML = '<span class="badge">' + (item.sourceId || 'verified') + '</span> <span style="font-family:var(--font-mono);">' + (item.infoHash ? item.infoHash.substring(0, 12) + '...' : '') + '</span>';
+
+          tdTitle.append(titleLink, metaRow);
 
           const tdCat = document.createElement('td');
-          tdCat.innerHTML = '<span class="badge">' + item.category + '</span>';
+          tdCat.innerHTML = '<span class="badge badge-accent">' + (item.category || 'Other') + '</span>';
 
           const tdSize = document.createElement('td');
           tdSize.style.fontFamily = 'var(--font-mono)';
@@ -473,7 +649,8 @@ export function renderFullHtmlPage(): string {
         const startTime = performance.now();
         const providers = Array.from(state.enabledProviders);
 
-        for (const providerId of providers) {
+        // Parallel queries to all enabled providers
+        const promises = providers.map(async (providerId) => {
           try {
             const res = await fetch('/api/v1/search', {
               method: 'POST',
@@ -483,21 +660,141 @@ export function renderFullHtmlPage(): string {
             if (res.ok) {
               const json = await res.json();
               if (json.data && Array.isArray(json.data)) {
-                state.items.push(...json.data);
-                renderResults();
+                return json.data;
               }
             }
           } catch {}
-        }
+          return [];
+        });
+
+        const resultsArrays = await Promise.all(promises);
+        state.items = resultsArrays.flat();
+        
+        // Multi-signal sorting: seeders descending
+        state.items.sort((a, b) => (b.seeders || 0) - (a.seeders || 0));
 
         state.isLoading = false;
         el.searchLatency.textContent = (performance.now() - startTime).toFixed(1) + ' ms';
         renderResults();
       }
 
+      function openSettingsModal() {
+        el.modalBody.replaceChildren();
+
+        // 1. Categories Mapping
+        const grouped = {};
+        ALL_CATEGORIZED_PROVIDERS.forEach(p => {
+          if (!grouped[p.cat]) grouped[p.cat] = [];
+          grouped[p.cat].push(p);
+        });
+
+        // Provider Management Section
+        for (const [catName, providers] of Object.entries(grouped)) {
+          const groupDiv = document.createElement('div');
+          groupDiv.className = 'settings-group';
+
+          const titleDiv = document.createElement('div');
+          titleDiv.className = 'settings-group-title';
+          titleDiv.innerHTML = '<span>' + catName + '</span>';
+
+          const gridDiv = document.createElement('div');
+          gridDiv.className = 'settings-grid';
+
+          providers.forEach(p => {
+            const card = document.createElement('div');
+            card.className = 'settings-checkbox-card';
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = 'chk-' + p.id;
+            checkbox.checked = state.enabledProviders.has(p.id);
+            checkbox.addEventListener('change', () => {
+              if (checkbox.checked) {
+                state.enabledProviders.add(p.id);
+              } else {
+                if (state.enabledProviders.size > 1) {
+                  state.enabledProviders.delete(p.id);
+                } else {
+                  checkbox.checked = true;
+                  showToast('Ít nhất 1 nguồn phải được bật!');
+                }
+              }
+              renderProviders();
+            });
+
+            const label = document.createElement('label');
+            label.htmlFor = 'chk-' + p.id;
+            label.textContent = p.icon + ' ' + p.name;
+
+            card.append(checkbox, label);
+            gridDiv.appendChild(card);
+          });
+
+          groupDiv.append(titleDiv, gridDiv);
+          el.modalBody.appendChild(groupDiv);
+        }
+
+        // Interface & Density Section
+        const uiGroup = document.createElement('div');
+        uiGroup.className = 'settings-group';
+        uiGroup.innerHTML = '<div class="settings-group-title"><span>🎨 Giao Diện &amp; Mật Độ Bảng</span></div>' +
+          '<div class="settings-row">' +
+            '<div><div class="settings-label">Mật độ dòng bảng (Density)</div><div class="settings-sublabel">Chọn khoảng cách dòng hiển thị kết quả</div></div>' +
+            '<select id="select-density" class="button button--sm" style="font-family:var(--font-mono);">' +
+              '<option value="compact">Compact (Dày đặc)</option>' +
+              '<option value="comfortable" selected>Comfortable (Mặc định)</option>' +
+            '</select>' +
+          '</div>' +
+          '<div class="settings-row" style="margin-top:0.75rem;">' +
+            '<div><div class="settings-label">Quyền riêng tư &amp; Lịch sử tìm kiếm</div><div class="settings-sublabel">Không lưu lại vết tìm kiếm trên Edge/Server</div></div>' +
+            '<button type="button" id="btn-clear-cache" class="button button--sm">Xóa Cache &amp; Lịch sử</button>' +
+          '</div>';
+        el.modalBody.appendChild(uiGroup);
+
+        setTimeout(() => {
+          const densitySelect = document.getElementById('select-density');
+          if (densitySelect) {
+            densitySelect.value = state.density;
+            densitySelect.addEventListener('change', (e) => {
+              state.density = e.target.value;
+              document.documentElement.style.setProperty('--result-row-padding-y', state.density === 'compact' ? '0.4rem' : '0.75rem');
+            });
+          }
+
+          const clearBtn = document.getElementById('btn-clear-cache');
+          if (clearBtn) {
+            clearBtn.addEventListener('click', () => {
+              state.items = [];
+              renderResults();
+              showToast('✓ Đã xóa toàn bộ bộ nhớ đệm!');
+            });
+          }
+        }, 50);
+
+        el.modalBackdrop.classList.remove('is-hidden');
+      }
+
+      function closeSettingsModal() {
+        el.modalBackdrop.classList.add('is-hidden');
+      }
+
       function init() {
         renderProviders();
         renderResults();
+
+        el.settingsBtn.addEventListener('click', openSettingsModal);
+        el.modalCloseBtn.addEventListener('click', closeSettingsModal);
+        el.modalActionBtn.addEventListener('click', closeSettingsModal);
+        el.modalBackdrop.addEventListener('click', (e) => {
+          if (e.target === el.modalBackdrop) closeSettingsModal();
+        });
+
+        el.modalResetBtn.addEventListener('click', () => {
+          state.enabledProviders = new Set(ALL_CATEGORIZED_PROVIDERS.map(p => p.id));
+          renderProviders();
+          openSettingsModal();
+          showToast('✓ Đã khôi phục cài đặt mặc định!');
+        });
 
         el.themeToggleBtn.addEventListener('click', () => {
           state.theme = state.theme === 'dark' ? 'light' : 'dark';
