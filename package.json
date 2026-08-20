@@ -5,8 +5,9 @@
   "type": "module",
   "scripts": {
     "build": "pnpm -r build",
+    "deploy": "wrangler deploy",
     "typecheck": "tsc --noEmit",
-    "test": "node --test tests/unit/*.test.js tests/security/*.test.js"
+    "test": "node --experimental-strip-types --test tests/unit/*.test.ts tests/integration/*.test.ts tests/security/*.test.ts"
   },
   "devDependencies": {
     "@types/node": "^26.2.0",

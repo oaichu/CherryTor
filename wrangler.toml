@@ -1,0 +1,14 @@
+name = "tor"
+main = "apps/edge/src/index.ts"
+compatibility_date = "2026-08-19"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = true
+
+routes = [
+  { pattern = "cherrytor.io.vn", custom_domain = true },
+  { pattern = "www.cherrytor.io.vn", custom_domain = true }
+]
+
+[vars]
+ENVIRONMENT = "production"
+MAX_REQUESTS_PER_MIN = "600"
