@@ -12,7 +12,7 @@ import { mapErrorToGatewayResponse } from '../../../packages/core/src/errors.ts'
 
 // In-memory circuit breakers and rate limiter for Worker isolate
 const circuitBreakers = new Map<string, CircuitBreaker>();
-export const globalRateLimiter = new SlidingWindowRateLimiter({ maxRequests: 60, windowMs: 60000 });
+export const globalRateLimiter = new SlidingWindowRateLimiter({ maxRequests: 600, windowMs: 60000 });
 
 function getOrCreateCircuitBreaker(providerId: string): CircuitBreaker {
   let cb = circuitBreakers.get(providerId);

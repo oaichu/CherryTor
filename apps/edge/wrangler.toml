@@ -5,4 +5,4 @@ compatibility_flags = ["nodejs_compat"]
 
 [vars]
 ENVIRONMENT = "production"
-MAX_REQUESTS_PER_MIN = "60"
+MAX_REQUESTS_PER_MIN = "600"

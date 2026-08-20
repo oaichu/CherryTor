@@ -139,8 +139,25 @@ export function validateProviderSearchQuery(input: unknown): ValidationResult<Pr
     errors.push('query must be between 1 and 200 characters');
   }
 
+  const mapUpperToCat: Record<string, Category> = {
+    'MOVIES': 'Movies',
+    'MOVIE': 'Movies',
+    'TV': 'TV',
+    'ANIME': 'Anime',
+    'MUSIC': 'Music',
+    'AUDIO': 'Music',
+    'GAMES': 'Games',
+    'GAME': 'Games',
+    'BOOKS': 'Books',
+    'BOOK': 'Books',
+    'SOFTWARE': 'Software',
+    'APPS': 'Software',
+    'OTHER': 'Other'
+  };
+
   if (obj['category'] !== undefined && obj['category'] !== null) {
-    if (obj['category'] !== 'ALL' && !ALLOWED_CATEGORIES.has(obj['category'] as Category)) {
+    const rawCatStr = String(obj['category']).trim().toUpperCase();
+    if (rawCatStr !== 'ALL' && !mapUpperToCat[rawCatStr] && !ALLOWED_CATEGORIES.has(obj['category'] as Category)) {
       errors.push('category is invalid');
     }
   }
@@ -149,12 +166,17 @@ export function validateProviderSearchQuery(input: unknown): ValidationResult<Pr
     return { ok: false, errors };
   }
 
+  const rawCat = obj['category'] ? String(obj['category']).trim().toUpperCase() : 'ALL';
+  const canonicalCat: Category | 'ALL' = rawCat !== 'ALL' && mapUpperToCat[rawCat] 
+    ? mapUpperToCat[rawCat] 
+    : (ALLOWED_CATEGORIES.has(obj['category'] as Category) ? (obj['category'] as Category) : 'ALL');
+
   return {
     ok: true,
     value: {
       provider: (obj['provider'] as string).trim(),
       query: (obj['query'] as string).trim(),
-      category: (obj['category'] as Category | 'ALL' | undefined) ?? 'ALL'
+      category: canonicalCat
     }
   };
 }

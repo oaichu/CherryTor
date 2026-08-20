@@ -3076,7 +3076,7 @@ export function renderFullHtmlPage(): string {
         el.searchInput.addEventListener('input', (e) => {
           state.query = e.target.value;
           clearTimeout(timer);
-          timer = setTimeout(() => executeLiveSearch(state.query), 250);
+          timer = setTimeout(() => executeLiveSearch(state.query), 350);
         });
 
         el.searchInput.addEventListener('keydown', (e) => {
