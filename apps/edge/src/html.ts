@@ -129,7 +129,7 @@ export function renderFullHtmlPage(): string {
     }
     .nav-brand-icon { width: 22px; height: 22px; }
     .nav-links { display: flex; align-items: center; gap: 1.25rem; }
-    .nav-link { font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-text-secondary); text-decoration: none; text-transform: uppercase; letter-spacing: 0.05em; transition: color 0.15s ease; cursor: pointer; }
+    .nav-link { font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-text-secondary); text-decoration: none; text-transform: uppercase; letter-spacing: 0.05em; transition: color 0.15s ease; cursor: pointer; background: none; border: none; padding: 0; outline: none; }
     .nav-link:hover, .nav-link.is-active { color: var(--color-text-accent); }
     .nav-actions { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
 
@@ -475,10 +475,10 @@ export function renderFullHtmlPage(): string {
       </a>
 
       <div class="nav-links">
-        <span class="nav-link is-active" id="nav-link-search">Search</span>
-        <span class="nav-link" id="nav-link-bookmarks">⭐ Bookmarks</span>
-        <span class="nav-link" id="nav-link-aeropad">📝 Aeropad</span>
-        <span class="nav-link" id="nav-link-about">ℹ️ About</span>
+        <button type="button" class="nav-link is-active" id="nav-link-search">Search</button>
+        <button type="button" class="nav-link" id="nav-link-bookmarks">⭐ Bookmarks</button>
+        <button type="button" class="nav-link" id="nav-link-aeropad">📝 Aeropad</button>
+        <button type="button" class="nav-link" id="nav-link-about">ℹ️ About</button>
       </div>
 
       <div class="nav-actions">
