@@ -2756,6 +2756,7 @@ export function renderFullHtmlPage(): string {
 
       async function executeLiveSearch(query) {
         const trimmed = query.trim();
+        state.query = trimmed;
         if (state.selectedCategory === 'BOOKMARKS') {
           renderResults();
           return;
@@ -2763,6 +2764,7 @@ export function renderFullHtmlPage(): string {
 
         if (trimmed.length === 0) {
           state.items = [];
+          state.isLoading = false;
           renderResults();
           return;
         }
@@ -2773,6 +2775,7 @@ export function renderFullHtmlPage(): string {
 
         const startTime = performance.now();
         const providers = Array.from(state.enabledProviders);
+        const seenKeys = new Set();
 
         const promises = providers.map(async (providerId) => {
           try {
@@ -2783,17 +2786,27 @@ export function renderFullHtmlPage(): string {
             });
             if (res.ok) {
               const json = await res.json();
-              if (json.data && Array.isArray(json.data)) {
-                return json.data;
+              if (json.data && Array.isArray(json.data) && json.data.length > 0) {
+                const freshItems = [];
+                for (const item of json.data) {
+                  const key = (item.infoHash || item.id || '').toLowerCase();
+                  if (key && !seenKeys.has(key)) {
+                    seenKeys.add(key);
+                    freshItems.push(item);
+                  }
+                }
+                if (freshItems.length > 0) {
+                  state.items = [...state.items, ...freshItems];
+                  state.isLoading = false;
+                  el.searchLatency.textContent = (performance.now() - startTime).toFixed(1) + ' ms';
+                  renderResults();
+                }
               }
             }
           } catch {}
-          return [];
         });
 
-        const resultsArrays = await Promise.all(promises);
-        state.items = resultsArrays.flat();
-
+        await Promise.allSettled(promises);
         state.isLoading = false;
         el.searchLatency.textContent = (performance.now() - startTime).toFixed(1) + ' ms';
         renderResults();
@@ -3063,10 +3076,21 @@ export function renderFullHtmlPage(): string {
         el.searchInput.addEventListener('input', (e) => {
           state.query = e.target.value;
           clearTimeout(timer);
-          timer = setTimeout(() => executeLiveSearch(state.query), 350);
+          timer = setTimeout(() => executeLiveSearch(state.query), 250);
         });
 
-        el.searchTriggerBtn.addEventListener('click', () => executeLiveSearch(el.searchInput.value));
+        el.searchInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            clearTimeout(timer);
+            executeLiveSearch(el.searchInput.value);
+          }
+        });
+
+        el.searchTriggerBtn.addEventListener('click', () => {
+          clearTimeout(timer);
+          executeLiveSearch(el.searchInput.value);
+        });
 
         el.navLinkBookmarks.addEventListener('click', () => {
           document.querySelectorAll('.switcher-tab').forEach(b => b.classList.remove('is-active'));
