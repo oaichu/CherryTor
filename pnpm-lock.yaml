@@ -12,8 +12,38 @@ importers:
         specifier: ^5.5.4
         version: 5.9.3
 
+  apps/edge:
+    dependencies:
+      '@cherrytor/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@cherrytor/providers':
+        specifier: workspace:*
+        version: link:../../packages/providers
+      '@cherrytor/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas
+
+  apps/web:
+    dependencies:
+      '@cherrytor/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@cherrytor/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas
+
   packages/core:
     dependencies:
+      '@cherrytor/schemas':
+        specifier: workspace:*
+        version: link:../schemas
+
+  packages/providers:
+    dependencies:
+      '@cherrytor/core':
+        specifier: workspace:*
+        version: link:../core
       '@cherrytor/schemas':
         specifier: workspace:*
         version: link:../schemas
