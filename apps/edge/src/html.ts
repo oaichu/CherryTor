@@ -3099,7 +3099,7 @@ export function renderFullHtmlPage(): string {
               const text = textarea ? textarea.value : '';
               const matches = text.match(/magnet:\?[^\s"'<>]+/gi) || [];
               if (matches.length > 0) {
-                navigator.clipboard?.writeText(matches.join('\n')).catch(() => {});
+                navigator.clipboard?.writeText(matches.join(String.fromCharCode(10))).catch(() => {});
                 showToast('✓ ' + matches.length + ' magnets copied to clipboard!');
               } else {
                 showToast('No valid magnets found to copy.');
@@ -3111,7 +3111,7 @@ export function renderFullHtmlPage(): string {
             exportTxtBtn.addEventListener('click', () => {
               const text = textarea ? textarea.value : '';
               const matches = text.match(/magnet:\?[^\s"'<>]+/gi) || [];
-              const blob = new Blob([matches.join('\n')], { type: 'text/plain;charset=utf-8' });
+              const blob = new Blob([matches.join(String.fromCharCode(10))], { type: 'text/plain;charset=utf-8' });
               const a = document.createElement('a');
               a.href = URL.createObjectURL(blob);
               a.download = 'aeropad_magnets.txt';
