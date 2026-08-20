@@ -16,6 +16,7 @@ export interface ProviderEndpointConfig {
   readonly id: string;
   readonly name: string;
   readonly origin: string; // Must be strictly https://
+  readonly mirrors?: readonly string[]; // Fallback & alternative mirror origins
   readonly pathTemplate: string; // e.g. "/api/search?q={query}"
   readonly allowedRedirectHosts: readonly string[];
   readonly timeoutMs: number; // default <= 5000
