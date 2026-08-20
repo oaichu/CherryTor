@@ -1,0 +1,16 @@
+{
+  "name": "@cherrytor/edge",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "dependencies": {
+    "@cherrytor/core": "workspace:*",
+    "@cherrytor/providers": "workspace:*",
+    "@cherrytor/schemas": "workspace:*"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  }
+}

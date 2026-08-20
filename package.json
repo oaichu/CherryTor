@@ -1,0 +1,14 @@
+{
+  "name": "cherrytor-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -r build",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test tests/unit/*.test.js tests/security/*.test.js"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  }
+}

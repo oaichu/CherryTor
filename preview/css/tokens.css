@@ -1,0 +1,123 @@
+/* ==========================================================================
+   CHERRYTOR DESIGN SYSTEM — PI.DEV EDITORIAL THEME
+   ========================================================================== */
+
+:root {
+  /* --- 1. PRIMITIVES --- */
+  --color-black: #07090b;
+  --color-gray-950: #0c0e12;
+  --color-gray-900: #12161c;
+  --color-gray-850: #181d25;
+  --color-gray-800: #1f2630;
+  --color-gray-700: #2d3744;
+  --color-gray-600: #4b5b6f;
+  --color-gray-500: #7b8ea3;
+  --color-gray-300: #c2d0df;
+  --color-gray-100: #f0f4f8;
+
+  /* Accents */
+  --color-green-400: #4ade80;
+  --color-green-500: #22c55e;
+  --color-cyan-500: #38bdf8;
+  --color-cherry-500: #f43f5e;
+  --color-yellow-500: #fbbf24;
+  --color-violet-500: #a855f7;
+
+  /* Typography */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Departure Mono", "IBM Plex Mono", "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+
+  --font-size-100: 0.6875rem; /* 11px */
+  --font-size-200: 0.75rem;   /* 12px */
+  --font-size-300: 0.875rem;  /* 14px */
+  --font-size-400: 1rem;      /* 16px */
+  --font-size-500: 1.125rem;  /* 18px */
+  --font-size-600: 1.25rem;   /* 20px */
+  --font-size-700: 1.5rem;    /* 24px */
+  --font-size-800: 2rem;      /* 32px */
+
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-readable: 1.65;
+
+  /* Spacing */
+  --space-0: 0;
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.25rem;  /* 20px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-8: 2rem;     /* 32px */
+  --space-10: 2.5rem;  /* 40px */
+  --space-12: 3rem;    /* 48px */
+
+  /* Hairline Borders & Radius */
+  --border-width-thin: 1px;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-pill: 9999px;
+
+  /* Controls */
+  --control-height-sm: 1.875rem; /* 30px */
+  --control-height-md: 2.375rem; /* 38px */
+  --control-height-lg: 3rem;     /* 48px */
+
+  /* --- 2. SEMANTICS (Default: Dark) --- */
+  --color-bg-canvas: #090b0e;
+  --color-bg-surface: #10141b;
+  --color-bg-elevated: #161c24;
+  --color-bg-hover: #1e2632;
+
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #64748b;
+  --color-text-accent: var(--color-green-400);
+  --color-text-cherry: var(--color-cherry-500);
+
+  --color-border-default: rgba(255, 255, 255, 0.09);
+  --color-border-subtle: rgba(255, 255, 255, 0.05);
+  --color-border-accent: var(--color-green-400);
+  --color-border-focus: var(--color-green-400);
+
+  --color-status-success: var(--color-green-400);
+  --color-status-info: var(--color-cyan-500);
+  --color-status-warning: var(--color-yellow-500);
+  --color-status-danger: var(--color-cherry-500);
+
+  --border-default: 1px solid var(--color-border-default);
+  --border-subtle: 1px solid var(--color-border-subtle);
+
+  --shadow-panel: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --glow-focus: 0 0 0 2px rgba(74, 222, 128, 0.25);
+
+  /* Density Defaults */
+  --result-row-padding-y: 0.75rem;
+}
+
+/* Light Theme (pi.dev light style) */
+[data-theme="light"] {
+  --color-bg-canvas: #f8fafc;
+  --color-bg-surface: #ffffff;
+  --color-bg-elevated: #f1f5f9;
+  --color-bg-hover: #e2e8f0;
+
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #334155;
+  --color-text-muted: #64748b;
+  --color-text-accent: #16a34a;
+  --color-text-cherry: #e11d48;
+
+  --color-border-default: rgba(0, 0, 0, 0.09);
+  --color-border-subtle: rgba(0, 0, 0, 0.05);
+  --color-border-accent: #16a34a;
+  --color-border-focus: #16a34a;
+
+  --shadow-panel: 0 4px 20px rgba(0, 0, 0, 0.06);
+  --glow-focus: 0 0 0 2px rgba(22, 163, 74, 0.2);
+}
+
+[data-density="compact"] {
+  --result-row-padding-y: 0.45rem;
+}

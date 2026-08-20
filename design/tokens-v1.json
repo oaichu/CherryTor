@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "name": "CherryTor Design Tokens (pi.dev Edition)",
+  "version": "1.1.0",
+  "description": "Editorial Minimal & Terminal precision design tokens inspired by pi.dev",
+  "primitives": {
+    "color": {
+      "neutral": {
+        "black": "#07090b",
+        "gray950": "#0c0e12",
+        "gray900": "#12161c",
+        "gray850": "#181d25",
+        "gray800": "#1f2630",
+        "gray700": "#2d3744",
+        "gray600": "#4b5b6f",
+        "gray500": "#7b8ea3",
+        "gray300": "#c2d0df",
+        "gray100": "#f0f4f8"
+      },
+      "accent": {
+        "green": "#4ade80",
+        "greenMuted": "#22c55e",
+        "cyan": "#38bdf8",
+        "cherry": "#f43f5e",
+        "amber": "#fbbf24",
+        "violet": "#a855f7"
+      }
+    },
+    "typography": {
+      "fontFamily": {
+        "sans": "-apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif",
+        "mono": "\"Departure Mono\", \"IBM Plex Mono\", \"JetBrains Mono\", \"SFMono-Regular\", Consolas, monospace"
+      },
+      "fontSize": {
+        "100": "0.6875rem",
+        "200": "0.75rem",
+        "300": "0.875rem",
+        "400": "1rem",
+        "500": "1.125rem",
+        "600": "1.25rem",
+        "700": "1.5rem",
+        "800": "2rem"
+      },
+      "lineHeight": {
+        "tight": 1.25,
+        "normal": 1.5,
+        "readable": 1.65
+      }
+    },
+    "spacing": {
+      "0": "0",
+      "1": "0.25rem",
+      "2": "0.5rem",
+      "3": "0.75rem",
+      "4": "1rem",
+      "5": "1.25rem",
+      "6": "1.5rem",
+      "8": "2rem",
+      "10": "2.5rem",
+      "12": "3rem"
+    },
+    "radius": {
+      "none": "0",
+      "xs": "2px",
+      "sm": "4px",
+      "md": "6px",
+      "lg": "8px"
+    }
+  },
+  "semantic": {
+    "color": {
+      "bg": {
+        "canvas": "{primitives.color.neutral.gray950}",
+        "surface": "{primitives.color.neutral.gray900}",
+        "elevated": "{primitives.color.neutral.gray850}",
+        "hover": "{primitives.color.neutral.gray800}"
+      },
+      "text": {
+        "primary": "{primitives.color.neutral.gray100}",
+        "secondary": "{primitives.color.neutral.gray300}",
+        "muted": "{primitives.color.neutral.gray500}",
+        "accent": "{primitives.color.accent.green}",
+        "cherry": "{primitives.color.accent.cherry}"
+      },
+      "border": {
+        "default": "rgba(255, 255, 255, 0.1)",
+        "subtle": "rgba(255, 255, 255, 0.05)",
+        "accent": "{primitives.color.accent.green}",
+        "focus": "{primitives.color.accent.green}"
+      }
+    }
+  }
+}
