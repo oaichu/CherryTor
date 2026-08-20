@@ -334,6 +334,127 @@ export function renderFullHtmlPage(): string {
     
     .code-box { background: var(--color-bg-canvas); border: var(--border-default); padding: 0.75rem; font-family: var(--font-mono); font-size: 0.75rem; border-radius: var(--radius-xs); word-break: break-all; white-space: pre-wrap; color: var(--color-text-secondary); line-height: 1.6; }
     .is-hidden { display: none !important; }
+    .mobile-inline-stats { display: none; }
+
+    /* ========================================================
+       Mobile & Tablet Responsive Optimizations (PWA & Touch)
+       ======================================================== */
+    @media (max-width: 1024px) {
+      .sticky-nav-inner { padding: 0.65rem 1rem; }
+      .page-shell { padding: 1.25rem 1rem 3rem 1rem; gap: 1.25rem; }
+      .hero-subtitle { font-size: clamp(1.4rem, 4vw, 2rem); }
+      .item-title-col { max-width: 320px; }
+      .modal-dialog { max-width: 90vw; max-height: 90vh; }
+    }
+
+    @media (max-width: 768px) {
+      /* Mobile Nav */
+      .sticky-nav-inner { flex-wrap: wrap; gap: 0.5rem; padding: 0.5rem 0.75rem; }
+      .nav-brand { font-size: 0.875rem; }
+      .nav-links { display: none; }
+      .nav-actions { width: 100%; display: flex; justify-content: space-between; gap: 0.35rem; }
+      .nav-actions select.select-input { flex: 1.2; font-size: 0.75rem; padding: 0.4rem 0.45rem; max-width: none; }
+      .nav-actions button.button { flex: 1; font-size: 0.75rem; padding: 0.4rem 0.45rem; }
+      
+      /* Mobile Hero */
+      .hero-zone { padding: 0.5rem 0 0.75rem 0; }
+      .hero-subtitle { font-size: 1.35rem; line-height: 1.25; margin-bottom: 0.4rem; }
+      .hero-orient { font-size: 0.75rem; line-height: 1.45; }
+
+      /* Mobile Switcher Tabs with touch momentum scrolling */
+      .search-switcher-box { border-radius: var(--radius-sm); }
+      .switcher-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 2px;
+      }
+      .switcher-tabs::-webkit-scrollbar { display: none; }
+      .switcher-tab { padding: 0.65rem 0.75rem; font-size: 0.75rem; min-height: 44px; display: inline-flex; align-items: center; }
+
+      /* Mobile Search Command Row */
+      .search-command-row { padding: 0.5rem 0.65rem; gap: 0.5rem; }
+      .search-shortcut-tag { display: none; }
+      .search-main-input { font-size: 16px; /* Prevents auto-zoom on iOS */ }
+      .search-command-row button { min-height: 38px; padding: 0.4rem 0.75rem; }
+
+      /* Feeds & Filter Toolbar */
+      .frame-toolbar { padding: 0.5rem 0.75rem; gap: 0.5rem; }
+      .controls-toolbar { flex-direction: column; align-items: flex-start; gap: 0.5rem; padding: 0.5rem 0.75rem; }
+      .filter-controls-group { width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 0.4rem; }
+      .filter-controls-group select.select-input { flex: 1; font-size: 0.75rem; padding: 0.35rem; }
+      .filter-checkbox-label { font-size: 0.6875rem; }
+      #toolbar-click-tip { font-size: 0.625rem; }
+
+      /* Mobile Card Layout for Results */
+      .data-table thead { display: none; }
+      .data-table, .data-table tbody { display: block; width: 100%; }
+      .data-table tr.data-row {
+        display: grid;
+        grid-template-areas:
+          "title star"
+          "badges badges"
+          "footer footer";
+        grid-template-columns: 1fr auto;
+        gap: 0.4rem;
+        padding: 0.85rem 0.75rem;
+        border-bottom: 1px solid var(--border-default);
+        position: relative;
+        background: var(--color-bg-surface);
+        border-radius: var(--radius-xs);
+        margin-bottom: 0.4rem;
+      }
+      .data-table tr.data-row:nth-child(even) { background: var(--color-bg-elevated); }
+      
+      .col-title { grid-area: title; max-width: 100% !important; padding: 0 !important; border: none !important; }
+      .col-title .item-title-link {
+        font-size: 0.875rem;
+        font-weight: 600;
+        white-space: normal !important;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.35;
+      }
+      .col-title .item-meta-row { display: none; }
+
+      .col-star { grid-area: star; padding: 0 !important; border: none !important; display: flex; align-items: center; justify-content: flex-end; }
+      .col-star .btn-bookmark { font-size: 1.25rem; min-width: 38px; min-height: 38px; display: flex; align-items: center; justify-content: center; }
+
+      .col-cat { grid-area: badges; padding: 0 !important; border: none !important; display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap; }
+      .col-health { display: none !important; }
+      .col-size { display: none !important; }
+      .col-swarm { display: none !important; }
+      .col-date { display: none !important; }
+
+      /* Mobile custom footer row with size, swarm, date & Magnet button */
+      .col-actions {
+        grid-area: footer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-top: 0.45rem !important;
+        border-top: var(--border-subtle) !important;
+        border-bottom: none !important;
+        width: 100%;
+      }
+      .mobile-inline-stats {
+        display: flex;
+        align-items: center;
+        gap: 0.65rem;
+        font-family: var(--font-mono);
+        font-size: 0.75rem;
+      }
+      .col-actions .button { min-height: 36px; padding: 0.35rem 0.85rem; font-size: 0.75rem; }
+
+      /* Modals on Mobile */
+      .modal-dialog { width: 96vw; max-height: 94vh; border-radius: var(--radius-sm); }
+      .modal-header { padding: 0.75rem 1rem; }
+      .modal-body { padding: 0.85rem; gap: 1rem; }
+      .modal-footer { padding: 0.75rem 1rem; flex-direction: column-reverse; gap: 0.5rem; }
+      .modal-footer button { width: 100%; min-height: 42px; font-size: 0.8125rem; }
+    }
   </style>
 </head>
 <body>
@@ -2528,6 +2649,7 @@ export function renderFullHtmlPage(): string {
 
           // Bookmark Star Column
           const tdStar = document.createElement('td');
+          tdStar.className = 'col-star';
           tdStar.style.textAlign = 'center';
           const starBtn = document.createElement('button');
           starBtn.type = 'button';
@@ -2542,7 +2664,7 @@ export function renderFullHtmlPage(): string {
 
           // Title Column (Click to Inspect)
           const tdTitle = document.createElement('td');
-          tdTitle.className = 'item-title-col';
+          tdTitle.className = 'col-title item-title-col';
           const titleLink = document.createElement('span');
           titleLink.className = 'item-title-link';
           titleLink.textContent = item.title;
@@ -2555,28 +2677,43 @@ export function renderFullHtmlPage(): string {
           tdTitle.append(titleLink, metaRow);
 
           const tdCat = document.createElement('td');
-          tdCat.innerHTML = '<span class="badge badge-accent">' + (item.category || 'Other') + '</span>';
+          tdCat.className = 'col-cat';
+          tdCat.innerHTML = '<span class="badge badge-accent">' + (item.category || 'Other') + '</span> ' +
+            '<span class="badge">' + (item.sourceId || 'verified') + '</span> ' +
+            (item.publishedAt ? '<span class="badge" style="font-family:var(--font-mono);">' + item.publishedAt.split('T')[0] + '</span>' : '');
 
           const tdSize = document.createElement('td');
+          tdSize.className = 'col-size';
           tdSize.style.fontFamily = 'var(--font-mono)';
           tdSize.textContent = formatBytes(item.sizeBytes);
 
           const tdSwarm = document.createElement('td');
+          tdSwarm.className = 'col-swarm';
           tdSwarm.style.fontFamily = 'var(--font-mono)';
           tdSwarm.innerHTML = '<span style="color:var(--color-text-accent)">▲' + (item.seeders || 0) + '</span> <span style="color:var(--color-text-muted)">▼' + (item.leechers || 0) + '</span>';
 
           const tdHealth = document.createElement('td');
+          tdHealth.className = 'col-health';
           tdHealth.innerHTML = '<span class="badge badge-accent">● Verified</span>';
 
           const tdDate = document.createElement('td');
+          tdDate.className = 'col-date';
           tdDate.style.fontFamily = 'var(--font-mono)';
           tdDate.textContent = item.publishedAt ? item.publishedAt.split('T')[0] : 'Recent';
 
           const tdActions = document.createElement('td');
+          tdActions.className = 'col-actions';
           tdActions.style.textAlign = 'right';
+
+          const mobileStats = document.createElement('div');
+          mobileStats.className = 'mobile-inline-stats';
+          mobileStats.innerHTML = '<span style="font-weight:700; color:var(--color-text-primary); font-size:0.875rem;">' + formatBytes(item.sizeBytes) + '</span> ' +
+            '<span style="color:var(--color-text-accent); font-weight:600;">▲' + (item.seeders || 0) + '</span> ' +
+            '<span style="color:var(--color-text-muted);">▼' + (item.leechers || 0) + '</span>';
+
           const copyBtn = document.createElement('button');
           copyBtn.className = 'button button--primary button--sm';
-          copyBtn.textContent = 'Magnet';
+          copyBtn.textContent = 'Magnet 🧲';
           copyBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             if (item.magnetUri) {
@@ -2584,7 +2721,7 @@ export function renderFullHtmlPage(): string {
               showToast(t('toast_copied'));
             }
           });
-          tdActions.appendChild(copyBtn);
+          tdActions.append(mobileStats, copyBtn);
 
           // Click on row to open Inspector Modal
           tr.addEventListener('click', () => openInspectorModal(item));
