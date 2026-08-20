@@ -9,6 +9,7 @@
     "test": "node --test tests/unit/*.test.js tests/security/*.test.js"
   },
   "devDependencies": {
+    "@types/node": "^26.2.0",
     "typescript": "^5.5.4"
   }
 }
