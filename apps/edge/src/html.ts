@@ -1,11 +1,12 @@
 /**
  * Production HTML Embedded Renderer for CherryTor Edge Gateway
+ * Multi-Language i18n Edition (vi, en, zh, ja, ko, id)
  * In accordance with Phase 2 / Gate A / pi.dev design contract
  */
 
 export function renderFullHtmlPage(): string {
   return `<!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="vi" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,10 +14,10 @@ export function renderFullHtmlPage(): string {
   <meta name="description" content="Minimal, security-first metadata aggregator with 0 arbitrary proxying, typed upstream registry, and multi-signal ranking." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --font-sans: 'Plus Jakarta Sans', 'Noto Sans SC', 'Noto Sans JP', 'Noto Sans KR', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
       
       --color-gray-950: #07090b;
@@ -111,6 +112,7 @@ export function renderFullHtmlPage(): string {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 1rem;
     }
     .nav-brand {
       display: flex;
@@ -122,12 +124,13 @@ export function renderFullHtmlPage(): string {
       letter-spacing: -0.02em;
       color: var(--color-text-primary);
       text-decoration: none;
+      flex-shrink: 0;
     }
     .nav-brand-icon { width: 22px; height: 22px; }
     .nav-links { display: flex; align-items: center; gap: 1.25rem; }
     .nav-link { font-family: var(--font-mono); font-size: 0.75rem; color: var(--color-text-secondary); text-decoration: none; text-transform: uppercase; letter-spacing: 0.05em; transition: color 0.15s ease; }
     .nav-link:hover, .nav-link.is-active { color: var(--color-text-accent); }
-    .nav-actions { display: flex; align-items: center; gap: 0.65rem; }
+    .nav-actions { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; }
 
     .button {
       display: inline-flex;
@@ -152,6 +155,19 @@ export function renderFullHtmlPage(): string {
     .button--accent { background: rgba(74, 222, 128, 0.12); border-color: var(--border-accent); color: var(--color-text-accent); }
     .button--accent:hover { background: rgba(74, 222, 128, 0.2); }
     .button--sm { padding: 0.3rem 0.6rem; font-size: 0.6875rem; }
+
+    .select-input {
+      font-family: var(--font-mono);
+      font-size: 0.6875rem;
+      padding: 0.3rem 0.6rem;
+      border-radius: var(--radius-xs);
+      border: var(--border-default);
+      background: var(--color-bg-elevated);
+      color: var(--color-text-primary);
+      cursor: pointer;
+      outline: none;
+    }
+    .select-input:hover { background: var(--color-bg-hover); border-color: var(--color-gray-500); }
 
     .page-shell {
       max-width: 1280px;
@@ -274,7 +290,7 @@ export function renderFullHtmlPage(): string {
     .modal-dialog { background: var(--color-bg-surface); border: var(--border-default); border-radius: var(--radius-md); width: 100%; max-width: 760px; max-height: 88vh; box-shadow: var(--shadow-panel); display: flex; flex-direction: column; overflow: hidden; }
     .modal-header { padding: 1rem 1.25rem; border-bottom: var(--border-default); display: flex; align-items: center; justify-content: space-between; background: var(--color-bg-elevated); flex-shrink: 0; }
     .modal-title { font-family: var(--font-mono); font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-primary); }
-    .modal-body { padding: 1.25rem; display: flex; flex-direction: column; gap: 1.5rem; font-size: 0.875rem; overflow-y: auto; }
+    .modal-body { padding: 1.25rem; display: flex; flex-direction: column; gap: 1.25rem; font-size: 0.875rem; overflow-y: auto; }
     .modal-footer { padding: 0.85rem 1.25rem; border-top: var(--border-default); display: flex; justify-content: space-between; align-items: center; background: var(--color-bg-elevated); flex-shrink: 0; }
     
     .settings-group { display: flex; flex-direction: column; gap: 0.75rem; border: var(--border-subtle); border-radius: var(--radius-sm); padding: 1rem; background: var(--color-bg-canvas); }
@@ -286,7 +302,7 @@ export function renderFullHtmlPage(): string {
     .settings-checkbox-card label { cursor: pointer; font-size: 0.75rem; font-family: var(--font-mono); color: var(--color-text-primary); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
     .settings-row { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-    .settings-label { font-size: 0.8125rem; color: var(--color-text-primary); }
+    .settings-label { font-size: 0.8125rem; color: var(--color-text-primary); font-weight: 500; }
     .settings-sublabel { font-size: 0.75rem; color: var(--color-text-muted); }
     .is-hidden { display: none !important; }
   </style>
@@ -309,12 +325,20 @@ export function renderFullHtmlPage(): string {
       </a>
 
       <div class="nav-links">
-        <a href="#search" class="nav-link is-active">Search</a>
-        <a href="#providers" class="nav-link">Providers</a>
-        <a href="#invariants" class="nav-link">Invariants</a>
+        <a href="#search" class="nav-link is-active" id="nav-link-search">Search</a>
+        <a href="#providers" class="nav-link" id="nav-link-providers">Providers</a>
+        <a href="#invariants" class="nav-link" id="nav-link-invariants">Invariants</a>
       </div>
 
       <div class="nav-actions">
+        <select id="select-global-lang" class="select-input" title="Language Selector">
+          <option value="vi">🇻🇳 Tiếng Việt</option>
+          <option value="en">🇺🇸 English</option>
+          <option value="zh">🇨🇳 中文</option>
+          <option value="ja">🇯🇵 日本語</option>
+          <option value="ko">🇰🇷 한국어</option>
+          <option value="id">🇮🇩 Bahasa Indonesia</option>
+        </select>
         <button type="button" id="btn-toggle-theme" class="button button--sm">Theme: Dark</button>
         <button type="button" id="btn-open-settings" class="button button--sm button--primary">⚙ Settings</button>
       </div>
@@ -325,23 +349,23 @@ export function renderFullHtmlPage(): string {
     
     <header class="hero-zone">
       <h1 class="hero-subtitle">
-        There are many torrent searchers,<br>
-        but this one is <span class="hero-subtitle-cherry">Cherry</span><span class="hero-subtitle-accent">Tor</span>.
+        <span id="hero-sub-pre">There are many torrent searchers,</span><br>
+        <span id="hero-sub-post">but this one is </span><span class="hero-subtitle-cherry">Cherry</span><span class="hero-subtitle-accent">Tor</span>.
       </h1>
-      <p class="hero-orient">
+      <p class="hero-orient" id="hero-orient-text">
         Minimal, security-first metadata aggregator. Zero arbitrary proxying, strict typed upstream registries, and deterministic multi-signal ranking.
       </p>
     </header>
 
     <section class="search-switcher-box" id="search">
       <div class="switcher-tabs">
-        <button type="button" class="switcher-tab is-active filter-chip" data-category="ALL">All Categories</button>
-        <button type="button" class="switcher-tab filter-chip" data-category="MOVIES">🎬 Phim / Movies</button>
-        <button type="button" class="switcher-tab filter-chip" data-category="ANIME">🌸 Anime &amp; Drama</button>
-        <button type="button" class="switcher-tab filter-chip" data-category="SOFTWARE">💻 Phần Mềm / OS</button>
-        <button type="button" class="switcher-tab filter-chip" data-category="GAMES">🎮 Trò Chơi / Games</button>
-        <button type="button" class="switcher-tab filter-chip" data-category="BOOKS">📚 Sách / Books</button>
-        <button type="button" class="switcher-tab filter-chip" data-category="MUSIC">🎵 Âm Nhạc / Music</button>
+        <button type="button" class="switcher-tab is-active filter-chip" data-category="ALL" id="tab-all">All Categories</button>
+        <button type="button" class="switcher-tab filter-chip" data-category="MOVIES" id="tab-movies">🎬 Movies</button>
+        <button type="button" class="switcher-tab filter-chip" data-category="ANIME" id="tab-anime">🌸 Anime &amp; Drama</button>
+        <button type="button" class="switcher-tab filter-chip" data-category="SOFTWARE" id="tab-software">💻 Software &amp; OS</button>
+        <button type="button" class="switcher-tab filter-chip" data-category="GAMES" id="tab-games">🎮 Games</button>
+        <button type="button" class="switcher-tab filter-chip" data-category="BOOKS" id="tab-books">📚 Books &amp; Texts</button>
+        <button type="button" class="switcher-tab filter-chip" data-category="MUSIC" id="tab-music">🎵 Music &amp; Audio</button>
       </div>
 
       <div class="search-command-row">
@@ -354,7 +378,7 @@ export function renderFullHtmlPage(): string {
           autocomplete="off" 
           spellcheck="false"
         />
-        <span class="search-shortcut-tag">[/] focus</span>
+        <span class="search-shortcut-tag" id="search-shortcut-tag">[/] focus</span>
         <button type="button" class="button button--primary button--sm" id="btn-search-trigger">Search</button>
       </div>
     </section>
@@ -368,7 +392,7 @@ export function renderFullHtmlPage(): string {
       <div class="figure-caption">
         <div class="figure-caption-title">
           <span class="figure-caption-live-dot"></span>
-          <span>Verified Swarm Metadata Feed</span>
+          <span id="caption-feed-title">Verified Swarm Metadata Feed</span>
         </div>
         <div style="display: flex; align-items: center; gap: 0.75rem;">
           <span id="result-count">0 items</span>
@@ -379,7 +403,7 @@ export function renderFullHtmlPage(): string {
       <div class="frame-toolbar" id="providers">
         <div class="feeds-pills" id="provider-toggles"></div>
         <div>
-          <span id="active-provider-count" class="badge badge-accent">14 Active</span>
+          <span id="active-provider-count" class="badge badge-accent">15 Active</span>
         </div>
       </div>
 
@@ -387,13 +411,13 @@ export function renderFullHtmlPage(): string {
         <table class="data-table">
           <thead>
             <tr>
-              <th style="width: 44%;">Title / Release</th>
-              <th style="width: 14%;">Category</th>
-              <th style="width: 12%;">Size</th>
-              <th style="width: 10%;">Swarm</th>
-              <th style="width: 10%;">Health</th>
-              <th style="width: 10%;">Date</th>
-              <th style="text-align: right; width: 10%;">Action</th>
+              <th style="width: 44%;" id="th-title">Title / Release</th>
+              <th style="width: 14%;" id="th-category">Category</th>
+              <th style="width: 12%;" id="th-size">Size</th>
+              <th style="width: 10%;" id="th-swarm">Swarm</th>
+              <th style="width: 10%;" id="th-health">Health</th>
+              <th style="width: 10%;" id="th-date">Date</th>
+              <th style="text-align: right; width: 10%;" id="th-action">Action</th>
             </tr>
           </thead>
           <tbody id="results-tbody">
@@ -409,7 +433,7 @@ export function renderFullHtmlPage(): string {
     </section>
 
     <section id="invariants" style="margin-top: 1rem;">
-      <h2 style="font-size: 1.125rem; font-weight: 700; margin-bottom: 0.5rem;">Core Security Invariants (INV-01 — INV-10)</h2>
+      <h2 style="font-size: 1.125rem; font-weight: 700; margin-bottom: 0.5rem;" id="invariants-title">Core Security Invariants (INV-01 — INV-10)</h2>
       <div class="feature-grid">
         <div class="feature-card">
           <div class="feature-card-title"><span class="badge badge-accent">INV-01 / 02</span> Anti-Proxy Core</div>
@@ -448,38 +472,390 @@ export function renderFullHtmlPage(): string {
   <script>
     (function () {
       'use strict';
-      
+
+      const TRANSLATIONS = {
+        vi: {
+          nav_search: 'Tìm kiếm',
+          nav_providers: 'Nhà cung cấp',
+          nav_invariants: 'Bảo mật',
+          btn_theme_dark: 'Giao diện: Tối',
+          btn_theme_light: 'Giao diện: Sáng',
+          btn_settings: '⚙ Cài đặt',
+          hero_sub_pre: 'Có rất nhiều công cụ tìm kiếm torrent,',
+          hero_sub_post: 'nhưng đây là ',
+          hero_orient: 'Công cụ tổng hợp siêu dữ liệu P2P tối giản, ưu tiên bảo mật. Không proxy tùy tiện, định tuyến theo nguồn tĩnh đã kiểm định.',
+          tab_all: 'Tất cả chuyên mục',
+          tab_movies: '🎬 Phim ảnh',
+          tab_anime: '🌸 Anime & Drama',
+          tab_software: '💻 Phần mềm / OS',
+          tab_games: '🎮 Trò chơi / Games',
+          tab_books: '📚 Sách & Ebooks',
+          tab_music: '🎵 Âm nhạc / FLAC',
+          search_placeholder: "Nhập từ khóa tìm kiếm (ví dụ: 'avatar', '鬼灭', 'ubuntu', 'elden ring')...",
+          search_btn: 'Tìm kiếm',
+          focus_tag: '[/] Tiêu điểm',
+          caption_title: 'DÒNG SIÊU DỮ LIỆU ĐÃ KIỂM CHỨNG',
+          active_providers_suffix: 'Hoạt động',
+          th_title: 'Tiêu đề / Bản phát hành',
+          th_category: 'Chuyên mục',
+          th_size: 'Dung lượng',
+          th_swarm: 'Swarm (Seed/Peer)',
+          th_health: 'Trạng thái',
+          th_date: 'Ngày đăng',
+          th_action: 'Thao tác',
+          state_ready: 'SẴN SÀNG TÌM KIẾM TRỰC TIẾP',
+          state_ready_desc: 'Nhập từ khóa ở trên để tìm kiếm siêu dữ liệu torrent an toàn.',
+          state_searching: 'ĐANG TÌM KIẾM CÁC NGUỒN...',
+          state_searching_desc: 'Đang truy vấn song song các nhà cung cấp được duyệt...',
+          state_empty: 'KHÔNG TÌM THẤY KẾT QUẢ',
+          state_empty_desc: 'Hãy thử đổi từ khóa hoặc bật thêm nhà cung cấp trong cài đặt.',
+          toast_copied: '✓ Đã sao chép liên kết Magnet!',
+          toast_cached: '✓ Đã xóa sạch bộ nhớ cache!',
+          toast_reset: '✓ Đã khôi phục cài đặt mặc định!',
+          toast_at_least_one: 'Ít nhất 1 nguồn phải được bật!',
+          modal_title: '⚙ CÀI ĐẶT & QUẢN LÝ NHÀ CUNG CẤP',
+          sec_lang: '🌐 Ngôn Ngữ Giao Diện (Language)',
+          sec_lang_desc: 'Chọn ngôn ngữ hiển thị cho ứng dụng',
+          sec_asian_movies: '🌸 Phim Châu Á & Anime',
+          sec_global_movies: '🎬 Phim Điện Ảnh & Toàn Cầu',
+          sec_software: '💻 Phần Mềm & Hệ Điều Hành',
+          sec_games: '🎮 Trò Chơi (PC Games / Repacks)',
+          sec_books: '📚 Sách & Tài Liệu Ebook',
+          sec_music: '🎵 Âm Nhạc & Lossless Audio',
+          sec_density: '🎨 Giao Diện & Mật Độ Hiển Thị',
+          density_label: 'Mật độ hiển thị bảng',
+          density_compact: 'Compact (Dày đặc)',
+          density_comfortable: 'Comfortable (Rộng rãi)',
+          sec_privacy: '🛡️ Quyền Riêng Tư & Bộ Nhớ Cache',
+          privacy_desc: 'Không lưu trữ cookie theo dõi hay proxy trái phép (INV-01 / INV-08).',
+          btn_purge_cache: 'Xóa Cache & Lịch Sử',
+          btn_reset: 'Khôi Phục Mặc Định',
+          btn_done: 'Hoàn Tất'
+        },
+        en: {
+          nav_search: 'Search',
+          nav_providers: 'Providers',
+          nav_invariants: 'Invariants',
+          btn_theme_dark: 'Theme: Dark',
+          btn_theme_light: 'Theme: Light',
+          btn_settings: '⚙ Settings',
+          hero_sub_pre: 'There are many torrent searchers,',
+          hero_sub_post: 'but this one is ',
+          hero_orient: 'Minimal, security-first metadata aggregator. Zero arbitrary proxying, strict typed upstream registries, and deterministic multi-signal ranking.',
+          tab_all: 'All Categories',
+          tab_movies: '🎬 Movies',
+          tab_anime: '🌸 Anime & Drama',
+          tab_software: '💻 Software & OS',
+          tab_games: '🎮 Games',
+          tab_books: '📚 Books & Texts',
+          tab_music: '🎵 Music & Audio',
+          search_placeholder: "Type query to search metadata (e.g. 'avatar', '鬼灭', 'ubuntu', 'elden ring')...",
+          search_btn: 'Search',
+          focus_tag: '[/] focus',
+          caption_title: 'VERIFIED SWARM METADATA FEED',
+          active_providers_suffix: 'Active',
+          th_title: 'Title / Release',
+          th_category: 'Category',
+          th_size: 'Size',
+          th_swarm: 'Swarm (Seed/Peer)',
+          th_health: 'Health',
+          th_date: 'Date',
+          th_action: 'Action',
+          state_ready: 'READY TO QUERY LIVE SWARMS',
+          state_ready_desc: 'Type a search term above to aggregate verified torrent metadata.',
+          state_searching: 'SEARCHING LIVE FEEDS...',
+          state_searching_desc: 'Querying approved server-side upstream registries in parallel...',
+          state_empty: 'NO METADATA RETURNED',
+          state_empty_desc: 'Try adjusting your query or enabling more upstream providers in settings.',
+          toast_copied: '✓ Magnet link copied!',
+          toast_cached: '✓ Cache purged successfully!',
+          toast_reset: '✓ Default settings restored!',
+          toast_at_least_one: 'At least 1 provider must be active!',
+          modal_title: '⚙ ENGINE SETTINGS & PROVIDER REGISTRY',
+          sec_lang: '🌐 Display Language',
+          sec_lang_desc: 'Select preferred user interface language',
+          sec_asian_movies: '🌸 Asian Movies & Anime',
+          sec_global_movies: '🎬 Movies & Global Series',
+          sec_software: '💻 Software & Operating Systems',
+          sec_games: '🎮 Games (PC / Repacks)',
+          sec_books: '📚 Books & Texts',
+          sec_music: '🎵 Music & Hi-Res Audio',
+          sec_density: '🎨 Interface & Display Density',
+          density_label: 'Table row spacing density',
+          density_compact: 'Compact',
+          density_comfortable: 'Comfortable',
+          sec_privacy: '🛡️ Privacy Controls & Local Cache',
+          privacy_desc: 'Zero persistent tracking cookies or unauthorized proxying (INV-01 / INV-08).',
+          btn_purge_cache: 'Purge Cache & History',
+          btn_reset: 'Reset All Defaults',
+          btn_done: 'Done'
+        },
+        zh: {
+          nav_search: '搜索',
+          nav_providers: '数据源',
+          nav_invariants: '安全约束',
+          btn_theme_dark: '主题: 深色',
+          btn_theme_light: '主题: 浅色',
+          btn_settings: '⚙ 设置',
+          hero_sub_pre: '世上有许多种子搜索工具，',
+          hero_sub_post: '但这是唯一的 ',
+          hero_orient: '极简且安全优先的元数据聚合器。零任意代理、严格类型化上游源注册表、确定性多信号排序。',
+          tab_all: '全部分类',
+          tab_movies: '🎬 电影与影视',
+          tab_anime: '🌸 动漫与亚洲剧集',
+          tab_software: '💻 软件与操作系统',
+          tab_games: '🎮 游戏专区',
+          tab_books: '📚 书籍与文献',
+          tab_music: '🎵 音乐与无损',
+          search_placeholder: "输入搜索关键词 (例如: 'avatar', '鬼灭', 'ubuntu', 'elden ring')...",
+          search_btn: '搜索',
+          focus_tag: '[/] 聚焦',
+          caption_title: '已验证群集元数据源',
+          active_providers_suffix: '个已启用',
+          th_title: '标题 / 发布版本',
+          th_category: '分类',
+          th_size: '文件大小',
+          th_swarm: '做种/下载 (Seed/Peer)',
+          th_health: '状态',
+          th_date: '发布日期',
+          th_action: '操作',
+          state_ready: '准备查询实时群集',
+          state_ready_desc: '在上方输入关键词以聚合安全验证的种子元数据。',
+          state_searching: '正在并行搜索上游数据源...',
+          state_searching_desc: '正在并发查询所有已核准的服务端上游注册源...',
+          state_empty: '未检索到相关元数据',
+          state_empty_desc: '请尝试修改搜索词或在设置中启用更多数据源。',
+          toast_copied: '✓ 已成功复制磁力链接！',
+          toast_cached: '✓ 已成功清除本地缓存！',
+          toast_reset: '✓ 已恢复默认设置！',
+          toast_at_least_one: '至少必须保留一个激活的数据源！',
+          modal_title: '⚙ 引擎设置与数据源管理',
+          sec_lang: '🌐 界面语言 (Language)',
+          sec_lang_desc: '选择应用程序显示语言',
+          sec_asian_movies: '🌸 亚洲影视与动漫',
+          sec_global_movies: '🎬 院线电影与全球剧集',
+          sec_software: '💻 软件与操作系统',
+          sec_games: '🎮 电脑游戏与精简压制',
+          sec_books: '📚 书籍与电子文档',
+          sec_music: '🎵 音乐与无损母带',
+          sec_density: '🎨 界面外观与表格密度',
+          density_label: '表格行距间隙密度',
+          density_compact: 'Compact (紧凑紧密)',
+          density_comfortable: 'Comfortable (舒适宽敞)',
+          sec_privacy: '🛡️ 隐私保护与本地缓存',
+          privacy_desc: '不保留任何追踪 Cookie，不执行任何未经授权的开放代理 (INV-01 / INV-08)。',
+          btn_purge_cache: '清除缓存与历史',
+          btn_reset: '恢复默认设置',
+          btn_done: '完成'
+        },
+        ja: {
+          nav_search: '検索',
+          nav_providers: 'プロバイダー',
+          nav_invariants: 'セキュリティ規約',
+          btn_theme_dark: 'テーマ: ダーク',
+          btn_theme_light: 'テーマ: ライト',
+          btn_settings: '⚙ 設定',
+          hero_sub_pre: '世の中に多くのTorrent検索がありますが、',
+          hero_sub_post: 'これが真の ',
+          hero_orient: 'ミニマルでセキュリティ最優先のメタデータアグリゲーター。任意プロキシなし、厳密な上流レジストリ、多角的決定論的ランキング。',
+          tab_all: 'すべてのカテゴリ',
+          tab_movies: '🎬 映画・映像',
+          tab_anime: '🌸 アニメ・アジアドラマ',
+          tab_software: '💻 ソフトウェア・OS',
+          tab_games: '🎮 ゲーム',
+          tab_books: '📚 書籍・電子書籍',
+          tab_music: '🎵 音楽・ハイレゾ',
+          search_placeholder: "キーワードを入力 (例: 'avatar', '鬼灭', 'ubuntu', 'elden ring')...",
+          search_btn: '検索',
+          focus_tag: '[/] フォーカス',
+          caption_title: '検証済みスウォーム メタデータ',
+          active_providers_suffix: '件有効',
+          th_title: 'タイトル / リリース',
+          th_category: 'カテゴリ',
+          th_size: 'サイズ',
+          th_swarm: 'シード / ピア',
+          th_health: '状態',
+          th_date: '登録日',
+          th_action: '操作',
+          state_ready: 'リアルタイム検索の準備完了',
+          state_ready_desc: '上で検索語を入力すると、検証済みのメタデータを集約します。',
+          state_searching: '各ソースから並行検索中...',
+          state_searching_desc: '承認済みの上流レジストリへ高速並行クエリを実行しています...',
+          state_empty: '該当するメタデータが見つかりませんでした',
+          state_empty_desc: 'キーワードを変更するか、設定から有効なソースを追加してください。',
+          toast_copied: '✓ マグネットリンクをコピーしました！',
+          toast_cached: '✓ キャッシュを正常にクリアしました！',
+          toast_reset: '✓ デフォルト設定に戻しました！',
+          toast_at_least_one: '少なくとも1つのプロバイダを有効にしてください！',
+          modal_title: '⚙ エンジン設定とプロバイダー管理',
+          sec_lang: '🌐 表示言語 (Language)',
+          sec_lang_desc: 'ユーザーインターフェースの言語を選択',
+          sec_asian_movies: '🌸 アジア映画・アニメ',
+          sec_global_movies: '🎬 映画・海外ドラマ',
+          sec_software: '💻 ソフトウェア・OS',
+          sec_games: '🎮 PCゲーム・リパック',
+          sec_books: '📚 書籍・電子書籍',
+          sec_music: '🎵 音楽・ロスレス音源',
+          sec_density: '🎨 デザイン・表示密度',
+          density_label: 'テーブルの行間密度',
+          density_compact: 'コンパクト (密集)',
+          density_comfortable: '標準 (快適)',
+          sec_privacy: '🛡️ プライバシー保護・キャッシュ管理',
+          privacy_desc: '追跡クッキーなし、不正なオープンプロキシ完全拒否 (INV-01 / INV-08)。',
+          btn_purge_cache: 'キャッシュと履歴を消去',
+          btn_reset: '初期設定にリセット',
+          btn_done: '完了'
+        },
+        ko: {
+          nav_search: '검색',
+          nav_providers: '제공자',
+          nav_invariants: '보안 규약',
+          btn_theme_dark: '테마: 다크',
+          btn_theme_light: '테마: 라이트',
+          btn_settings: '⚙ 설정',
+          hero_sub_pre: '수많은 토렌트 검색기가 있지만,',
+          hero_sub_post: '이것이 진정한 ',
+          hero_orient: '미니멀하고 보안 우선의 메타데이터 수집 엔진. 임의 프록시 배제, 엄격한 상위 레지스트리 및 결정론적 랭킹 알고리즘.',
+          tab_all: '전체 카테고리',
+          tab_movies: '🎬 영화 / 영상',
+          tab_anime: '🌸 애니 & 아시아 드라마',
+          tab_software: '💻 소프트웨어 & OS',
+          tab_games: '🎮 게임',
+          tab_books: '📚 도서 & 텍스트',
+          tab_music: '🎵 음악 & 무손실',
+          search_placeholder: "검색어를 입력하세요 (예: 'avatar', '鬼灭', 'ubuntu', 'elden ring')...",
+          search_btn: '검색',
+          focus_tag: '[/] 포커스',
+          caption_title: '검증된 스웜 메타데이터 피드',
+          active_providers_suffix: '개 활성화됨',
+          th_title: '제목 / 릴리즈',
+          th_category: '카테고리',
+          th_size: '용량',
+          th_swarm: '시드 / 피어 (Seed/Peer)',
+          th_health: '상태',
+          th_date: '게시일',
+          th_action: '작업',
+          state_ready: '실시간 검색 준비 완료',
+          state_ready_desc: '상단에 검색어를 입력하여 검증된 토렌트 메타데이터를 검색하세요.',
+          state_searching: '상위 소스 실시간 검색 중...',
+          state_searching_desc: '승인된 상위 레지스트리에 병렬로 안전하게 쿼리하고 있습니다...',
+          state_empty: '검색 결과가 없습니다',
+          state_empty_desc: '검색어를 변경하거나 설정에서 활성화된 제공자를 추가해 보세요.',
+          toast_copied: '✓ 마그넷 링크가 복사되었습니다!',
+          toast_cached: '✓ 캐시가 성공적으로 삭제되었습니다!',
+          toast_reset: '✓ 기본 설정으로 초기화되었습니다!',
+          toast_at_least_one: '최소 1개 이상의 제공자가 활성화되어야 합니다!',
+          modal_title: '⚙ 엔진 설정 및 제공자 관리',
+          sec_lang: '🌐 표시 언어 (Language)',
+          sec_lang_desc: '사용자 인터페이스 언어 선택',
+          sec_asian_movies: '🌸 아시아 영화 & 애니메이션',
+          sec_global_movies: '🎬 영화 & 글로벌 시리즈',
+          sec_software: '💻 소프트웨어 & 운영체제',
+          sec_games: '🎮 PC 게임 & 리팩',
+          sec_books: '📚 도서 & 전자책',
+          sec_music: '🎵 음악 & 무손실 음원',
+          sec_density: '🎨 인터페이스 & 테이블 밀도',
+          density_label: '테이블 행 간격 밀도',
+          density_compact: '컴팩트 (조밀하게)',
+          density_comfortable: '기본 (여유있게)',
+          sec_privacy: '🛡️ 개인정보 보호 & 캐시 관리',
+          privacy_desc: '추적 쿠키 없음, 비인가 오픈 프록시 완전 차단 (INV-01 / INV-08).',
+          btn_purge_cache: '캐시 및 기록 삭제',
+          btn_reset: '기본값으로 복원',
+          btn_done: '완료'
+        },
+        id: {
+          nav_search: 'Pencarian',
+          nav_providers: 'Penyedia',
+          nav_invariants: 'Invarian Keamanan',
+          btn_theme_dark: 'Tema: Gelap',
+          btn_theme_light: 'Tema: Terang',
+          btn_settings: '⚙ Pengaturan',
+          hero_sub_pre: 'Ada banyak pencari torrent,',
+          hero_sub_post: 'tetapi yang ini adalah ',
+          hero_orient: 'Agregator metadata minimalis dan mengutamakan keamanan. Nol proksi sewenang-wenang, registri sumber ketat, dan pemeringkatan multi-sinyal.',
+          tab_all: 'Semua Kategori',
+          tab_movies: '🎬 Film',
+          tab_anime: '🌸 Anime & Drama',
+          tab_software: '💻 Perangkat Lunak & OS',
+          tab_games: '🎮 Game',
+          tab_books: '📚 Buku & Teks',
+          tab_music: '🎵 Musik & Lossless',
+          search_placeholder: "Ketik kueri pencarian (contoh: 'avatar', '鬼灭', 'ubuntu', 'elden ring')...",
+          search_btn: 'Cari',
+          focus_tag: '[/] fokus',
+          caption_title: 'UMPAN METADATA SWARM TERVERIFIKASI',
+          active_providers_suffix: 'Aktif',
+          th_title: 'Judul / Rilis',
+          th_category: 'Kategori',
+          th_size: 'Ukuran',
+          th_swarm: 'Swarm (Seed/Peer)',
+          th_health: 'Status',
+          th_date: 'Tanggal',
+          th_action: 'Aksi',
+          state_ready: 'SIAP MENCARI METADATA SWARM',
+          state_ready_desc: 'Ketik kata kunci di atas untuk mencari metadata torrent terverifikasi.',
+          state_searching: 'MENCARI DARI SUMBER RESMI...',
+          state_searching_desc: 'Mengirimkan kueri secara paralel ke penyedia terdaftar...',
+          state_empty: 'TIDAK ADA HASIL',
+          state_empty_desc: 'Coba ubah kata kunci atau aktifkan lebih banyak penyedia di pengaturan.',
+          toast_copied: '✓ Tautan Magnet berhasil disalin!',
+          toast_cached: '✓ Cache lokal berhasil dibersihkan!',
+          toast_reset: '✓ Pengaturan bawaan berhasil dipulihkan!',
+          toast_at_least_one: 'Minimal 1 penyedia harus tetap aktif!',
+          modal_title: '⚙ PENGATURAN MESIN & REGISTRI PENYEDIA',
+          sec_lang: '🌐 Bahasa Tampilan (Language)',
+          sec_lang_desc: 'Pilih bahasa antarmuka pengguna',
+          sec_asian_movies: '🌸 Film Asia & Anime',
+          sec_global_movies: '🎬 Film Bioskop & Serial Global',
+          sec_software: '💻 Perangkat Lunak & OS',
+          sec_games: '🎮 Game PC & Repack',
+          sec_books: '📚 Buku & Dokumen Teks',
+          sec_music: '🎵 Musik & Audio Lossless',
+          sec_density: '🎨 Antarmuka & Kepadatan Baris',
+          density_label: 'Kepadatan baris tabel',
+          density_compact: 'Kompak (Rapat)',
+          density_comfortable: 'Nyaman (Bawaan)',
+          sec_privacy: '🛡️ Privasi & Manajemen Cache',
+          privacy_desc: 'Nol cookie pelacak dan nol proksi tidak sah (INV-01 / INV-08).',
+          btn_purge_cache: 'Bersihkan Cache & Riwayat',
+          btn_reset: 'Kembalikan Pengaturan Awal',
+          btn_done: 'Selesai'
+        }
+      };
+
       const ALL_CATEGORIZED_PROVIDERS = [
         // Phim & Phim Châu Á (Asian & Global Movies / Dramas)
-        { id: 'apibay', name: 'ThePirateBay (Global)', cat: 'Phim & Tổng hợp', icon: '🎬' },
-        { id: 'dmhy', name: '动漫花园 DMHY (中文/亚洲影视)', cat: 'Phim Châu Á & Anime', icon: '🌸' },
-        { id: 'nyaa', name: 'Nyaa (Asian & Global Media)', cat: 'Phim Châu Á & Anime', icon: '🌸' },
-        { id: 'acg-rip', name: 'ACG.RIP (中文影视社区)', cat: 'Phim Châu Á & Anime', icon: '🌸' },
-        { id: 'bangumi', name: '萌番组 Bangumi (亚洲动画/剧集)', cat: 'Phim Châu Á & Anime', icon: '🌸' },
-        { id: 'tokyotosho', name: 'Tokyo Toshokan (Asian Media)', cat: 'Phim Châu Á & Anime', icon: '🌸' },
-        { id: 'yts', name: 'YTS (Movies HD/4K)', cat: 'Phim Điện Ảnh', icon: '🎬' },
-        { id: 'eztv', name: 'EZTV (TV Series & Shows)', cat: 'Phim Bộ & Truyền Hình', icon: '📺' },
-        { id: 'solidtorrents', name: 'SolidTorrents (DHT)', cat: 'Phim & Tổng hợp', icon: '🌐' },
+        { id: 'apibay', name: 'ThePirateBay (Global)', catKey: 'sec_global_movies', icon: '🎬' },
+        { id: 'dmhy', name: '动漫花园 DMHY (中文/亚洲影视)', catKey: 'sec_asian_movies', icon: '🌸' },
+        { id: 'nyaa', name: 'Nyaa (Asian & Global Media)', catKey: 'sec_asian_movies', icon: '🌸' },
+        { id: 'acg-rip', name: 'ACG.RIP (中文影视社区)', catKey: 'sec_asian_movies', icon: '🌸' },
+        { id: 'bangumi', name: '萌番组 Bangumi (亚洲动画/剧集)', catKey: 'sec_asian_movies', icon: '🌸' },
+        { id: 'tokyotosho', name: 'Tokyo Toshokan (Asian Media)', catKey: 'sec_asian_movies', icon: '🌸' },
+        { id: 'yts', name: 'YTS (Movies HD/4K)', catKey: 'sec_global_movies', icon: '🎬' },
+        { id: 'eztv', name: 'EZTV (TV Series & Shows)', catKey: 'sec_global_movies', icon: '📺' },
+        { id: 'solidtorrents', name: 'SolidTorrents (DHT)', catKey: 'sec_global_movies', icon: '🌐' },
 
         // Phần mềm & OS
-        { id: 'linuxtracker', name: 'LinuxTracker (Linux OS)', cat: 'Phần mềm & Hệ điều hành', icon: '💻' },
-        { id: 'archive-org-software', name: 'Archive.org Software (Tools/ISO)', cat: 'Phần mềm & Hệ điều hành', icon: '💻' },
+        { id: 'linuxtracker', name: 'LinuxTracker (Linux OS)', catKey: 'sec_software', icon: '💻' },
+        { id: 'archive-org-software', name: 'Archive.org Software (Tools/ISO)', catKey: 'sec_software', icon: '💻' },
 
         // Trò chơi (Games)
-        { id: 'fitgirl', name: 'FitGirl Repacks (PC Games)', cat: 'Trò chơi (Games)', icon: '🎮' },
-        { id: 'dodi', name: 'DODI Repacks (PC Games)', cat: 'Trò chơi (Games)', icon: '🎮' },
+        { id: 'fitgirl', name: 'FitGirl Repacks (PC Games)', catKey: 'sec_games', icon: '🎮' },
+        { id: 'dodi', name: 'DODI Repacks (PC Games)', catKey: 'sec_games', icon: '🎮' },
 
         // Sách & Tài liệu
-        { id: 'archive-org-texts', name: 'Archive.org Texts (Books/Ebooks)', cat: 'Sách & Tài liệu', icon: '📚' },
+        { id: 'archive-org-texts', name: 'Archive.org Texts (Books/Ebooks)', catKey: 'sec_books', icon: '📚' },
 
         // Âm nhạc & Audio Hi-Res
-        { id: 'archive-org-audio', name: 'Archive.org Audio (FLAC/Hi-Res)', cat: 'Âm nhạc & Lossless', icon: '🎵' }
+        { id: 'archive-org-audio', name: 'Archive.org Audio (FLAC/Hi-Res)', catKey: 'sec_music', icon: '🎵' }
       ];
 
       const state = {
         query: '',
         selectedCategory: 'ALL',
         theme: 'dark',
+        lang: 'vi',
         density: 'comfortable',
         enabledProviders: new Set(ALL_CATEGORIZED_PROVIDERS.map(p => p.id)),
         items: [],
@@ -487,9 +863,16 @@ export function renderFullHtmlPage(): string {
         historyEnabled: true
       };
 
+      function t(key) {
+        const dict = TRANSLATIONS[state.lang] || TRANSLATIONS['vi'];
+        return dict[key] || TRANSLATIONS['en'][key] || key;
+      }
+
       const el = {
+        langSelect: document.getElementById('select-global-lang'),
         searchInput: document.getElementById('search-input'),
         searchTriggerBtn: document.getElementById('btn-search-trigger'),
+        searchShortcutTag: document.getElementById('search-shortcut-tag'),
         providerToggles: document.getElementById('provider-toggles'),
         resultsBody: document.getElementById('results-tbody'),
         resultCount: document.getElementById('result-count'),
@@ -503,8 +886,73 @@ export function renderFullHtmlPage(): string {
         modalCloseBtn: document.getElementById('modal-close-btn'),
         modalActionBtn: document.getElementById('modal-action-btn'),
         modalResetBtn: document.getElementById('modal-reset-btn'),
-        toast: document.getElementById('toast-notification')
+        toast: document.getElementById('toast-notification'),
+        
+        navLinkSearch: document.getElementById('nav-link-search'),
+        navLinkProviders: document.getElementById('nav-link-providers'),
+        navLinkInvariants: document.getElementById('nav-link-invariants'),
+        heroSubPre: document.getElementById('hero-sub-pre'),
+        heroSubPost: document.getElementById('hero-sub-post'),
+        heroOrient: document.getElementById('hero-orient-text'),
+        tabAll: document.getElementById('tab-all'),
+        tabMovies: document.getElementById('tab-movies'),
+        tabAnime: document.getElementById('tab-anime'),
+        tabSoftware: document.getElementById('tab-software'),
+        tabGames: document.getElementById('tab-games'),
+        tabBooks: document.getElementById('tab-books'),
+        tabMusic: document.getElementById('tab-music'),
+        captionFeedTitle: document.getElementById('caption-feed-title'),
+        thTitle: document.getElementById('th-title'),
+        thCategory: document.getElementById('th-category'),
+        thSize: document.getElementById('th-size'),
+        thSwarm: document.getElementById('th-swarm'),
+        thHealth: document.getElementById('th-health'),
+        thDate: document.getElementById('th-date'),
+        thAction: document.getElementById('th-action')
       };
+
+      function applyTranslations() {
+        document.documentElement.setAttribute('lang', state.lang);
+        if (el.langSelect) el.langSelect.value = state.lang;
+        
+        el.navLinkSearch.textContent = t('nav_search');
+        el.navLinkProviders.textContent = t('nav_providers');
+        el.navLinkInvariants.textContent = t('nav_invariants');
+        el.themeToggleBtn.textContent = state.theme === 'dark' ? t('btn_theme_dark') : t('btn_theme_light');
+        el.settingsBtn.textContent = t('btn_settings');
+
+        el.heroSubPre.textContent = t('hero_sub_pre');
+        el.heroSubPost.textContent = t('hero_sub_post');
+        el.heroOrient.textContent = t('hero_orient');
+
+        el.tabAll.textContent = t('tab_all');
+        el.tabMovies.textContent = t('tab_movies');
+        el.tabAnime.textContent = t('tab_anime');
+        el.tabSoftware.textContent = t('tab_software');
+        el.tabGames.textContent = t('tab_games');
+        el.tabBooks.textContent = t('tab_books');
+        el.tabMusic.textContent = t('tab_music');
+
+        el.searchInput.placeholder = t('search_placeholder');
+        el.searchTriggerBtn.textContent = t('search_btn');
+        el.searchShortcutTag.textContent = t('focus_tag');
+        el.captionFeedTitle.textContent = t('caption_title');
+
+        el.thTitle.textContent = t('th_title');
+        el.thCategory.textContent = t('th_category');
+        el.thSize.textContent = t('th_size');
+        el.thSwarm.textContent = t('th_swarm');
+        el.thHealth.textContent = t('th_health');
+        el.thDate.textContent = t('th_date');
+        el.thAction.textContent = t('th_action');
+
+        el.modalResetBtn.textContent = t('btn_reset');
+        el.modalActionBtn.textContent = t('btn_done');
+        el.modalTitle.textContent = t('modal_title');
+        
+        renderProviders();
+        renderResults();
+      }
 
       function formatBytes(bytes) {
         if (bytes === null || bytes === undefined || bytes <= 1) return 'N/A';
@@ -541,7 +989,7 @@ export function renderFullHtmlPage(): string {
           });
           el.providerToggles.appendChild(btn);
         });
-        el.activeProviderCount.textContent = state.enabledProviders.size + ' Active';
+        el.activeProviderCount.textContent = state.enabledProviders.size + ' ' + t('active_providers_suffix');
       }
 
       function renderResults() {
@@ -555,7 +1003,7 @@ export function renderFullHtmlPage(): string {
           td.style.padding = '3rem 1rem';
           td.style.color = 'var(--color-text-accent)';
           td.style.fontFamily = 'var(--font-mono)';
-          td.innerHTML = '<span class="figure-caption-live-dot" style="display:inline-block; margin-right:0.5rem;"></span>SEARCHING LIVE FEEDS...<br><span style="font-size:0.75rem; color:var(--color-gray-500);">Querying ' + state.enabledProviders.size + ' approved server-side upstream registries in parallel...</span>';
+          td.innerHTML = '<span class="figure-caption-live-dot" style="display:inline-block; margin-right:0.5rem;"></span>' + t('state_searching') + '<br><span style="font-size:0.75rem; color:var(--color-gray-500);">' + t('state_searching_desc') + '</span>';
           tr.appendChild(td);
           el.resultsBody.appendChild(tr);
           return;
@@ -570,8 +1018,8 @@ export function renderFullHtmlPage(): string {
           td.style.color = 'var(--color-text-muted)';
           td.style.fontFamily = 'var(--font-mono)';
           td.innerHTML = state.query.trim().length === 0 
-            ? 'READY TO QUERY LIVE SWARMS<br><span style="font-size:0.75rem; color:var(--color-gray-600);">Type a search term above to aggregate verified torrent metadata.</span>'
-            : 'NO METADATA RETURNED<br><span style="font-size:0.75rem; color:var(--color-gray-600);">Try adjusting your query or enabling more upstream providers.</span>';
+            ? t('state_ready') + '<br><span style="font-size:0.75rem; color:var(--color-gray-600);">' + t('state_ready_desc') + '</span>'
+            : t('state_empty') + '<br><span style="font-size:0.75rem; color:var(--color-gray-600);">' + t('state_empty_desc') + '</span>';
           tr.appendChild(td);
           el.resultsBody.appendChild(tr);
           el.resultCount.textContent = '0 items';
@@ -622,7 +1070,7 @@ export function renderFullHtmlPage(): string {
             e.stopPropagation();
             if (item.magnetUri) {
               navigator.clipboard?.writeText(item.magnetUri).catch(() => {});
-              showToast('✓ Magnet link copied!');
+              showToast(t('toast_copied'));
             }
           });
           tdActions.appendChild(copyBtn);
@@ -649,7 +1097,6 @@ export function renderFullHtmlPage(): string {
         const startTime = performance.now();
         const providers = Array.from(state.enabledProviders);
 
-        // Parallel queries to all enabled providers
         const promises = providers.map(async (providerId) => {
           try {
             const res = await fetch('/api/v1/search', {
@@ -669,8 +1116,6 @@ export function renderFullHtmlPage(): string {
 
         const resultsArrays = await Promise.all(promises);
         state.items = resultsArrays.flat();
-        
-        // Multi-signal sorting: seeders descending
         state.items.sort((a, b) => (b.seeders || 0) - (a.seeders || 0));
 
         state.isLoading = false;
@@ -681,14 +1126,31 @@ export function renderFullHtmlPage(): string {
       function openSettingsModal() {
         el.modalBody.replaceChildren();
 
-        // 1. Categories Mapping
+        // 1. Language Section
+        const langGroup = document.createElement('div');
+        langGroup.className = 'settings-group';
+        langGroup.innerHTML = '<div class="settings-group-title"><span>' + t('sec_lang') + '</span></div>' +
+          '<div class="settings-row">' +
+            '<div><div class="settings-label">' + t('sec_lang_desc') + '</div></div>' +
+            '<select id="modal-select-lang" class="select-input">' +
+              '<option value="vi"' + (state.lang === 'vi' ? ' selected' : '') + '>🇻🇳 Tiếng Việt</option>' +
+              '<option value="en"' + (state.lang === 'en' ? ' selected' : '') + '>🇺🇸 English</option>' +
+              '<option value="zh"' + (state.lang === 'zh' ? ' selected' : '') + '>🇨🇳 中文</option>' +
+              '<option value="ja"' + (state.lang === 'ja' ? ' selected' : '') + '>🇯🇵 日本語</option>' +
+              '<option value="ko"' + (state.lang === 'ko' ? ' selected' : '') + '>🇰🇷 한국어</option>' +
+              '<option value="id"' + (state.lang === 'id' ? ' selected' : '') + '>🇮🇩 Bahasa Indonesia</option>' +
+            '</select>' +
+          '</div>';
+        el.modalBody.appendChild(langGroup);
+
+        // 2. Providers Categorized
         const grouped = {};
         ALL_CATEGORIZED_PROVIDERS.forEach(p => {
-          if (!grouped[p.cat]) grouped[p.cat] = [];
-          grouped[p.cat].push(p);
+          const categoryTitle = t(p.catKey);
+          if (!grouped[categoryTitle]) grouped[categoryTitle] = [];
+          grouped[categoryTitle].push(p);
         });
 
-        // Provider Management Section
         for (const [catName, providers] of Object.entries(grouped)) {
           const groupDiv = document.createElement('div');
           groupDiv.className = 'settings-group';
@@ -716,7 +1178,7 @@ export function renderFullHtmlPage(): string {
                   state.enabledProviders.delete(p.id);
                 } else {
                   checkbox.checked = true;
-                  showToast('Ít nhất 1 nguồn phải được bật!');
+                  showToast(t('toast_at_least_one'));
                 }
               }
               renderProviders();
@@ -734,27 +1196,41 @@ export function renderFullHtmlPage(): string {
           el.modalBody.appendChild(groupDiv);
         }
 
-        // Interface & Density Section
+        // 3. Interface & Density Section
         const uiGroup = document.createElement('div');
         uiGroup.className = 'settings-group';
-        uiGroup.innerHTML = '<div class="settings-group-title"><span>🎨 Giao Diện &amp; Mật Độ Bảng</span></div>' +
+        uiGroup.innerHTML = '<div class="settings-group-title"><span>' + t('sec_density') + '</span></div>' +
           '<div class="settings-row">' +
-            '<div><div class="settings-label">Mật độ dòng bảng (Density)</div><div class="settings-sublabel">Chọn khoảng cách dòng hiển thị kết quả</div></div>' +
-            '<select id="select-density" class="button button--sm" style="font-family:var(--font-mono);">' +
-              '<option value="compact">Compact (Dày đặc)</option>' +
-              '<option value="comfortable" selected>Comfortable (Mặc định)</option>' +
+            '<div><div class="settings-label">' + t('density_label') + '</div></div>' +
+            '<select id="select-density" class="select-input">' +
+              '<option value="compact"' + (state.density === 'compact' ? ' selected' : '') + '>' + t('density_compact') + '</option>' +
+              '<option value="comfortable"' + (state.density === 'comfortable' ? ' selected' : '') + '>' + t('density_comfortable') + '</option>' +
             '</select>' +
-          '</div>' +
-          '<div class="settings-row" style="margin-top:0.75rem;">' +
-            '<div><div class="settings-label">Quyền riêng tư &amp; Lịch sử tìm kiếm</div><div class="settings-sublabel">Không lưu lại vết tìm kiếm trên Edge/Server</div></div>' +
-            '<button type="button" id="btn-clear-cache" class="button button--sm">Xóa Cache &amp; Lịch sử</button>' +
           '</div>';
         el.modalBody.appendChild(uiGroup);
 
+        // 4. Privacy & Cache
+        const privGroup = document.createElement('div');
+        privGroup.className = 'settings-group';
+        privGroup.innerHTML = '<div class="settings-group-title"><span>' + t('sec_privacy') + '</span></div>' +
+          '<div class="settings-row">' +
+            '<div><div class="settings-sublabel">' + t('privacy_desc') + '</div></div>' +
+            '<button type="button" id="btn-clear-cache" class="button button--sm">' + t('btn_purge_cache') + '</button>' +
+          '</div>';
+        el.modalBody.appendChild(privGroup);
+
         setTimeout(() => {
+          const modalLangSelect = document.getElementById('modal-select-lang');
+          if (modalLangSelect) {
+            modalLangSelect.addEventListener('change', (e) => {
+              state.lang = e.target.value;
+              applyTranslations();
+              openSettingsModal();
+            });
+          }
+
           const densitySelect = document.getElementById('select-density');
           if (densitySelect) {
-            densitySelect.value = state.density;
             densitySelect.addEventListener('change', (e) => {
               state.density = e.target.value;
               document.documentElement.style.setProperty('--result-row-padding-y', state.density === 'compact' ? '0.4rem' : '0.75rem');
@@ -766,7 +1242,7 @@ export function renderFullHtmlPage(): string {
             clearBtn.addEventListener('click', () => {
               state.items = [];
               renderResults();
-              showToast('✓ Đã xóa toàn bộ bộ nhớ đệm!');
+              showToast(t('toast_cached'));
             });
           }
         }, 50);
@@ -779,8 +1255,14 @@ export function renderFullHtmlPage(): string {
       }
 
       function init() {
-        renderProviders();
-        renderResults();
+        applyTranslations();
+
+        if (el.langSelect) {
+          el.langSelect.addEventListener('change', (e) => {
+            state.lang = e.target.value;
+            applyTranslations();
+          });
+        }
 
         el.settingsBtn.addEventListener('click', openSettingsModal);
         el.modalCloseBtn.addEventListener('click', closeSettingsModal);
@@ -791,15 +1273,18 @@ export function renderFullHtmlPage(): string {
 
         el.modalResetBtn.addEventListener('click', () => {
           state.enabledProviders = new Set(ALL_CATEGORIZED_PROVIDERS.map(p => p.id));
-          renderProviders();
+          state.lang = 'vi';
+          state.density = 'comfortable';
+          document.documentElement.style.setProperty('--result-row-padding-y', '0.75rem');
+          applyTranslations();
           openSettingsModal();
-          showToast('✓ Đã khôi phục cài đặt mặc định!');
+          showToast(t('toast_reset'));
         });
 
         el.themeToggleBtn.addEventListener('click', () => {
           state.theme = state.theme === 'dark' ? 'light' : 'dark';
           document.documentElement.setAttribute('data-theme', state.theme);
-          el.themeToggleBtn.textContent = 'Theme: ' + (state.theme === 'dark' ? 'Dark' : 'Light');
+          el.themeToggleBtn.textContent = state.theme === 'dark' ? t('btn_theme_dark') : t('btn_theme_light');
         });
 
         let timer;
