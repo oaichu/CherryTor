@@ -3104,7 +3104,7 @@ export function renderFullHtmlPage(): string {
             document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('is-active'));
             btn.classList.add('is-active');
             state.selectedCategory = btn.getAttribute('data-category') || 'ALL';
-            if (state.selectedCategory === 'BOOKMARKS') {
+            if (state.selectedCategory === 'BOOKMARKS' || state.items.length > 0) {
               renderResults();
             } else if (state.query.trim().length > 0) {
               executeLiveSearch(state.query);
