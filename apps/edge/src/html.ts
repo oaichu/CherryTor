@@ -520,6 +520,14 @@ export function renderFullHtmlPage(): string {
       <p class="hero-orient" id="hero-orient-text">
         Minimal, security-first metadata aggregator. Zero arbitrary proxying, strict typed upstream registries, and deterministic multi-signal ranking.
       </p>
+      <div style="display: flex; justify-content: center; align-items: center; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap;">
+        <span class="badge badge-accent" style="font-size: 0.75rem; padding: 0.3rem 0.6rem;">🛡️ Zero-Log Invariant</span>
+        <span class="badge badge-default" style="font-size: 0.75rem; padding: 0.3rem 0.6rem;">⚡ 15+ Upstream Feeds</span>
+        <a href="https://aeropad.pages.dev/" target="_blank" rel="noopener noreferrer" class="badge badge-cherry" style="font-size: 0.75rem; padding: 0.3rem 0.6rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem; transition: transform 0.15s ease;" title="Visit official AeroPad 2FA Vault & Security Studio">
+          <span>📝 Companion: <strong>AeroPad 2FA Vault</strong></span>
+          <span style="font-size: 0.7rem;">↗</span>
+        </a>
+      </div>
     </header>
 
     <section class="search-switcher-box" id="search">
@@ -3053,7 +3061,14 @@ export function renderFullHtmlPage(): string {
 
         const padDiv = document.createElement('div');
         padDiv.innerHTML = '<div style="font-size:0.875rem; color:var(--color-text-muted); margin-bottom:1rem; line-height:1.5;">' +
-          'Paste raw magnet links, hash lists, or release notes below. Aeropad automatically extracts all valid magnets for 1-click batch copy or client handoff.' +
+          '<div style="background:var(--color-bg-canvas); border:var(--border-subtle); border-radius:var(--radius-xs); padding:0.75rem 1rem; margin-bottom:0.75rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;">' +
+            '<div>' +
+              '<span style="font-weight:700; color:var(--color-text-primary); font-size:0.875rem;">🚀 AeroPad &amp; 2FA Vault Web App</span>' +
+              '<div style="font-size:0.75rem; color:var(--color-text-muted);">Looking for offline 2FA TOTP authenticator and AES-GCM encrypted notes?</div>' +
+            '</div>' +
+            '<a href="https://aeropad.pages.dev/" target="_blank" rel="noopener noreferrer" class="button button--primary button--sm" style="font-size:0.75rem; padding:0.25rem 0.6rem; text-decoration:none;">Open AeroPad Studio ↗</a>' +
+          '</div>' +
+          'Paste raw magnet links, hash lists, or release notes below. Quick Pad automatically extracts all valid magnets for 1-click batch copy or client handoff.' +
         '</div>' +
         '<textarea id="aeropad-textarea" style="width:100%; height:150px; background:var(--color-bg-canvas); color:var(--color-text-primary); border:var(--border-subtle); border-radius:var(--radius-xs); padding:0.75rem; font-family:var(--font-mono); font-size:0.8125rem; resize:vertical; box-sizing:border-box;" placeholder="Paste magnet:?xt=urn:btih:... links or raw text here..."></textarea>' +
         '<div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.75rem; flex-wrap:wrap; gap:0.5rem;">' +
@@ -3184,28 +3199,46 @@ export function renderFullHtmlPage(): string {
 
         const aboutDiv = document.createElement('div');
         aboutDiv.innerHTML = '<div style="font-size:0.875rem; color:var(--color-text-muted); line-height:1.6;">' +
-          '<div style="font-size:1.15rem; font-weight:800; color:var(--color-text-primary); margin-bottom:0.5rem;">' +
+          '<div style="font-size:1.15rem; font-weight:800; color:var(--color-text-primary); margin-bottom:0.4rem;">' +
             '⚡ The Ultra-Fast, Security-First, Zero-Log Swarm Aggregator' +
           '</div>' +
-          '<p style="margin-bottom:1rem;">' +
-            '<strong>CherryTor</strong> and its companion tool <strong>Aeropad</strong> provide a modern, private, and high-density swarm metadata exploration experience running on Cloudflare Serverless Edge.' +
+          '<p style="margin-bottom:1rem; color:var(--color-text-secondary); font-size:0.8125rem;">' +
+            '<strong>CherryTor</strong> and its companion project <strong>AeroPad</strong> deliver a modern, privacy-first, and high-density swarm metadata exploration experience running on Cloudflare Serverless Edge.' +
           '</p>' +
-          '<div class="settings-group">' +
-            '<div class="settings-group-title"><span>🛡️ Core Architecture &amp; Guarantees</span></div>' +
-            '<ul style="margin:0.5rem 0 0 1.25rem; font-size:0.8125rem; color:var(--color-text-primary); line-height:1.7;">' +
-              '<li><strong>Zero-Log Invariant:</strong> No IP tracking, no search history logs, zero analytics trackers.</li>' +
-              '<li><strong>15+ Global Upstreams:</strong> Parallel aggregation across ThePirateBay, DMHY, Nyaa, ACG.RIP, Bangumi, YTS, EZTV, FitGirl, DODI, Archive.org.</li>' +
-              '<li><strong>Aeropad Scratchpad:</strong> Offline client-side magnet extractor and batch dispatcher.</li>' +
-              '<li><strong>Multi-Signal Classifier:</strong> Instant real-time category filtering (Movies, Anime, Games, Software, Books, Music).</li>' +
+          '<div class="settings-group" style="margin-bottom:1rem;">' +
+            '<div class="settings-group-title"><span>🌸 CherryTor Edge Engine</span></div>' +
+            '<ul style="margin:0.4rem 0 0 1.25rem; font-size:0.8125rem; color:var(--color-text-primary); line-height:1.7;">' +
+              '<li><strong>Zero-Log Invariant:</strong> Ephemeral in-memory execution. No IP tracking, no query logs, zero cookies.</li>' +
+              '<li><strong>15+ Global Upstreams:</strong> Parallel multi-source queries (DMHY, Nyaa, ACG.RIP, Bangumi, TPB, YTS, EZTV, FitGirl, DODI, Archive.org).</li>' +
+              '<li><strong>Multi-Signal Classifier:</strong> Instant category filtering (Movies, Anime, Software, Games, Books, Music).</li>' +
+              '<li><strong>Deterministic Ranking:</strong> Accurate seed/peer health and byte-exact deduplication.</li>' +
             '</ul>' +
           '</div>' +
-          '<div class="settings-group">' +
-            '<div class="settings-group-title"><span>🌐 Official Web Addresses</span></div>' +
-            '<div style="display:flex; flex-direction:column; gap:0.5rem; font-size:0.8125rem; font-family:var(--font-mono);">' +
-              '<div>• Custom Domain: <a href="https://cherrytor.io.vn" target="_blank" style="color:var(--color-cyan-400);">https://cherrytor.io.vn</a></div>' +
-              '<div>• Edge Mirror: <a href="https://tor.oaichuhust.workers.dev" target="_blank" style="color:var(--color-text-accent);">https://tor.oaichuhust.workers.dev</a></div>' +
-              '<div>• GitHub Source: <a href="https://github.com/oaichu/CherryTor" target="_blank" style="color:var(--color-text-primary);">https://github.com/oaichu/CherryTor</a></div>' +
+          '<div class="settings-group" style="margin-bottom:1rem; border-color: rgba(0, 242, 254, 0.3);">' +
+            '<div class="settings-group-title" style="display:flex; justify-content:space-between; align-items:center;">' +
+              '<span style="color:var(--color-cyan-400);">📝 AeroPad: 2FA &amp; Cipher Vault</span>' +
+              '<a href="https://aeropad.pages.dev/" target="_blank" rel="noopener noreferrer" class="button button--primary button--sm" style="font-size:0.75rem; padding:0.2rem 0.5rem; text-decoration:none;">Open AeroPad ↗</a>' +
             '</div>' +
+            '<p style="font-size:0.8125rem; color:var(--color-text-secondary); margin:0.4rem 0 0.5rem 0; line-height:1.5;">' +
+              'Apple-grade Web3 cryptographic security studio and 2FA authentication companion at <a href="https://aeropad.pages.dev/" target="_blank" style="color:var(--color-cyan-400);">https://aeropad.pages.dev</a>.' +
+            '</p>' +
+            '<ul style="margin:0 0 0 1.25rem; font-size:0.8125rem; color:var(--color-text-primary); line-height:1.7;">' +
+              '<li><strong>2FA Studio &amp; Offline TOTP:</strong> Generate and QR-scan time-based OTP codes (RFC 6238) offline in your browser.</li>' +
+              '<li><strong>Client-Side AES-GCM Vault:</strong> Encrypted notes, seed phrases, and cipher workspace.</li>' +
+              '<li><strong>Zero-Log Magnet Extractor:</strong> Fast in-app batch magnet and swarm infohash parser.</li>' +
+            '</ul>' +
+          '</div>' +
+          '<div class="settings-group" style="margin-bottom:1rem;">' +
+            '<div class="settings-group-title"><span>🌐 Official Web Endpoints &amp; Source</span></div>' +
+            '<div style="display:flex; flex-direction:column; gap:0.4rem; font-size:0.8125rem; font-family:var(--font-mono); margin-top:0.4rem;">' +
+              '<div style="display:flex; justify-content:space-between;"><span style="color:var(--color-text-muted);">CherryTor Official:</span> <a href="https://cherrytor.io.vn" target="_blank" style="color:var(--color-cyan-400);">https://cherrytor.io.vn</a></div>' +
+              '<div style="display:flex; justify-content:space-between;"><span style="color:var(--color-text-muted);">Edge Mirror:</span> <a href="https://tor.oaichuhust.workers.dev" target="_blank" style="color:var(--color-text-accent);">https://tor.oaichuhust.workers.dev</a></div>' +
+              '<div style="display:flex; justify-content:space-between;"><span style="color:var(--color-text-muted);">AeroPad Vault:</span> <a href="https://aeropad.pages.dev/" target="_blank" style="color:var(--color-cyan-400);">https://aeropad.pages.dev/</a></div>' +
+              '<div style="display:flex; justify-content:space-between;"><span style="color:var(--color-text-muted);">GitHub Repository:</span> <a href="https://github.com/oaichu/CherryTor" target="_blank" style="color:var(--color-text-primary);">https://github.com/oaichu/CherryTor</a></div>' +
+            '</div>' +
+          '</div>' +
+          '<div style="font-size:0.75rem; color:var(--color-text-muted); line-height:1.5; border-top:var(--border-subtle); padding-top:0.75rem;">' +
+            '<strong>Legal Notice:</strong> CherryTor is a non-custodial metadata routing gateway running in ephemeral edge RAM. It does not host, store, or transmit copyrighted files. All torrent discovery occurs peer-to-peer on public DHT swarms. Released under the <a href="https://opensource.org/licenses/MIT" target="_blank" style="color:var(--color-text-secondary);">MIT License</a>.' +
           '</div>' +
         '</div>';
 
