@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/cherrytor-banner.svg" alt="CherryTor Banner" width="100%">
+  <img src="docs/assets/cherrytor-hero.png" alt="CherryTor Real Web Interface" width="100%">
 </p>
 
 <p align="center">
@@ -10,6 +10,7 @@
   <a href="https://cherrytor.io.vn"><img src="https://img.shields.io/badge/Official_Domain-cherrytor.io.vn-0284C7?style=for-the-badge&logo=internet-explorer" alt="Official Domain"></a>
   <a href="https://tor.oaichuhust.workers.dev"><img src="https://img.shields.io/badge/Edge_Mirror-tor.oaichuhust.workers.dev-E11D48?style=for-the-badge&logo=cloudflare" alt="Edge Mirror"></a>
   <a href="https://aeropad.pages.dev/"><img src="https://img.shields.io/badge/AeroPad_Vault-aeropad.pages.dev-00F2FE?style=for-the-badge&logo=icloud" alt="AeroPad Vault"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge&logo=opensourceinitiative" alt="MIT License"></a>
   <img src="https://img.shields.io/badge/Security-Zero--Log_Invariant-10B981?style=for-the-badge&logo=shield" alt="Zero Logs">
   <img src="https://img.shields.io/badge/Edge_Latency-<15ms-8B5CF6?style=for-the-badge&logo=speedtest" alt="Latency">
 </p>
@@ -22,10 +23,10 @@
 
 **CherryTor** is a next-generation, high-performance BitTorrent swarm metadata aggregator and search engine deployed globally across **Cloudflare Workers Serverless Edge**. 
 
-Engineered with a **Zero-Trust, Zero-Log architecture**, CherryTor guarantees complete user privacy: **no IP logging, no search history tracking, no surveillance cookies, and zero arbitrary proxying**.
+Engineered with a strict **Zero-Trust & Zero-Log architecture**, CherryTor guarantees uncompromising privacy: **no IP logging, no search history tracking, no surveillance cookies, and zero arbitrary proxying**.
 
 <p align="center">
-  <img src="docs/assets/cherrytor-ui-mockup.svg" alt="CherryTor & Aeropad Interface Mockup" width="100%">
+  <img src="docs/assets/cherrytor-live-results.png" alt="CherryTor Real Live Search Results" width="100%">
 </p>
 
 ---
@@ -33,12 +34,12 @@ Engineered with a **Zero-Trust, Zero-Log architecture**, CherryTor guarantees co
 ## 🚀 Key Features
 
 ### 1. 🛡️ Absolute Privacy & Zero-Log Architecture
-- **Zero Logging Guarantee**: Queries are processed strictly in ephemeral memory within Cloudflare Edge Isolates and immediately discarded upon completion.
+- **Zero Logging Guarantee**: All queries are processed strictly in ephemeral RAM within Cloudflare Edge Isolates and immediately discarded upon completion.
 - **Anti-Proxy Invariant (INV-01 & INV-02)**: Strict protocol prevents arbitrary proxying or illegal file relaying. CherryTor serves verified swarm metadata and standard RFC Magnet links only.
-- **Client-Side Data Storage**: Bookmarks, history, and preferences stay 100% on your local device via browser `LocalStorage`.
+- **Client-Side Data Sovereignty**: Bookmarks, history, and preferences stay 100% on your local device via browser `LocalStorage`.
 
-### 2. 📝 AeroPad: The 2FA Vault & Zero-Knowledge Security Studio
-A core companion project in our ecosystem is **[AeroPad](https://aeropad.pages.dev/)** ([https://aeropad.pages.dev](https://aeropad.pages.dev)):
+### 2. 📝 Ecosystem Companion: AeroPad & 2FA Vault
+Our official companion web application is **[AeroPad](https://aeropad.pages.dev/)** ([https://aeropad.pages.dev](https://aeropad.pages.dev)):
 - **2FA Studio & Offline TOTP**: Generate and scan time-based one-time passwords (RFC 6238) with real-time QR camera scanning without cloud dependencies.
 - **Client-Side AES-GCM Cipher Vault**: Store encrypted notes, seed phrases, and credentials protected by master encryption.
 - **Instant Magnet & Swarm Extractor**: Paste unstructured text, logs, or release notes to automatically extract all valid `magnet:?xt=urn:btih:...` URIs and infohashes for 1-click batch export.
@@ -67,7 +68,7 @@ Easily toggle between 6 fully localized languages from the navigation bar or set
 
 ### 5. 🎯 Smart Category Classifier & Accurate File Sizes
 - **Multi-Signal Classifier (`classifier.ts`)**: Dynamically categorizes releases into Movies, Anime, Games, Software, Books, or Music.
-- **Human File Size Parser**: Automatically parses file sizes from XML tags, byte counts, or bracketed titles (e.g. `12.00 GiB`, `773.62 MiB`, `48.50 GiB`).
+- **Human File Size Parser**: Automatically extracts file sizes from XML tags, byte counts, or bracketed titles (e.g. `12.00 GiB`, `773.62 MiB`, `48.50 GiB`).
 
 ---
 
@@ -107,6 +108,7 @@ flowchart TD
 
 - **Official Web Address**: [https://cherrytor.io.vn](https://cherrytor.io.vn)
 - **Direct Edge Mirror**: [https://tor.oaichuhust.workers.dev](https://tor.oaichuhust.workers.dev)
+- **Companion 2FA Vault (AeroPad)**: [https://aeropad.pages.dev](https://aeropad.pages.dev)
 
 ---
 
@@ -129,18 +131,13 @@ pnpm install
 
 # Type-check & Run full test suite (45/45 passing)
 pnpm tsc --noEmit
-node --experimental-strip-types --test tests/unit/*.test.ts tests/integration/*.test.ts tests/security/*.test.ts
+pnpm test
 ```
 
 ### 3. Deploy to Cloudflare Edge
 
 ```bash
-cd apps/edge
-
-# Authenticate with Cloudflare (one-time setup)
-pnpm wrangler login
-
-# Deploy globally in seconds
+# Deploy globally in seconds via root or apps/edge
 pnpm run deploy
 ```
 
@@ -160,8 +157,8 @@ Content-Type: application/json
 ```json
 {
   "provider": "dmhy",
-  "query": "elden ring",
-  "category": "GAMES"
+  "query": "avatar",
+  "category": "MOVIES"
 }
 ```
 
@@ -171,22 +168,22 @@ Content-Type: application/json
   "data": [
     {
       "id": "dmhy-GVV2SVPEGTWQ2KULFXCWOIMIKM4KIS6U",
-      "title": "艾爾登法環 / 艾尔登法环 / ELDEN RING v1.10 [DODI]",
-      "category": "Games",
-      "sizeBytes": 12884901888,
-      "seeders": 10,
-      "leechers": 1,
-      "infoHash": "gvv2svpegtwq2kulfxcwoimikm4kis6u",
-      "magnetUri": "magnet:?xt=urn:btih:GVV2SVPEGTWQ2KULFXCWOIMIKM4KIS6U&...",
+      "title": "Avatar The Legend of Aang [1080p BluRay x265]",
+      "category": "Movies",
+      "sizeBytes": 3403563991,
+      "seeders": 154,
+      "leechers": 12,
+      "infoHash": "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678",
+      "magnetUri": "magnet:?xt=urn:btih:a1b2c3d4e5f60718293a4b5c6d7e8f9012345678&...",
       "sourceId": "dmhy",
-      "publishedAt": "2023-08-03T14:32:30.000Z"
+      "publishedAt": "2026-08-20T10:15:00.000Z"
     }
   ],
   "errors": [],
   "meta": {
     "provider": "dmhy",
-    "latencyMs": 312,
-    "timestamp": "2026-08-20T13:50:00.000Z"
+    "latencyMs": 284,
+    "timestamp": "2026-08-20T15:20:00.000Z"
   }
 }
 ```
@@ -209,6 +206,20 @@ CherryTor strictly adheres to 10 security invariants verified by automated secur
 
 ---
 
+## ⚖️ Legal Disclaimer & Compliance Notice
+
+1. **Metadata Aggregation Gateway**: CherryTor functions solely as an automated, ephemeral metadata indexing and query routing interface. CherryTor **does not host, store, cache, upload, or transmit** any torrent files, media content, proprietary payloads, or data streams on its servers.
+2. **RFC Magnet Standard**: All search results consist exclusively of public cryptographic infohashes and standard RFC-compliant Magnet URIs referencing decentralized swarms across the public DHT (Distributed Hash Table) network.
+3. **User Responsibility & Compliance**: Users are strictly responsible for complying with the applicable copyright, intellectual property, and data transmission laws in their respective legal jurisdictions.
+4. **Non-Custodial & Zero-Log Architecture**: CherryTor operates on ephemeral serverless memory without user accounts, databases, or surveillance logging mechanisms.
+
+---
+
 ## 📄 License
 
-Distributed under the **MIT License**. Contributions, bug reports, and pull requests are warmly welcome!
+This project is open-source software licensed under the **[MIT License](LICENSE)**. 
+
+```text
+MIT License
+Copyright (c) 2026 CherryTor Contributors
+```

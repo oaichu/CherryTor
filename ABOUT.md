@@ -1,12 +1,12 @@
-# 🌸 About CherryTor & Aeropad
+# 🌸 About CherryTor & AeroPad
 
-> *"The Internet was founded on the principles of free information exchange and individual sovereignty. CherryTor and Aeropad exist to safeguard those fundamental ideals without compromise."*
+> *"The Internet was founded on the principles of free information exchange, open protocols, and individual sovereignty. CherryTor and AeroPad exist to safeguard those fundamental ideals without compromise."*
 
 ---
 
 ## 🎯 The Mission
 
-Modern search engines and torrent aggregators are plagued with pervasive tracking scripts, intrusive pop-up advertisements, malicious redirect chains, and surveillance logs tracking user IP addresses.
+Modern search engines and legacy torrent portals are overburdened with pervasive tracking scripts, intrusive pop-up advertisements, malicious redirect chains, and surveillance logs capturing user IP addresses.
 
 **CherryTor** was architected from the ground up to deliver a clean, lightning-fast, and strictly private alternative:
 
@@ -15,6 +15,10 @@ Modern search engines and torrent aggregators are plagued with pervasive trackin
 3. **Sub-15ms Edge Performance**: Powered by Cloudflare Workers serverless isolates distributed across 300+ cities worldwide.
 4. **Clean, Distraction-Free Design**: Zero ads, zero tracking pixels, zero analytics bloat. Just a high-density, keyboard-driven interface built for speed.
 
+<p align="center">
+  <img src="docs/assets/cherrytor-hero.png" alt="CherryTor Real Web Interface" width="100%">
+</p>
+
 ---
 
 ## 📝 Meet AeroPad: The 2FA Vault & Zero-Knowledge Security Studio
@@ -22,12 +26,12 @@ Modern search engines and torrent aggregators are plagued with pervasive trackin
 A core companion project in our ecosystem is **[AeroPad](https://aeropad.pages.dev/)** — an Apple-grade cryptographic security workspace and 2FA vault:
 
 <p align="center">
-  <img src="docs/assets/cherrytor-ui-mockup.svg" alt="AeroPad & CherryTor Interface" width="100%">
+  <img src="docs/assets/cherrytor-live-results.png" alt="CherryTor Real Live Swarm Results" width="100%">
 </p>
 
 ### Key Capabilities of AeroPad ([https://aeropad.pages.dev](https://aeropad.pages.dev)):
-- **2FA Studio & Offline TOTP**: Generate and scan time-based one-time passwords (RFC 6238) with QR camera scanner entirely client-side without cloud leaks.
-- **Smart Encrypted Notepad**: Client-side AES-GCM encrypted notes and cipher vault with biometric / master password protection.
+- **2FA Studio & Offline TOTP**: Generate and scan time-based one-time passwords (RFC 6238) with real-time QR camera scanning without cloud dependencies.
+- **Smart Encrypted Notepad**: Client-side AES-GCM encrypted notes and cipher vault with master password protection.
 - **Instant Magnet & Swarm Extractor**: Paste raw text, log files, or release notes. AeroPad extracts valid `magnet:?xt=urn:btih:...` URIs and infohashes for batch handoff.
 - **100% Client-Side & Zero-Knowledge**: Keys and secret tokens never leave your browser isolate. Fully functional offline.
 
@@ -64,7 +68,7 @@ CherryTor queries 15+ verified providers in parallel:
 
 ## 🌍 Internationalization (i18n)
 
-Both CherryTor and Aeropad natively support 6 major languages:
+Both CherryTor and AeroPad natively support 6 major languages:
 - 🇻🇳 **Tiếng Việt** (Vietnamese)
 - 🇺🇸 **English** (International)
 - 🇨🇳 **中文** (Simplified Chinese)
@@ -74,7 +78,15 @@ Both CherryTor and Aeropad natively support 6 major languages:
 
 ---
 
+## ⚖️ Legal Disclaimer & Terms of Use
+
+1. **Non-Hosting Status**: CherryTor and AeroPad operate exclusively as metadata indexers and cryptographic client-side utilities. Neither platform hosts, stores, streams, or distributes any copyrighted audio, video, software, or media files.
+2. **Decentralized Protocol**: All content discovery relies on the decentralized BitTorrent DHT network. Users are solely responsible for ensuring that their P2P transfers comply with local laws and regulations.
+3. **No Surveillance Logs**: In accordance with our Zero-Log design, we do not log user search queries, IP addresses, or browser footprints.
+
+---
+
 <p align="center">
-  <em>Built with ❤️ and distributed under the permissive MIT License.</em><br>
+  <em>Built with ❤️ and distributed under the permissive <a href="LICENSE">MIT License</a>.</em><br>
   <strong>CherryTor:</strong> <a href="https://cherrytor.io.vn">https://cherrytor.io.vn</a> &bull; <strong>Edge Mirror:</strong> <a href="https://tor.oaichuhust.workers.dev">https://tor.oaichuhust.workers.dev</a> &bull; <strong>AeroPad:</strong> <a href="https://aeropad.pages.dev/">https://aeropad.pages.dev/</a>
 </p>
