@@ -26,6 +26,11 @@ const ALLOWED_CATEGORIES: ReadonlySet<Category> = new Set([
 const HEX40_REGEX = /^[0-9a-fA-F]{40}$/;
 const BASE32_REGEX = /^[2-7a-zA-Z]{32}$/;
 const ISO8601_REGEX = /^\d{4}-\d{2}-\d{2}(T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2}))?$/;
+// Strict magnet gate (AATP-R001): xt must be a real btih hash; the remainder must be
+// percent-encoded params free of quotes, angle brackets, backticks, backslashes and
+// whitespace so the URI can never break out of an HTML attribute or inject markup.
+const MAGNET_URI_REGEX = /^magnet:\?xt=urn:btih:(?:[0-9a-fA-F]{40}|[2-7a-zA-Z]{32})(?:[&#][^\s"'<>`\\]*)?$/;
+const MAGNET_URI_MAX_LENGTH = 2048;
 
 export function validateSearchItem(input: unknown): ValidationResult<SearchItem> {
   const errors: string[] = [];
@@ -77,10 +82,14 @@ export function validateSearchItem(input: unknown): ValidationResult<SearchItem>
     errors.push('infoHash must be a valid 40-char hex or 32-char base32 string');
   }
 
-  // magnetUri validation
+  // magnetUri validation (strict RFC-BTIH gate, AATP-R001)
   if (obj['magnetUri'] !== undefined && obj['magnetUri'] !== null) {
-    if (typeof obj['magnetUri'] !== 'string' || !obj['magnetUri'].startsWith('magnet:?xt=urn:btih:')) {
-      errors.push('magnetUri must begin with magnet:?xt=urn:btih:');
+    if (
+      typeof obj['magnetUri'] !== 'string' ||
+      obj['magnetUri'].length > MAGNET_URI_MAX_LENGTH ||
+      !MAGNET_URI_REGEX.test(obj['magnetUri'])
+    ) {
+      errors.push('magnetUri must be a strictly valid magnet:?xt=urn:btih:<40-hex|32-base32> URI without quotes, angle brackets or whitespace');
     }
   }
 
