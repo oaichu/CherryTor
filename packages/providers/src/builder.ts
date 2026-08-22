@@ -1,7 +1,7 @@
 import type { ProviderEndpointConfig } from './types.ts';
 import { ValidationError } from '../../core/src/errors.ts';
 
-export function buildProviderUrl(config: ProviderEndpointConfig, query: string, _category?: string): URL {
+export function buildProviderUrl(config: ProviderEndpointConfig, query: string, category?: string): URL {
   if (!query || typeof query !== 'string') {
     throw new ValidationError('Search query must be a non-empty string', config.id);
   }
@@ -19,6 +19,15 @@ export function buildProviderUrl(config: ProviderEndpointConfig, query: string, 
     targetUrl = new URL(relativePath, config.origin);
   } catch {
     throw new ValidationError(`Failed to construct valid URL for provider: ${config.id}`, config.id);
+  }
+
+  // AATP-S4: upstream-side category narrowing when the provider supports it.
+  // Only whitelisted param values from the registry map are ever written.
+  if (category && category !== 'ALL' && config.categoryParam) {
+    const mappedValue = config.categoryParam.map[category];
+    if (mappedValue !== undefined) {
+      targetUrl.searchParams.set(config.categoryParam.param, mappedValue);
+    }
   }
 
   const originUrl = new URL(config.origin);

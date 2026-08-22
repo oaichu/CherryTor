@@ -8,7 +8,8 @@ import { normalizeAndValidateQuery } from '../../../packages/core/src/query.ts';
 import { withTimeout } from '../../../packages/core/src/timeout.ts';
 import { CircuitBreaker } from '../../../packages/core/src/circuit-breaker.ts';
 import { SlidingWindowRateLimiter } from '../../../packages/core/src/rate-limiter.ts';
-import { mapErrorToGatewayResponse } from '../../../packages/core/src/errors.ts';
+import { mapErrorToGatewayResponse, ValidationError } from '../../../packages/core/src/errors.ts';
+import { tokenizeQuery, filterRelevantItems } from '../../../packages/core/src/relevance.ts';
 
 // In-memory circuit breakers and rate limiter for Worker isolate
 const circuitBreakers = new Map<string, CircuitBreaker>();
@@ -134,8 +135,14 @@ export async function handleSearchApiRequest(request: Request): Promise<Response
 
     cb.recordSuccess();
 
+    // AATP-S1 (FIND-016): firehose feeds ignore the query server-side, so the
+    // edge drops titles that share no query token before merging into results.
+    const relevantItems = config.unfilteredSearch
+      ? filterRelevantItems(items, tokenizeQuery(sanitizedQuery))
+      : items;
+
     const responsePayload: NormalizedGatewayResponse = {
-      data: items,
+      data: relevantItems,
       errors: [],
       meta: {
         provider: providerId,
@@ -155,7 +162,12 @@ export async function handleSearchApiRequest(request: Request): Promise<Response
       }
     });
   } catch (err: unknown) {
-    cb.recordFailure();
+    // AATP-R005 (FIND-005): only upstream/provider failures may open the circuit
+    // breaker. ValidationError is thrown by query normalization/URL building and is
+    // caused by the client — counting it would let any client open the breaker.
+    if (!(err instanceof ValidationError)) {
+      cb.recordFailure();
+    }
     const serialized = mapErrorToGatewayResponse(err, providerId);
     const statusCode = serialized.code === 'VALIDATION_ERROR' ? 400 : 502;
 

@@ -123,12 +123,12 @@ export function parseRssXmlFeed(xmlText: string, sourceId: string, defaultCatego
       magnetUri = buildMagnet(infoHash, title);
     }
 
-    // Swarm seeds / leechers
+    // Swarm seeds / leechers — null when the feed does not report them (AATP-R006)
     const seedersStr = extractTagValue(chunk, 'nyaa:seeders') || extractTagValue(chunk, 'seeders');
-    const seeders = seedersStr ? Math.max(0, parseInt(seedersStr, 10) || 0) : 10;
+    const seeders = seedersStr ? Math.max(0, parseInt(seedersStr, 10) || 0) : null;
 
     const leechersStr = extractTagValue(chunk, 'nyaa:leechers') || extractTagValue(chunk, 'leechers');
-    const leechers = leechersStr ? Math.max(0, parseInt(leechersStr, 10) || 0) : 1;
+    const leechers = leechersStr ? Math.max(0, parseInt(leechersStr, 10) || 0) : null;
 
     // Smart File Size Extraction
     let sizeBytes: number | null = null;
@@ -153,7 +153,8 @@ export function parseRssXmlFeed(xmlText: string, sourceId: string, defaultCatego
     // Determine category dynamically
     const category = detectCategory(rawCategoryTag, title, sourceId) || defaultCategory;
 
-    let validPubDate = new Date().toISOString();
+    // Published date is kept only when the feed actually reports one (AATP-R006)
+    let validPubDate: string | undefined = undefined;
     if (pubDate) {
       const parsedDate = new Date(pubDate);
       if (!isNaN(parsedDate.getTime())) {

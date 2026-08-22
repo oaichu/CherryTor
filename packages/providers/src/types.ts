@@ -25,4 +25,19 @@ export interface ProviderEndpointConfig {
   readonly format: 'json' | 'xml';
   readonly adapter?: ProviderAdapterType;
   readonly enabled: boolean;
+  /**
+   * True when the upstream ignores its search parameter and returns its latest
+   * uploads regardless of query (e.g. EZTV keywords, LinuxTracker rss search).
+   * The edge applies a server-side relevance filter to such feeds (AATP-S1).
+   */
+  readonly unfilteredSearch?: boolean;
+  /**
+   * Optional upstream-side category narrowing: canonical CherryTor category →
+   * upstream query-parameter value (AATP-S4). Only verified parent codes are
+   * mapped (apibay accepts 100/200/300/400; subcategory codes are ignored by it).
+   */
+  readonly categoryParam?: {
+    readonly param: string;
+    readonly map: Readonly<Record<string, string>>;
+  };
 }

@@ -66,8 +66,18 @@ export async function safeFetchProvider(options: SafeFetchOptions): Promise<Resp
           continue;
         }
 
-        if (!response.ok && candidateOrigins.length > 1 && response.status >= 500) {
-          throw new ProviderBadResponseError(`Provider ${config.id} origin returned HTTP ${response.status}`, config.id);
+        // AATP-S3 (FIND-011): a mirror that blocks us (403/429), is broken (5xx) or
+        // serves an HTML challenge page instead of the API falls through to the next
+        // mirror. 404 and other 4xx are genuine upstream answers and stay terminal.
+        const contentType = (response.headers.get('Content-Type') || '').toLowerCase();
+        const looksLikeHtml = contentType.includes('text/html') || contentType.includes('application/xhtml');
+        const blockedOrBroken = response.status === 403 || response.status === 429 || response.status >= 500;
+
+        if (candidateOrigins.length > 1 && blockedOrBroken && !response.ok) {
+          throw new ProviderBadResponseError(`Provider ${config.id} origin ${currentUrl.hostname} returned HTTP ${response.status}`, config.id);
+        }
+        if (candidateOrigins.length > 1 && response.ok && looksLikeHtml) {
+          throw new ProviderBadResponseError(`Provider ${config.id} origin ${currentUrl.hostname} returned an HTML challenge page instead of structured data`, config.id);
         }
 
         return response;

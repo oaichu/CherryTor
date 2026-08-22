@@ -64,8 +64,8 @@ export async function parseProviderResponse(
 
         const quality = String(t['quality'] || 'HD');
         const sizeBytes = typeof t['size_bytes'] === 'number' ? t['size_bytes'] : null;
-        const seeders = typeof t['seeds'] === 'number' ? Math.max(0, t['seeds']) : 10;
-        const leechers = typeof t['peers'] === 'number' ? Math.max(0, t['peers']) : 1;
+        const seeders = typeof t['seeds'] === 'number' ? Math.max(0, t['seeds']) : null;
+        const leechers = typeof t['peers'] === 'number' ? Math.max(0, t['peers']) : null;
         const title = `${movieTitle} [${quality}]`;
 
         const candidate = {
@@ -77,8 +77,7 @@ export async function parseProviderResponse(
           leechers,
           infoHash: hash.toLowerCase(),
           magnetUri: buildMagnet(hash, title),
-          sourceId: config.id,
-          publishedAt: new Date().toISOString()
+          sourceId: config.id
         };
 
         const res = validateSearchItem(candidate);
@@ -101,8 +100,8 @@ export async function parseProviderResponse(
       if (!hash || hash.length < 32) continue;
 
       const sizeBytes = typeof t['size_bytes'] === 'number' && t['size_bytes'] > 0 ? t['size_bytes'] : null;
-      const seeders = typeof t['seeds'] === 'number' ? Math.max(0, t['seeds']) : 5;
-      const leechers = typeof t['peers'] === 'number' ? Math.max(0, t['peers']) : 1;
+      const seeders = typeof t['seeds'] === 'number' ? Math.max(0, t['seeds']) : null;
+      const leechers = typeof t['peers'] === 'number' ? Math.max(0, t['peers']) : null;
 
       const candidate = {
         id: `${config.id}-${hash}`,
@@ -113,8 +112,7 @@ export async function parseProviderResponse(
         leechers,
         infoHash: hash.toLowerCase(),
         magnetUri: String(t['magnet_url'] || buildMagnet(hash, title)),
-        sourceId: config.id,
-        publishedAt: new Date().toISOString()
+        sourceId: config.id
       };
 
       const res = validateSearchItem(candidate);
@@ -131,15 +129,23 @@ export async function parseProviderResponse(
     for (const item of results) {
       if (!item || typeof item !== 'object') continue;
       const t = item as Record<string, unknown>;
-      const hash = String(t['infoHash'] || t['hash'] || '').trim();
+      // 'infohash' (lowercase) is bitsearch.eu; 'infoHash' is SolidTorrents (AATP-S2)
+      const hash = String(t['infoHash'] || t['infohash'] || t['hash'] || '').trim();
       const title = String(t['title'] || '').trim();
       if (!hash || !title || hash.length < 32) continue;
 
       const swarm = (t['swarm'] && typeof t['swarm'] === 'object') ? (t['swarm'] as Record<string, unknown>) : {};
-      const seeders = typeof swarm['seeders'] === 'number' ? Math.max(0, swarm['seeders']) : 5;
-      const leechers = typeof swarm['leechers'] === 'number' ? Math.max(0, swarm['leechers']) : 1;
+      const seeders = typeof swarm['seeders'] === 'number'
+        ? Math.max(0, swarm['seeders'])
+        : (typeof t['seeders'] === 'number' ? Math.max(0, t['seeders']) : null);
+      const leechers = typeof swarm['leechers'] === 'number'
+        ? Math.max(0, swarm['leechers'])
+        : (typeof t['leechers'] === 'number' ? Math.max(0, t['leechers']) : null);
       const sizeBytes = typeof t['size'] === 'number' && t['size'] > 0 ? t['size'] : null;
       const category = detectCategory(t['category'] as string, title, config.id);
+
+      const publishedAtRaw = (typeof t['imported'] === 'string' ? t['imported']
+        : (typeof t['createdAt'] === 'string' ? t['createdAt'] : undefined));
 
       const candidate = {
         id: `${config.id}-${hash}`,
@@ -151,7 +157,7 @@ export async function parseProviderResponse(
         infoHash: hash.toLowerCase(),
         magnetUri: String(t['magnet'] || buildMagnet(hash, title)),
         sourceId: config.id,
-        publishedAt: String(t['imported'] || new Date().toISOString())
+        ...(publishedAtRaw !== undefined ? { publishedAt: publishedAtRaw } : {})
       };
 
       const res = validateSearchItem(candidate);
@@ -176,7 +182,7 @@ export async function parseProviderResponse(
       const leechers = Math.max(0, parseInt(String(item['leechers'] || '0'), 10) || 0);
       const sizeBytes = parseInt(String(item['size'] || '0'), 10) || null;
       const addedTs = parseInt(String(item['added'] || '0'), 10);
-      const publishedAt = addedTs > 0 ? new Date(addedTs * 1000).toISOString() : new Date().toISOString();
+      const publishedAt = addedTs > 0 ? new Date(addedTs * 1000).toISOString() : undefined;
       const category = detectCategory(item['category'] as string | number, name, config.id);
 
       const candidate = {

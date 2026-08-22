@@ -16,6 +16,15 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
       requiresAuth: false,
       format: 'json',
       adapter: 'apibay',
+      // TPB search is latin-substring based; CJK queries fall back to latest uploads
+      // (live probe: 鬼滅 returned unrelated items) — edge relevance-filters (AATP-S1)
+      unfilteredSearch: true,
+      // AATP-S4: upstream category narrowing — only parent codes verified live
+      // (100 Audio / 200 Video / 300 Apps / 400 Games; subcategory codes are ignored)
+      categoryParam: {
+        param: 'cat',
+        map: { Movies: '200', TV: '200', Anime: '200', Music: '100', Games: '400', Software: '300' }
+      },
       enabled: true
     }
   ],
@@ -67,7 +76,8 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
       requiresAuth: false,
       format: 'xml',
       adapter: 'rss-xml',
-      enabled: true
+      // AATP-S3: feed carries no extractable infoHash (0 items on latin + CJK probes)
+      enabled: false
     }
   ],
   [
@@ -84,7 +94,8 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
       requiresAuth: false,
       format: 'xml',
       adapter: 'rss-xml',
-      enabled: true
+      // AATP-S3: latest-feed carries no extractable infoHash (0 items on both probes)
+      enabled: false
     }
   ],
   [
@@ -112,7 +123,7 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
       origin: 'https://yts.mx',
       mirrors: ['https://yts.mx', 'https://yts.lt', 'https://yts.do', 'https://yts.ag'],
       pathTemplate: '/api/v2/list_movies.json?query_term={query}&limit=25',
-      allowedRedirectHosts: ['yts.mx', 'yts.lt', 'yts.am', 'yts.do', 'yts.ag'],
+      allowedRedirectHosts: ['yts.mx', 'yts.lt', 'yts.am', 'yts.do', 'yts.ag', 'yts.gg'],
       timeoutMs: 5000,
       maxPayloadBytes: 5242880,
       requiresAuth: false,
@@ -135,6 +146,8 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
       requiresAuth: false,
       format: 'json',
       adapter: 'eztv',
+      // EZTV's API ignores the keywords param (returns latest uploads) — edge filters (AATP-S1)
+      unfilteredSearch: true,
       enabled: true
     }
   ],
@@ -146,7 +159,26 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
       origin: 'https://solidtorrents.to',
       mirrors: ['https://solidtorrents.to', 'https://solidtorrents.net', 'https://bitsearch.to'],
       pathTemplate: '/api/v1/search?q={query}&limit=30',
-      allowedRedirectHosts: ['solidtorrents.to', 'solidtorrents.net', 'bitsearch.to'],
+      allowedRedirectHosts: ['solidtorrents.to', 'solidtorrents.net', 'bitsearch.to', 'bitsearch.eu'],
+      timeoutMs: 5000,
+      maxPayloadBytes: 5242880,
+      requiresAuth: false,
+      format: 'json',
+      adapter: 'solidtorrents',
+      enabled: true
+    }
+  ],
+  [
+    'bitsearch',
+    {
+      // AATP-S2: open DHT search API (SolidTorrents-compatible shape), verified live
+      // 200/application/json — no browser emulation, no WAF bypass (INV-06 compliant).
+      id: 'bitsearch',
+      name: 'BitSearch (DHT Search)',
+      origin: 'https://bitsearch.eu',
+      mirrors: ['https://bitsearch.eu', 'https://bitsearch.to'],
+      pathTemplate: '/api/v1/search?q={query}',
+      allowedRedirectHosts: ['bitsearch.eu', 'bitsearch.to'],
       timeoutMs: 5000,
       maxPayloadBytes: 5242880,
       requiresAuth: false,
@@ -170,6 +202,8 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
       requiresAuth: false,
       format: 'xml',
       adapter: 'rss-xml',
+      // rss.php ignores the search param (returns latest uploads) — edge filters (AATP-S1)
+      unfilteredSearch: true,
       enabled: true
     }
   ],
@@ -186,7 +220,10 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
       requiresAuth: false,
       format: 'json',
       adapter: 'archive-org',
-      enabled: true
+      // AATP-R003 (FIND-002): this adapter fabricates infoHashes (identifier padding),
+      // producing dead magnets displayed as verified. Keep disabled until a real-hash
+      // adapter (archive.org metadata API) passes the provider security gate.
+      enabled: false
     }
   ],
 
@@ -204,7 +241,9 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
       requiresAuth: false,
       format: 'xml',
       adapter: 'rss-xml',
-      enabled: true
+      // AATP-S3: TLS-fails from worker egress AND WordPress RSS carries no magnets
+      // (0 items on both probes) — disabled until a hash-bearing endpoint exists
+      enabled: false
     }
   ],
   [
@@ -220,7 +259,8 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
       requiresAuth: false,
       format: 'xml',
       adapter: 'rss-xml',
-      enabled: true
+      // AATP-S3: WordPress RSS carries no magnets (0 items on both probes)
+      enabled: false
     }
   ],
 
@@ -238,7 +278,10 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
       requiresAuth: false,
       format: 'json',
       adapter: 'archive-org',
-      enabled: true
+      // AATP-R003 (FIND-002): this adapter fabricates infoHashes (identifier padding),
+      // producing dead magnets displayed as verified. Keep disabled until a real-hash
+      // adapter (archive.org metadata API) passes the provider security gate.
+      enabled: false
     }
   ],
 
@@ -256,7 +299,10 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
       requiresAuth: false,
       format: 'json',
       adapter: 'archive-org',
-      enabled: true
+      // AATP-R003 (FIND-002): this adapter fabricates infoHashes (identifier padding),
+      // producing dead magnets displayed as verified. Keep disabled until a real-hash
+      // adapter (archive.org metadata API) passes the provider security gate.
+      enabled: false
     }
   ],
   [
@@ -272,7 +318,10 @@ const APPROVED_PROVIDERS: ReadonlyMap<string, ProviderEndpointConfig> = new Map(
       requiresAuth: false,
       format: 'json',
       adapter: 'archive-org',
-      enabled: true
+      // AATP-R003 (FIND-002): this adapter fabricates infoHashes (identifier padding),
+      // producing dead magnets displayed as verified. Keep disabled until a real-hash
+      // adapter (archive.org metadata API) passes the provider security gate.
+      enabled: false
     }
   ]
 ]);
