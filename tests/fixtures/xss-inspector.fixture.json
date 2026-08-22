@@ -1,0 +1,33 @@
+{
+  "_comment": "AATP-R002 fixture: malicious upstream item simulating FIND-001 payloads (title markup injection + magnetUri attribute breakout). Used only for browser verification of the inspector modal; would be rejected by the AATP-R001 schema gate if it ever reached the edge.",
+  "providerFixtureResponse": {
+    "data": [
+      {
+        "id": "xss-1",
+        "title": "<img src=x onerror=\"window.__xssTitle=1\"> Evil Release <script>window.__xssScript=1</script>",
+        "category": "Movies",
+        "sizeBytes": 1468006400,
+        "seeders": 1337,
+        "leechers": 42,
+        "infoHash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "magnetUri": "magnet:?xt=urn:btih:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\" onmouseover=\"window.__xssMagnet=1\" x=\"",
+        "sourceId": "evil-upstream",
+        "publishedAt": "2026-08-01T00:00:00Z"
+      },
+      {
+        "id": "xss-2",
+        "title": "javascript:alert(1) \"quotes\" 'single' <b>bold</b>",
+        "category": "TV",
+        "sizeBytes": null,
+        "seeders": 0,
+        "leechers": 0,
+        "infoHash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "magnetUri": "javascript:alert(document.domain)",
+        "sourceId": "evil-upstream",
+        "publishedAt": "2026-08-02T00:00:00Z"
+      }
+    ],
+    "errors": [],
+    "meta": { "provider": "evil-upstream", "latencyMs": 1, "timestamp": "2026-08-22T00:00:00Z" }
+  }
+}

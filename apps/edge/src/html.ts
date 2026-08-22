@@ -522,7 +522,7 @@ export function renderFullHtmlPage(): string {
       </p>
       <div style="display: flex; justify-content: center; align-items: center; gap: 0.75rem; margin-top: 1rem; flex-wrap: wrap;">
         <span class="badge badge-accent" style="font-size: 0.75rem; padding: 0.3rem 0.6rem;">🛡️ Zero-Log Invariant</span>
-        <span class="badge badge-default" style="font-size: 0.75rem; padding: 0.3rem 0.6rem;">⚡ 15+ Upstream Feeds</span>
+        <span class="badge badge-default" style="font-size: 0.75rem; padding: 0.3rem 0.6rem;">⚡ 9 Verified Upstream Feeds</span>
         <a href="https://aeropad.pages.dev/" target="_blank" rel="noopener noreferrer" class="badge badge-cherry" style="font-size: 0.75rem; padding: 0.3rem 0.6rem; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3rem; transition: transform 0.15s ease;" title="Visit official AeroPad 2FA Vault & Security Studio">
           <span>📝 Companion: <strong>AeroPad 2FA Vault</strong></span>
           <span style="font-size: 0.7rem;">↗</span>
@@ -581,6 +581,10 @@ export function renderFullHtmlPage(): string {
           <span id="active-provider-count" class="badge badge-accent">15 Active</span>
         </div>
       </div>
+
+      <!-- Per-source outcome strip (AATP-S1): shows which upstream feeds answered,
+           which returned zero and which failed — no more silent provider loss. -->
+      <div id="provider-status" style="display:none; padding:0.45rem 0.75rem; font-size:0.7188rem; line-height:1.7; border-bottom:var(--border-subtle); font-family:var(--font-mono); color:var(--color-text-muted); word-break:break-word;"></div>
 
       <!-- Sorter & Filter Sub-Toolbar -->
       <div class="controls-toolbar">
@@ -2305,26 +2309,19 @@ export function renderFullHtmlPage(): string {
         { id: 'apibay', name: 'ThePirateBay (Global)', catKey: 'sec_global_movies', icon: '🎬' },
         { id: 'dmhy', name: '动漫花园 DMHY (中文/亚洲影视)', catKey: 'sec_asian_movies', icon: '🌸' },
         { id: 'nyaa', name: 'Nyaa (Asian & Global Media)', catKey: 'sec_asian_movies', icon: '🌸' },
-        { id: 'acg-rip', name: 'ACG.RIP (中文影视社区)', catKey: 'sec_asian_movies', icon: '🌸' },
-        { id: 'bangumi', name: '萌番组 Bangumi (亚洲动画/剧集)', catKey: 'sec_asian_movies', icon: '🌸' },
         { id: 'tokyotosho', name: 'Tokyo Toshokan (Asian Media)', catKey: 'sec_asian_movies', icon: '🌸' },
         { id: 'yts', name: 'YTS (Movies HD/4K)', catKey: 'sec_global_movies', icon: '🎬' },
         { id: 'eztv', name: 'EZTV (TV Series & Shows)', catKey: 'sec_global_movies', icon: '📺' },
         { id: 'solidtorrents', name: 'SolidTorrents (DHT)', catKey: 'sec_global_movies', icon: '🌐' },
+        { id: 'bitsearch', name: 'BitSearch (DHT Movies/TV)', catKey: 'sec_global_movies', icon: '🌐' },
 
         // Phần mềm & OS
         { id: 'linuxtracker', name: 'LinuxTracker (Linux OS)', catKey: 'sec_software', icon: '💻' },
-        { id: 'archive-org-software', name: 'Archive.org Software (Tools/ISO)', catKey: 'sec_software', icon: '💻' },
 
         // Trò chơi (Games)
-        { id: 'fitgirl', name: 'FitGirl Repacks (PC Games)', catKey: 'sec_games', icon: '🎮' },
-        { id: 'dodi', name: 'DODI Repacks (PC Games)', catKey: 'sec_games', icon: '🎮' },
-
-        // Sách & Tài liệu
-        { id: 'archive-org-texts', name: 'Archive.org Texts (Books/Ebooks)', catKey: 'sec_books', icon: '📚' },
-
-        // Âm nhạc & Audio Hi-Res
-        { id: 'archive-org-audio', name: 'Archive.org Audio (FLAC/Hi-Res)', catKey: 'sec_music', icon: '🎵' }
+        // AATP-S3: fitgirl / dodi removed — their RSS feeds carry no magnets (0 items
+        // on live probes); archive-org* removed earlier (FIND-002). All are disabled
+        // in the edge registry until hash-bearing endpoints are verified.
       ];
 
       // Load persistent state from localStorage
@@ -2371,6 +2368,7 @@ export function renderFullHtmlPage(): string {
         resultsBody: document.getElementById('results-tbody'),
         resultCount: document.getElementById('result-count'),
         searchLatency: document.getElementById('search-latency'),
+        providerStatus: document.getElementById('provider-status'),
         activeProviderCount: document.getElementById('active-provider-count'),
         themeToggleBtn: document.getElementById('btn-toggle-theme'),
         settingsBtn: document.getElementById('btn-open-settings'),
@@ -2518,51 +2516,109 @@ export function renderFullHtmlPage(): string {
         el.modalTitle.textContent = t('modal_inspector_title');
         el.modalBody.replaceChildren();
 
+        // AATP-R002: every provider-controlled value is rendered via textContent /
+        // DOM properties. Never interpolate item.* into innerHTML strings.
+        function makeBadge(text, cls) {
+          const badge = document.createElement('span');
+          badge.className = cls || 'badge';
+          badge.textContent = String(text);
+          return badge;
+        }
+
+        function makeGroupTitle(labelText, btnId, btnCls, btnText) {
+          const row = document.createElement('div');
+          row.className = 'settings-group-title';
+          const label = document.createElement('span');
+          label.textContent = labelText;
+          row.appendChild(label);
+          if (btnText) {
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.id = btnId;
+            btn.className = btnCls;
+            btn.textContent = btnText;
+            row.appendChild(btn);
+          }
+          return row;
+        }
+
+        function makeMetricCell(labelText, valueText, valueColor) {
+          const cell = document.createElement('div');
+          cell.style.cssText = 'padding:0.75rem; background:var(--color-bg-canvas); border:var(--border-subtle); border-radius:var(--radius-xs); text-align:center;';
+          const label = document.createElement('div');
+          label.style.cssText = 'font-size:0.6875rem; color:var(--color-text-muted); text-transform:uppercase;';
+          label.textContent = labelText;
+          const value = document.createElement('div');
+          value.style.cssText = 'font-size:1.15rem; font-weight:700; font-family:var(--font-mono); margin-top:0.25rem;';
+          if (valueColor) value.style.color = valueColor;
+          value.textContent = String(valueText);
+          cell.append(label, value);
+          return cell;
+        }
+
         const contentDiv = document.createElement('div');
         contentDiv.style.cssText = 'display:flex; flex-direction:column; gap:1rem;';
 
         // Title & Badges
         const titleCard = document.createElement('div');
         titleCard.style.cssText = 'padding:1rem; background:var(--color-bg-canvas); border:var(--border-subtle); border-radius:var(--radius-sm);';
-        titleCard.innerHTML = '<h2 style="font-size:1.05rem; font-weight:700; color:var(--color-text-primary); line-height:1.4; word-break:break-word;">' + item.title + '</h2>' +
-          '<div style="display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.65rem;">' +
-            '<span class="badge badge-accent">' + (item.category || 'Other') + '</span>' +
-            '<span class="badge">' + (item.sourceId || 'verified') + '</span>' +
-            '<span class="badge badge-accent">● Verified RFC-BTIH</span>' +
-            (item.publishedAt ? '<span class="badge" style="font-family:var(--font-mono);">' + item.publishedAt.split('T')[0] + '</span>' : '') +
-          '</div>';
+        const titleH2 = document.createElement('h2');
+        titleH2.style.cssText = 'font-size:1.05rem; font-weight:700; color:var(--color-text-primary); line-height:1.4; word-break:break-word;';
+        titleH2.textContent = String(item.title || '');
+        const badgeRow = document.createElement('div');
+        badgeRow.style.cssText = 'display:flex; flex-wrap:wrap; gap:0.5rem; margin-top:0.65rem;';
+        badgeRow.append(
+          makeBadge(item.category || 'Other', 'badge badge-accent'),
+          makeBadge(item.sourceId || 'verified', 'badge'),
+          makeBadge('● Verified RFC-BTIH', 'badge badge-accent')
+        );
+        if (item.publishedAt) {
+          const dateBadge = makeBadge(String(item.publishedAt).split('T')[0], 'badge');
+          dateBadge.style.fontFamily = 'var(--font-mono)';
+          badgeRow.appendChild(dateBadge);
+        }
+        titleCard.append(titleH2, badgeRow);
 
         // Swarm & Size Details
         const metricsGrid = document.createElement('div');
         metricsGrid.style.cssText = 'display:grid; grid-template-columns:repeat(auto-fit, minmax(140px, 1fr)); gap:0.75rem;';
-        metricsGrid.innerHTML = 
-          '<div style="padding:0.75rem; background:var(--color-bg-canvas); border:var(--border-subtle); border-radius:var(--radius-xs); text-align:center;">' +
-            '<div style="font-size:0.6875rem; color:var(--color-text-muted); text-transform:uppercase;">' + t('th_size') + '</div>' +
-            '<div style="font-size:1.15rem; font-weight:700; font-family:var(--font-mono); color:var(--color-text-primary); margin-top:0.25rem;">' + formatBytes(item.sizeBytes) + '</div>' +
-          '</div>' +
-          '<div style="padding:0.75rem; background:var(--color-bg-canvas); border:var(--border-subtle); border-radius:var(--radius-xs); text-align:center;">' +
-            '<div style="font-size:0.6875rem; color:var(--color-text-muted); text-transform:uppercase;">Seeders (▲)</div>' +
-            '<div style="font-size:1.15rem; font-weight:700; font-family:var(--font-mono); color:var(--color-text-accent); margin-top:0.25rem;">▲ ' + (item.seeders || 0) + '</div>' +
-          '</div>' +
-          '<div style="padding:0.75rem; background:var(--color-bg-canvas); border:var(--border-subtle); border-radius:var(--radius-xs); text-align:center;">' +
-            '<div style="font-size:0.6875rem; color:var(--color-text-muted); text-transform:uppercase;">Leechers (▼)</div>' +
-            '<div style="font-size:1.15rem; font-weight:700; font-family:var(--font-mono); color:var(--color-text-muted); margin-top:0.25rem;">▼ ' + (item.leechers || 0) + '</div>' +
-          '</div>';
+        metricsGrid.append(
+          makeMetricCell(t('th_size'), formatBytes(item.sizeBytes), 'var(--color-text-primary)'),
+          makeMetricCell('Seeders (▲)', '▲ ' + (item.seeders || 0), 'var(--color-text-accent)'),
+          makeMetricCell('Leechers (▼)', '▼ ' + (item.leechers || 0), 'var(--color-text-muted)')
+        );
 
         // InfoHash Box
         const hashGroup = document.createElement('div');
         hashGroup.className = 'settings-group';
-        hashGroup.innerHTML = '<div class="settings-group-title"><span>BTIH InfoHash (40-char Hex)</span><button type="button" id="btn-copy-hash" class="button button--sm">Copy Hash</button></div>' +
-          '<div class="code-box">' + (item.infoHash || 'N/A') + '</div>';
+        hashGroup.appendChild(makeGroupTitle('BTIH InfoHash (40-char Hex)', 'btn-copy-hash', 'button button--sm', 'Copy Hash'));
+        const hashCodeBox = document.createElement('div');
+        hashCodeBox.className = 'code-box';
+        hashCodeBox.textContent = String(item.infoHash || 'N/A');
+        hashGroup.appendChild(hashCodeBox);
 
         // Magnet URI Box & Direct Client Actions
         const magnetGroup = document.createElement('div');
         magnetGroup.className = 'settings-group';
-        magnetGroup.innerHTML = '<div class="settings-group-title"><span>Magnet URI Specification</span><button type="button" id="btn-copy-magnet-full" class="button button--primary button--sm">Copy Magnet Link</button></div>' +
-          '<div class="code-box" style="max-height:120px; overflow-y:auto;">' + (item.magnetUri || 'N/A') + '</div>' +
-          '<div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.5rem;">' +
-            '<a href="' + (item.magnetUri || '#') + '" class="button button--accent button--sm" target="_blank">' + t('btn_open_client') + ' ↗</a>' +
-          '</div>';
+        magnetGroup.appendChild(makeGroupTitle('Magnet URI Specification', 'btn-copy-magnet-full', 'button button--primary button--sm', 'Copy Magnet Link'));
+        const magnetCodeBox = document.createElement('div');
+        magnetCodeBox.className = 'code-box';
+        magnetCodeBox.style.cssText = 'max-height:120px; overflow-y:auto;';
+        magnetCodeBox.textContent = String(item.magnetUri || 'N/A');
+        magnetGroup.appendChild(magnetCodeBox);
+        const magnetActions = document.createElement('div');
+        magnetActions.style.cssText = 'display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.5rem;';
+        const openClientLink = document.createElement('a');
+        openClientLink.className = 'button button--accent button--sm';
+        openClientLink.target = '_blank';
+        openClientLink.rel = 'noopener noreferrer';
+        openClientLink.textContent = t('btn_open_client') + ' ↗';
+        // Only a confirmed magnet:? URI may be assigned to href; anything else stays inert.
+        if (typeof item.magnetUri === 'string' && item.magnetUri.indexOf('magnet:?') === 0) {
+          openClientLink.href = item.magnetUri;
+        }
+        magnetActions.appendChild(openClientLink);
+        magnetGroup.appendChild(magnetActions);
 
         contentDiv.append(titleCard, metricsGrid, hashGroup, magnetGroup);
         el.modalBody.appendChild(contentDiv);
@@ -2732,7 +2788,13 @@ export function renderFullHtmlPage(): string {
 
           const metaRow = document.createElement('div');
           metaRow.className = 'item-meta-row';
-          metaRow.innerHTML = '<span class="badge">' + (item.sourceId || 'verified') + '</span> <span style="font-family:var(--font-mono);">' + (item.infoHash ? item.infoHash.substring(0, 12) + '...' : '') + '</span>';
+          const metaSrcBadge = document.createElement('span');
+          metaSrcBadge.className = 'badge';
+          metaSrcBadge.textContent = String(item.sourceId || 'verified');
+          const metaHashSpan = document.createElement('span');
+          metaHashSpan.style.fontFamily = 'var(--font-mono)';
+          metaHashSpan.textContent = item.infoHash ? String(item.infoHash).substring(0, 12) + '...' : '';
+          metaRow.append(metaSrcBadge, document.createTextNode(' '), metaHashSpan);
 
           tdTitle.append(titleLink, metaRow);
 
@@ -2805,6 +2867,7 @@ export function renderFullHtmlPage(): string {
           state.items = [];
           state.isLoading = false;
           renderResults();
+          if (el.providerStatus) el.providerStatus.style.display = 'none';
           return;
         }
 
@@ -2816,6 +2879,36 @@ export function renderFullHtmlPage(): string {
         const providers = Array.from(state.enabledProviders);
         const seenKeys = new Set();
 
+        // Per-source outcome tracking (AATP-S1): render status chips as feeds settle
+        const outcomes = [];
+        const providerName = (pid) => {
+          const p = ALL_CATEGORIZED_PROVIDERS.find(x => x.id === pid);
+          return p ? p.name : pid;
+        };
+        const renderProviderStatus = () => {
+          if (!el.providerStatus) return;
+          el.providerStatus.replaceChildren();
+          if (outcomes.length === 0) {
+            el.providerStatus.style.display = 'none';
+            return;
+          }
+          el.providerStatus.style.display = 'block';
+          outcomes.forEach((o, idx) => {
+            if (idx > 0) el.providerStatus.appendChild(document.createTextNode(' · '));
+            const chip = document.createElement('span');
+            let note;
+            if (o.ok) {
+              note = o.count + (o.count === 1 ? ' item' : ' items');
+              chip.style.color = o.count > 0 ? 'var(--color-text-accent)' : 'var(--color-text-muted)';
+            } else {
+              note = '✗ ' + String(o.note || 'failed').substring(0, 70);
+              chip.style.color = '#ff7a7a';
+            }
+            chip.textContent = o.name + ': ' + note;
+            el.providerStatus.appendChild(chip);
+          });
+        };
+
         const promises = providers.map(async (providerId) => {
           try {
             const res = await fetch('/api/v1/search', {
@@ -2825,9 +2918,11 @@ export function renderFullHtmlPage(): string {
             });
             if (res.ok) {
               const json = await res.json();
-              if (json.data && Array.isArray(json.data) && json.data.length > 0) {
+              const incoming = (json.data && Array.isArray(json.data)) ? json.data : [];
+              outcomes.push({ name: providerName(providerId), ok: true, count: incoming.length });
+              if (incoming.length > 0) {
                 const freshItems = [];
-                for (const item of json.data) {
+                for (const item of incoming) {
                   const key = (item.infoHash || item.id || '').toLowerCase();
                   if (key && !seenKeys.has(key)) {
                     seenKeys.add(key);
@@ -2841,13 +2936,19 @@ export function renderFullHtmlPage(): string {
                   renderResults();
                 }
               }
+            } else {
+              outcomes.push({ name: providerName(providerId), ok: false, note: 'HTTP ' + res.status });
             }
-          } catch {}
+          } catch (err) {
+            outcomes.push({ name: providerName(providerId), ok: false, note: (err && err.message) || 'network error' });
+          }
+          renderProviderStatus();
         });
 
         await Promise.allSettled(promises);
         state.isLoading = false;
         el.searchLatency.textContent = (performance.now() - startTime).toFixed(1) + ' ms';
+        renderProviderStatus();
         renderResults();
       }
 
