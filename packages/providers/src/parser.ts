@@ -20,7 +20,20 @@ export async function parseProviderResponse(
     );
   }
 
-  // 2. Size Limit Verification
+  // 2. Size Limit Verification — reject on declared Content-Length BEFORE
+  // buffering the body (AATP-D1 / FIND-006); the post-read check stays as a
+  // backstop for providers that lie about or omit the header.
+  const declaredLengthHeader = response.headers.get('Content-Length');
+  if (declaredLengthHeader !== null) {
+    const declaredLength = Number(declaredLengthHeader);
+    if (Number.isFinite(declaredLength) && declaredLength > config.maxPayloadBytes) {
+      throw new ProviderBadResponseError(
+        `Provider ${config.id} payload exceeds maximum allowed size of ${config.maxPayloadBytes} bytes`,
+        config.id
+      );
+    }
+  }
+
   const rawText = await response.text();
   if (rawText.length > config.maxPayloadBytes) {
     throw new ProviderBadResponseError(

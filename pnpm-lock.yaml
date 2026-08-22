@@ -31,15 +31,6 @@ importers:
         specifier: ^4.124.0
         version: 4.124.0
 
-  apps/web:
-    dependencies:
-      '@cherrytor/core':
-        specifier: workspace:*
-        version: link:../../packages/core
-      '@cherrytor/schemas':
-        specifier: workspace:*
-        version: link:../../packages/schemas
-
   packages/core:
     dependencies:
       '@cherrytor/schemas':

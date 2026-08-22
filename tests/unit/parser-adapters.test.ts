@@ -90,6 +90,19 @@ test('SolidTorrents-compatible adapter - parses bitsearch.eu shape (AATP-S2)', a
   assert.ok(items[0]?.magnetUri?.startsWith('magnet:?xt=urn:btih:5ca4f8aa'));
 });
 
+test('parser - rejects oversized payloads via Content-Length before body read (AATP-D1 / FIND-006)', async () => {
+  const config = getProviderConfig('apibay');
+  assert.ok(config);
+  const oversized = new Response('[]', {
+    status: 200,
+    headers: { 'Content-Type': 'application/json', 'Content-Length': String(config!.maxPayloadBytes + 1) }
+  });
+  await assert.rejects(
+    () => parseProviderResponse(config!, oversized),
+    /exceeds maximum allowed size/
+  );
+});
+
 test('RSS adapter - missing nyaa:seeders/pubDate yield null swarm and no publishedAt', () => {
   const rss = `
     <rss version="2.0"><channel><title>Feed</title>

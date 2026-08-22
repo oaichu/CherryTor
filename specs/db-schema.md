@@ -1,5 +1,10 @@
 # CLIENT STORAGE SPECIFICATION — CHERRYTOR
 
+> **Implementation status (2026-08): DESIGN TARGET — not yet shipped.**
+> The served v1 UI persists only bookmarks and settings via `localStorage`
+> (see PRIVACY.md). No IndexedDB database is opened by the production page.
+> This document describes the storage layer to be implemented in a future cycle.
+
 ## IndexedDB Database: `cherrytor_db` (Version 1)
 
 ### Object Store: `search_cache`

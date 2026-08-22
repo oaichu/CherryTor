@@ -39,3 +39,23 @@ test('Rate Limiter - sliding window recovers after window expiration', () => {
   const resAfter = limiter.check(ip, 2005);
   assert.equal(resAfter.allowed, true);
 });
+
+test('Rate Limiter - prunes stale clients once tracking cap is exceeded (AATP-D2 / FIND-007)', () => {
+  const limiter = new SlidingWindowRateLimiter({ maxRequests: 10, windowMs: 1000, maxTrackedClients: 2 });
+
+  limiter.check('client-a', 1000);
+  limiter.check('client-b', 1000);
+
+  // client-a's window fully expired; a third client pushes the map past the cap
+  limiter.check('client-c', 2500);
+  assert.equal(limiter.trackedClientCount(), 3, 'cap only sweeps once exceeded');
+
+  // The next check must sweep both stale entries back within the cap.
+  limiter.check('client-d', 2600);
+  assert.ok(limiter.trackedClientCount() <= 2, `stale entries must be pruned, got ${limiter.trackedClientCount()}`);
+
+  // client-a restarting gets a fresh window instead of resurrecting old state.
+  const res = limiter.check('client-a', 2600);
+  assert.equal(res.allowed, true);
+  assert.equal(res.remaining, 9, 'client-a must start from a clean window after being pruned');
+});

@@ -24,7 +24,13 @@ export default {
         headers: {
           'Content-Type': 'text/html; charset=utf-8',
           'Cache-Control': 'no-cache, no-store, must-revalidate',
-          'X-Content-Type-Options': 'nosniff'
+          'X-Content-Type-Options': 'nosniff',
+          // AATP-D3 (FIND-010): deny-by-default CSP. The page is a single inline
+          // document; its only external resources are Google Fonts stylesheets.
+          'Content-Security-Policy':
+            "default-src 'none'; script-src 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+          'X-Frame-Options': 'DENY',
+          'Referrer-Policy': 'no-referrer'
         }
       });
     }

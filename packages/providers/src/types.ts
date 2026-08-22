@@ -20,7 +20,7 @@ export interface ProviderEndpointConfig {
   readonly pathTemplate: string; // e.g. "/api/search?q={query}"
   readonly allowedRedirectHosts: readonly string[];
   readonly timeoutMs: number; // default <= 5000
-  readonly maxPayloadBytes: number; // default <= 5242880 (5MB)
+  readonly maxPayloadBytes: number; // policy cap <= 2097152 (2MB, AATP-D1)
   readonly requiresAuth: boolean;
   readonly format: 'json' | 'xml';
   readonly adapter?: ProviderAdapterType;

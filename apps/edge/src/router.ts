@@ -51,8 +51,10 @@ export async function handleSearchApiRequest(request: Request): Promise<Response
     );
   }
 
-  // Rate Limiting Guard (AATP-0217)
-  const clientIp = request.headers.get('cf-connecting-ip') || request.headers.get('x-forwarded-for') || '127.0.0.1';
+  // Rate Limiting Guard (AATP-0217). Only cf-connecting-ip is trusted: it is set
+  // by Cloudflare for every Worker request. x-forwarded-for is client-spoofable
+  // and was removed as a fallback (AATP-D2 / FIND-007).
+  const clientIp = request.headers.get('cf-connecting-ip') || 'unknown-client';
   const rateLimitStatus = globalRateLimiter.check(clientIp);
 
   if (!rateLimitStatus.allowed) {

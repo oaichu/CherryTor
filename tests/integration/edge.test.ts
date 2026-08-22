@@ -37,6 +37,19 @@ test('Edge Worker - rejects unapproved provider IDs with 400 Bad Request', async
   assert.ok(json.errors.length > 0);
 });
 
+test('Edge Worker - HTML page ships strict security headers (AATP-D3 / FIND-010)', async () => {
+  const req = new Request('https://edge.cherrytor.local/');
+  const res = await worker.fetch(req);
+  assert.equal(res.status, 200);
+
+  const csp = res.headers.get('Content-Security-Policy') || '';
+  assert.ok(csp.includes("default-src 'none'"), 'CSP must set a deny-by-default base');
+  assert.ok(csp.includes("frame-ancestors 'none'"), 'CSP must forbid framing');
+  assert.ok(csp.includes("connect-src 'self'"), 'CSP must restrict API calls to same origin');
+  assert.equal(res.headers.get('X-Frame-Options'), 'DENY');
+  assert.equal(res.headers.get('Referrer-Policy'), 'no-referrer');
+});
+
 test('Edge Worker - health check returns 200 OK', async () => {
   const req = new Request('https://edge.cherrytor.local/healthz');
   const res = await worker.fetch(req);

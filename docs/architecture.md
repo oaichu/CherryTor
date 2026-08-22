@@ -4,7 +4,7 @@
 
 ```text
 ┌─────────────────────────────────────────────────────────────────────────┐
-│ BROWSER CLIENT (apps/web)                                              │
+│ BROWSER CLIENT (inline UI served by apps/edge)                                              │
 │ - UI (Retro Terminal / CRT) strictly consumes design/tokens-v1.json     │
 │ - Search Dispatcher (Incremental batch rendering)                       │
 │ - Safe Text Renderer (0 innerHTML, strict textContent)                  │

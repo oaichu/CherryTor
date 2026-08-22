@@ -2570,7 +2570,7 @@ export function renderFullHtmlPage(): string {
         badgeRow.append(
           makeBadge(item.category || 'Other', 'badge badge-accent'),
           makeBadge(item.sourceId || 'verified', 'badge'),
-          makeBadge('● Verified RFC-BTIH', 'badge badge-accent')
+          makeBadge('RFC-BTIH InfoHash', 'badge badge-accent')
         );
         if (item.publishedAt) {
           const dateBadge = makeBadge(String(item.publishedAt).split('T')[0], 'badge');
@@ -2678,7 +2678,7 @@ export function renderFullHtmlPage(): string {
           } else if (state.selectedCategory === 'GAMES') {
             list = list.filter(item => item.category === 'Games' || /(repack|fitgirl|dodi|iso|game|switch|nsp|xci|gog)/i.test(item.title));
           } else if (state.selectedCategory === 'SOFTWARE') {
-            list = list.filter(item => ['Software', 'OS'].includes(item.category) || /(setup|installer|x64|windows|macos|linux|portable)/i.test(item.title));
+            list = list.filter(item => item.category === 'Software' || /(setup|installer|x64|windows|macos|linux|portable)/i.test(item.title));
           } else if (state.selectedCategory === 'BOOKS') {
             list = list.filter(item => item.category === 'Books' || /(pdf|epub|mobi|cbz|cbr|book)/i.test(item.title));
           } else if (state.selectedCategory === 'MUSIC') {
@@ -2816,7 +2816,7 @@ export function renderFullHtmlPage(): string {
 
           const tdHealth = document.createElement('td');
           tdHealth.className = 'col-health';
-          tdHealth.innerHTML = '<span class="badge badge-accent">● Verified</span>';
+          tdHealth.innerHTML = '<span class="badge badge-accent">● Indexed</span>';
 
           const tdDate = document.createElement('td');
           tdDate.className = 'col-date';
