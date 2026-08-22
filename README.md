@@ -1,223 +1,176 @@
 <p align="center">
-  <img src="docs/assets/cherrytor-hero.png" alt="CherryTor Real Web Interface" width="100%">
+  <img src="docs/assets/cherrytor-hero.png" alt="CherryTor — Real Web Interface" width="100%">
+</p>
+
+<h1 align="center">🍒 CherryTor</h1>
+
+<p align="center">
+  <strong>The security-first, zero-log BitTorrent metadata search engine.<br/>One query — nine live upstream indexes — global edge latency.</strong>
 </p>
 
 <p align="center">
-  <strong>⚡ The Ultra-Fast, Security-First, Zero-Log Swarm Aggregator &amp; Decentralized Metadata Search Engine ⚡</strong>
-</p>
-
-<p align="center">
-  <a href="https://cherrytor.io.vn"><img src="https://img.shields.io/badge/Official_Domain-cherrytor.io.vn-0284C7?style=for-the-badge&logo=internet-explorer" alt="Official Domain"></a>
-  <a href="https://aeropad.pages.dev/"><img src="https://img.shields.io/badge/AeroPad_Vault-aeropad.pages.dev-00F2FE?style=for-the-badge&logo=icloud" alt="AeroPad Vault"></a>
+  <a href="https://cherrytor.io.vn"><img src="https://img.shields.io/badge/Live-cherrytor.io.vn-0284C7?style=for-the-badge&logo=cloudflare" alt="Live at cherrytor.io.vn"></a>
+  <a href="https://github.com/oaichu/CherryTor/actions/workflows/ci.yml"><img src="https://github.com/oaichu/CherryTor/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <img src="https://img.shields.io/badge/Languages-20-8B5CF6?style=for-the-badge&logo=googletranslate" alt="20 languages">
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-10B981?style=for-the-badge&logo=opensourceinitiative" alt="MIT License"></a>
-  <img src="https://img.shields.io/badge/Security-Zero--Log_Invariant-10B981?style=for-the-badge&logo=shield" alt="Zero Logs">
-  <img src="https://img.shields.io/badge/Edge_Latency-<15ms-8B5CF6?style=for-the-badge&logo=speedtest" alt="Latency">
 </p>
 
 ---
 
-## 🌟 Introduction
+## 🌟 Why CherryTor?
 
-> *"There are many torrent search engines, but this one is **CherryTor**."*
+> *"There are many torrent search engines, but this one is CherryTor."*
 
-**CherryTor** is a next-generation, high-performance BitTorrent swarm metadata aggregator and search engine deployed globally across **Cloudflare Workers Serverless Edge**. 
+Legacy torrent portals bury you in pop-ups, redirect chains, mining scripts and IP-grabbing trackers. CherryTor is the opposite: a **minimal, audited, serverless gateway** that federates the world's public torrent *metadata* and hands you clean, strictly-validated magnet links — nothing else.
 
-Engineered with a strict **Zero-Trust & Zero-Log architecture**, CherryTor guarantees uncompromising privacy: **no IP logging, no search history tracking, no surveillance cookies, and zero arbitrary proxying**.
+- **Zero-log by construction** — queries live in ephemeral Cloudflare isolate memory and are destroyed on response. No accounts, no database, no analytics.
+- **Not a proxy, ever** — the edge only calls a fixed, human-reviewed registry of HTTPS upstreams. Arbitrary `?target=` / `/proxy` requests are rejected at the door (INV-01/02).
+- **Nothing executes in your browser** — every provider-controlled value (titles, magnet URIs, hashes) is rendered via `textContent` under a deny-by-default CSP. Upstream HTML is never relayed (INV-04).
+- **Honest data** — swarm counts and dates come from the upstream feed or they don't appear at all. We never invent seeders, dates, or "verified" badges.
+- **Per-source transparency** — every search shows exactly which index answered, returned zero, or failed. No silent result loss.
 
 <p align="center">
-  <img src="docs/assets/cherrytor-live-results.png" alt="CherryTor Real Live Search Results" width="100%">
+  <img src="docs/assets/cherrytor-live-results.png" alt="CherryTor — Live aggregated results" width="100%">
 </p>
 
 ---
 
-## 🚀 Key Features
+## 🚀 Features
 
-### 1. 🛡️ Absolute Privacy & Zero-Log Architecture
-- **Zero Logging Guarantee**: All queries are processed strictly in ephemeral RAM within Cloudflare Edge Isolates and immediately discarded upon completion.
-- **Anti-Proxy Invariant (INV-01 & INV-02)**: Strict protocol prevents arbitrary proxying or illegal file relaying. CherryTor serves verified swarm metadata and standard RFC Magnet links only.
-- **Client-Side Data Sovereignty**: Bookmarks, history, and preferences stay 100% on your local device via browser `LocalStorage`.
+### 🔎 Aggregated multi-source search
+One query fans out to every enabled index in parallel; results are merged, de-duplicated by infohash and relevance-filtered server-side, so firehose feeds that ignore keywords can never pollute your results.
 
-### 2. 📝 Ecosystem Companion: AeroPad & 2FA Vault
-Our official companion web application is **[AeroPad](https://aeropad.pages.dev/)** ([https://aeropad.pages.dev](https://aeropad.pages.dev)):
-- **2FA Studio & Offline TOTP**: Generate and scan time-based one-time passwords (RFC 6238) with real-time QR camera scanning without cloud dependencies.
-- **Client-Side AES-GCM Cipher Vault**: Store encrypted notes, seed phrases, and credentials protected by master encryption.
-- **Instant Magnet & Swarm Extractor**: Paste unstructured text, logs, or release notes to automatically extract all valid `magnet:?xt=urn:btih:...` URIs and infohashes for 1-click batch export.
-- **100% Client-Side Privacy**: Operates fully offline in your browser with zero server logs or tracking.
+| Source | Coverage | Format |
+| :--- | :--- | :---: |
+| **The Pirate Bay (apibay)** | Global movies / TV / music / games / software | JSON |
+| **YTS** | HD & 4K movies | JSON |
+| **EZTV** | TV series & shows | JSON |
+| **SolidTorrents** | DHT-wide aggregation | JSON |
+| **BitSearch** | DHT-wide aggregation | JSON |
+| **Nyaa** | Anime & Asian media | RSS |
+| **动漫花园 DMHY** | Chinese anime & drama | RSS |
+| **Tokyo Toshokan** | Japanese anime & media | RSS |
+| **LinuxTracker** | Linux ISOs & open-source | RSS |
 
-### 3. ⚡ 15+ Verified Global Upstream Feeds
-Queries the world's most trusted public indexers in parallel with sub-second response times:
+*Every source must pass the [provider acceptance policy](PROVIDER_POLICY.md) (HTTPS-only, structured APIs, no scraping, no WAF/anti-bot bypass — INV-06) before it is enabled.*
 
-| Category | Supported Providers | Protocol / Format | Highlights |
-| :--- | :--- | :---: | :--- |
-| **🌸 Asian Media & Anime** | **动漫花园 (DMHY)**, **Nyaa**, **ACG.RIP**, **萌番组 (Bangumi)**, **Tokyo Toshokan** | XML / RSS 2.0 | Native Chinese, Japanese, Korean search with real-time updates |
-| **🎬 Global Movies & TV** | **The Pirate Bay (Apibay)**, **YTS**, **EZTV**, **SolidTorrents** | JSON REST API | 4K/1080p BluRay, Web-DL, complete TV series, Remux |
-| **🎮 PC Games & Repacks** | **FitGirl Repacks**, **DODI Repacks** | XML Feeds | High-compression PC game repacks, latest patches, and DLCs |
-| **💻 Software & Operating Systems** | **LinuxTracker**, **Internet Archive Software** | XML / JSON | Linux ISO distributions, open-source software, portable tools |
-| **📚 Books & Literature** | **Internet Archive Texts & Books** | Search API | Millions of free PDF, EPUB, Manga, and academic texts |
-| **🎵 Music & Lossless Audio** | **Internet Archive Audio**, **FLAC Feeds** | Audio API | 24-bit/96kHz Studio Master FLAC, albums, soundtracks, OSTs |
+### 🛡️ Security engineering, not marketing
+- Strict RFC-BTIH magnet gate at the schema boundary — attribute-breakout and HTML-injection payloads are dropped at the edge before they ever reach a browser.
+- Manual redirect handling with per-provider host allowlists; mirror failover on 403/429/5xx/HTML-challenge pages.
+- 2 MB payload caps enforced on `Content-Length` *before* buffering; 5 s timeouts; per-provider circuit breakers; sliding-window rate limiting.
+- Deny-by-default CSP, `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer`.
 
-### 4. 🌐 6-Language Localization (i18n)
-Easily toggle between 6 fully localized languages from the navigation bar or settings:
-- 🇻🇳 **Tiếng Việt** (Vietnamese)
-- 🇺🇸 **English** (International)
-- 🇨🇳 **中文** (Simplified Chinese)
-- 🇯🇵 **日本語** (Japanese)
-- 🇰🇷 **한국어** (Korean)
-- 🇮🇩 **Bahasa Indonesia** (Indonesian)
+### 🌍 20 languages, one click
+🇻🇳 Tiếng Việt · 🇺🇸 English · 🇨🇳 中文 · 🇯🇵 日本語 · 🇰🇷 한국어 · 🇮🇩 Bahasa Indonesia · 🇪🇸 Español · 🇫🇷 Français · 🇩🇪 Deutsch · 🇷🇺 Русский · 🇧🇷 Português · 🇮🇹 Italiano · 🇹🇷 Türkçe · 🇵🇱 Polski · 🇺🇦 Українська · 🇸🇦 العربية · 🇮🇷 فارسی · 🇮🇳 हिन्दी · 🇧🇩 বাংলা · 🇷🇴 Română
 
-### 5. 🎯 Smart Category Classifier & Accurate File Sizes
-- **Multi-Signal Classifier (`classifier.ts`)**: Dynamically categorizes releases into Movies, Anime, Games, Software, Books, or Music.
-- **Human File Size Parser**: Automatically extracts file sizes from XML tags, byte counts, or bracketed titles (e.g. `12.00 GiB`, `773.62 MiB`, `48.50 GiB`).
+### 🗂️ Client-side sorting & bookmarks
+Sort by seeders, size, date or title; bookmark releases to `localStorage`; theme (dark/light), density and CRT modes — all stored **only** on your device. CherryTor records no search history at all.
+
+### 📝 Companion: AeroPad 2FA Vault
+Our sister app **[AeroPad](https://aeropad.pages.dev/)** is a zero-knowledge security studio: RFC-6238 TOTP 2FA, AES-GCM cipher vault, and a magnet/infohash batch extractor — 100% client-side.
 
 ---
 
-## 🏛️ System Architecture
+## 🏛️ Architecture
 
 ```mermaid
 flowchart TD
-    User([👤 User / Browser]) -->|HTTPS / Anycast CDN| Edge[⚡ Cloudflare Worker Edge Isolate]
-    
-    subgraph Edge_Gateway [CherryTor Edge Gateway]
-        RateLimit[🛡️ Rate Limiter: 600 req/min] --> Router[🔀 Router & Anti-Proxy Guard]
-        Router --> Registry[📋 Approved Provider Registry]
-        Registry --> Fetcher[🌐 Safe Upstream Fetcher]
-        Fetcher --> Breaker[⚡ Circuit Breaker & Timeout]
+    User([👤 User / Browser]) -->|HTTPS| Edge[⚡ Cloudflare Worker Edge]
+
+    subgraph EdgeGateway [CherryTor Edge Gateway]
+        RL[🛡️ Rate Limiter 600/min] --> R[🔀 Router + Anti-Proxy Guard]
+        R --> CB[⚡ Circuit Breakers + 5s Timeouts]
+        CB --> F[🌐 Safe Fetcher — manual redirects, mirror failover, 2MB caps]
+        F --> P[⚙️ Strict Parsers + Relevance Gate]
     end
 
-    Edge --> RateLimit
-    
-    subgraph Upstream_Providers [15+ Live Upstream Feeds]
-        P1[(🎬 The Pirate Bay)]
-        P2[(🌸 动漫花园 DMHY)]
-        P3[(🌸 Nyaa ACG)]
-        P4[(🎮 FitGirl / DODI)]
-        P5[(📚 Internet Archive)]
-        P6[(🎬 YTS / EZTV)]
-    end
-
-    Breaker --> Upstream_Providers
-    Upstream_Providers --> Parser[⚙️ Safe Parser & Category Classifier]
-    Parser --> Ranking[📊 Deterministic Multi-Signal Ranking]
-    Ranking --> User
+    Edge --> RL
+    F --> UP[📋 Fixed Registry — 9 live HTTPS upstreams]
+    P --> User
 ```
 
----
-
-## 🌐 Live Deployments
-
-- **Official Web Address**: [https://cherrytor.io.vn](https://cherrytor.io.vn)
-- **Companion 2FA Vault (AeroPad)**: [https://aeropad.pages.dev](https://aeropad.pages.dev)
+Full trust-boundary model: [THREAT_MODEL.md](THREAT_MODEL.md) · [docs/architecture.md](docs/architecture.md) · Invariants: [SECURITY.md](SECURITY.md)
 
 ---
 
-## 💻 Quickstart & Self-Hosting
-
-### 1. Prerequisites
-- **Node.js**: >= 20.x
-- **PNPM**: >= 9.x
-- **Cloudflare Account** (Free tier is 100% sufficient)
-
-### 2. Local Setup & Testing
+## 💻 Self-hosting
 
 ```bash
-# Clone the repository
 git clone https://github.com/oaichu/CherryTor.git
 cd CherryTor
 
-# Install dependencies
 pnpm install
+pnpm typecheck     # strict TypeScript
+pnpm test          # full unit + integration + security suite (Node ≥ 22.6)
 
-# Type-check & Run full test suite (45/45 passing)
-pnpm tsc --noEmit
-pnpm test
+pnpm deploy        # ships to your Cloudflare account (free tier works)
 ```
 
-### 3. Deploy to Cloudflare Edge
-
-```bash
-# Deploy globally in seconds via root or apps/edge
-pnpm run deploy
-```
+Requirements: Node ≥ 22.6 (for `--experimental-strip-types`), pnpm ≥ 9, a Cloudflare account. Configure your routes in [`wrangler.toml`](wrangler.toml).
 
 ---
 
-## 📡 API Specification
+## 📡 Public API
 
 ### `POST /api/v1/search`
-Query swarm metadata directly from approved providers.
 
-**Headers:**
-```http
-Content-Type: application/json
-```
-
-**Request Body:**
 ```json
 {
-  "provider": "dmhy",
+  "provider": "yts",
   "query": "avatar",
-  "category": "MOVIES"
+  "category": "Movies"
 }
 ```
 
-**Response (200 OK):**
+Response — strictly-validated items only:
+
 ```json
 {
   "data": [
     {
-      "id": "dmhy-GVV2SVPEGTWQ2KULFXCWOIMIKM4KIS6U",
-      "title": "Avatar The Legend of Aang [1080p BluRay x265]",
+      "id": "yts-5ca4f8aae8ec1f422f9aad23908c94297c2cb882",
+      "title": "Avatar Fire and Ash (2025) [1080p]",
       "category": "Movies",
-      "sizeBytes": 3403563991,
-      "seeders": 154,
-      "leechers": 12,
-      "infoHash": "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678",
-      "magnetUri": "magnet:?xt=urn:btih:a1b2c3d4e5f60718293a4b5c6d7e8f9012345678&...",
-      "sourceId": "dmhy",
-      "publishedAt": "2026-08-20T10:15:00.000Z"
+      "sizeBytes": 3300467929,
+      "seeders": 2461,
+      "leechers": 1066,
+      "infoHash": "5ca4f8aae8ec1f422f9aad23908c94297c2cb882",
+      "magnetUri": "magnet:?xt=urn:btih:5ca4f8aa...",
+      "sourceId": "yts",
+      "publishedAt": "2025-12-20T01:42:44.819Z"
     }
   ],
   "errors": [],
-  "meta": {
-    "provider": "dmhy",
-    "latencyMs": 284,
-    "timestamp": "2026-08-20T15:20:00.000Z"
-  }
+  "meta": { "provider": "yts", "latencyMs": 623, "timestamp": "2026-08-22T08:37:19Z" }
 }
 ```
 
----
-
-## 🔒 Security Invariants (INV-01 to INV-10)
-
-CherryTor strictly adheres to 10 security invariants verified by automated security test suites:
-1. **INV-01**: Rejects `?target=` and `?url=` parameters to prevent open-proxy abuse.
-2. **INV-02**: Prohibits `/proxy` endpoints.
-3. **INV-03**: Pinpoint allowlisting of upstream URLs defined in `registry.ts`.
-4. **INV-04**: Rejects unstructured raw HTML upstream responses to eliminate XSS.
-5. **INV-05**: Strict JSON-only API contracts with structured responses.
-6. **INV-06**: Blocks dangerous URI schemes (`javascript:`, `data:`, `file:`) in magnet links.
-7. **INV-07**: Sliding-window rate limiting (600 req/min) per IP.
-8. **INV-08**: Zero credentials or API keys exposed to client storage.
-9. **INV-09**: Transparent disclosure of P2P swarm mechanics.
-10. **INV-10**: Strict validation of redirect targets against pre-approved domains.
+Errors: `400` validation · `429` rate-limited · `502/504` upstream failure or circuit breaker open. Full contract: [specs/api.md](specs/api.md).
 
 ---
 
-## ⚖️ Legal Disclaimer & Compliance Notice
+## 🔒 Security invariants (INV-01 … INV-10)
 
-1. **Metadata Aggregation Gateway**: CherryTor functions solely as an automated, ephemeral metadata indexing and query routing interface. CherryTor **does not host, store, cache, upload, or transmit** any torrent files, media content, proprietary payloads, or data streams on its servers.
-2. **RFC Magnet Standard**: All search results consist exclusively of public cryptographic infohashes and standard RFC-compliant Magnet URIs referencing decentralized swarms across the public DHT (Distributed Hash Table) network.
-3. **User Responsibility & Compliance**: Users are strictly responsible for complying with the applicable copyright, intellectual property, and data transmission laws in their respective legal jurisdictions.
-4. **Non-Custodial & Zero-Log Architecture**: CherryTor operates on ephemeral serverless memory without user accounts, databases, or surveillance logging mechanisms.
+1. **INV-01/02** — no arbitrary target URLs; never an open proxy.
+2. **INV-03** — upstream URLs are generated exclusively from the server-side registry.
+3. **INV-04** — raw upstream HTML is never relayed to the browser.
+4. **INV-05** — the production API speaks structured JSON only.
+5. **INV-06** — no CAPTCHA / WAF / anti-bot bypass, ever.
+6. **INV-07** — no browser-to-LAN RPC from the web client.
+7. **INV-08** — zero credentials or secrets in client storage.
+8. **INV-09** — P2P operations stay outside the search security boundary.
+9. **INV-10** — unreviewed providers are disabled by default.
+
+Every invariant is pinned by automated tests in [`tests/security/`](tests/security/). Found an issue? Please open a private advisory (Security tab) — responsible disclosure is welcome.
+
+---
+
+## ⚖️ Legal notice
+
+CherryTor is a **metadata gateway**: it hosts, stores, caches and transmits no torrent files or media. Results are public infohashes and RFC magnet URIs resolved by the decentralized DHT network. Users are responsible for complying with the copyright and data-transmission laws of their jurisdiction.
 
 ---
 
 ## 📄 License
 
-This project is open-source software licensed under the **[MIT License](LICENSE)**. 
-
-```text
-MIT License
-Copyright (c) 2026 CherryTor Contributors
-```
+[MIT](LICENSE) © 2026 CherryTor Contributors.
